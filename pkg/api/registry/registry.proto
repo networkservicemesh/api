@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package registry;
+
+import "ptypes/empty/empty.proto";
+import "ptypes/timestamp/timestamp.proto";
+
+message NetworkService {
+    string name = 1;
+    string payload = 2;
+    repeated Match matches = 3;
+}
+
+message Match {
+    map<string, string> source_selector = 1;
+    repeated Destination routes = 2;
+}
+
+message Destination {
+    map<string, string> destination_selector = 1;
+    uint32 weight = 2;
+}
+
+message NetworkServiceManager {
+    string name = 1;
+    string url = 2;
+    google.protobuf.Timestamp expiration_time = 3;
+    string state = 4;
+}
+
+message NetworkServiceEndpoint {
+    string name = 1;
+    string payload = 2;
+    string network_service_name = 3;
+    string network_service_manager_name = 4;
+    map<string, string> labels = 5;
+    string state = 6;
+}
+
+message FindNetworkServiceRequest {
+    string network_service_name = 1;
+}
+
+message FindNetworkServiceResponse {
+    string payload = 1;
+    NetworkService network_service = 2;
+    map<string, NetworkServiceManager> network_service_managers = 3;
+    repeated NetworkServiceEndpoint network_service_endpoints = 4;
+}
+
+message NSERegistration {
+    NetworkService network_service = 1;
+    NetworkServiceManager network_service_manager = 2;
+    NetworkServiceEndpoint network_service_endpoint = 3;
+}
+
+message RemoveNSERequest {
+    string network_service_endpoint_name = 1;
+}
+
+service NetworkServiceRegistry {
+    rpc RegisterNSE (NSERegistration) returns (NSERegistration);
+    rpc BulkRegisterNSE (stream NSERegistration) returns (stream NSERegistration);
+    rpc RemoveNSE (RemoveNSERequest) returns (google.protobuf.Empty);
+}
+
+service NetworkServiceDiscovery {
+    rpc FindNetworkService (FindNetworkServiceRequest) returns (FindNetworkServiceResponse);
+}
+
+message NetworkServiceEndpointList {
+    repeated NetworkServiceEndpoint network_service_endpoints = 1;
+}
+
+service NsmRegistry {
+    rpc RegisterNSM (NetworkServiceManager) returns (NetworkServiceManager);
+    rpc GetEndpoints (google.protobuf.Empty) returns (NetworkServiceEndpointList);
+}

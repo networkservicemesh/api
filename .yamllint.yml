@@ -11,4 +11,3 @@ rules:
   line-length: disable
   comments-indentation:
     ignore: .circleci/config.yml
-
