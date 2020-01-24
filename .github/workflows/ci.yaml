@@ -1,0 +1,125 @@
+---
+name: ci
+on: pull_request
+jobs:
+  yamllint:
+    name: yamllint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: Setup Python
+        uses: actions/setup-python@v1
+      - name: Install yamllint
+        run: pip install --user yamllint
+      - name: Run yamllint
+        run: ~/.local/bin/yamllint -c .yamllint.yml --strict .
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: shellcheck
+        uses: azohra/shell-linter@v0.2.0
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - run: |
+          go build -race  ./...
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - name: Install gotestsum
+        run: go get gotest.tools/gotestsum@v0.4.0
+      - name: Run tests
+        run: |
+          eval $(go env)
+          mkdir -p ~/junit/
+          ${GOPATH}/bin/gotestsum --junitfile ~/junit/unit-tests.xml -- -race -short $(go list ./...)
+  golangci-lint:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: golangci-lint
+        uses: Mushus/golangci-linter@v1
+
+  excludeFmtErrorf:
+    name: exclude fmt.Errorf
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exclude fmt.Errorf
+        run: |
+          if grep -r --include=*.go fmt.Errorf . ; then
+           echo "Please use errors.Errorf (or errors.New or errors.Wrap or errors.Wrapf) as appropriate rather than fmt.Errorf"
+           exit 1
+          fi
+
+  restrictNSMDeps:
+    name: Restrict dependencies on github.com/networkservicemesh/*
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restrict dependencies on github.com/networkservicemesh/*
+        run: |
+          for i in $(grep github.com/networkservicemesh/ go.mod | gsed 's;.*\(github.com\/networkservicemesh\/[a-zA-z\/]*\).*;\1;g' | sort -u);do
+            echo Dependency on "${i}" is forbidden
+            exit 1
+          done
+
+  checkgomod:
+    name: check go.mod and go.sum
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - run: go mod tidy
+      - name: Check for changes in go.mod or go.sum
+        run: |
+          git diff --name-only --exit-code go.mod || ( echo "Run go tidy" && false )
+          git diff --name-only --exit-code go.sum || ( echo "Run go tidy" && false )
+  license:
+    name: license header check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - name: Install go-header
+        run: 'go get github.com/denis-tingajkin/go-header@v0.2.1'
+      - name: Run go-header
+        run: |
+          eval $(go env)
+          ${GOPATH}/bin/go-header
+
+  protobuf:
+    name: Check protobuf generation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: arduino/actions/setup-protoc@master
+        with:
+          version: '3.8.0'
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - name: Install proto-gen-go
+        run: go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
+      - name: Generate protobufs
+        run: go generate ./...
+      - name: Check for changes in generated code
+        run: |
+          git diff --name-only --exit-code pkg/ || ( echo "Rerun go generate ./... locally and resubmit" && false )
