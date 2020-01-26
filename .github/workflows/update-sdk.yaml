@@ -1,5 +1,5 @@
 ---
-name: Update sdk-kernel
+name: Update sdk
 on: push
 jobs:
   update-sdk:
