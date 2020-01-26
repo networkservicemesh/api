@@ -17,4 +17,4 @@
 // Package connectioncontext provides the ConnectionContext NSM API Message
 package connectioncontext
 
-//go:generate bash -c "protoc -I . -I ../../ connectioncontext.proto --go_out=plugins=grpc:."
+//go:generate bash -c "protoc -I . -I ../../ connectioncontext.proto --go_out=plugins=grpc,paths=source_relative:."
