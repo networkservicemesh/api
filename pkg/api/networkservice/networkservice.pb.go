@@ -101,11 +101,11 @@ var fileDescriptor_361e8247d5a9945c = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConnInterface
+var _ grpc.ClientConn
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
+const _ = grpc.SupportPackageIsVersion4
 
 // NetworkServiceClient is the client API for NetworkService service.
 //
@@ -116,10 +116,10 @@ type NetworkServiceClient interface {
 }
 
 type networkServiceClient struct {
-	cc grpc.ClientConnInterface
+	cc *grpc.ClientConn
 }
 
-func NewNetworkServiceClient(cc grpc.ClientConnInterface) NetworkServiceClient {
+func NewNetworkServiceClient(cc *grpc.ClientConn) NetworkServiceClient {
 	return &networkServiceClient{cc}
 }
 
