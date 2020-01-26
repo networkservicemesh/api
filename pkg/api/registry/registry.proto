@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package registry;
+option go_package = "github.com/networkservicemesh/api/pkg/api/registry";
 
 import "ptypes/empty/empty.proto";
 import "ptypes/timestamp/timestamp.proto";
