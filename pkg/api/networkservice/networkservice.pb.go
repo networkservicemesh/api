@@ -8,7 +8,6 @@ import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
 	empty "github.com/golang/protobuf/ptypes/empty"
-	connection "github.com/networkservicemesh/api/pkg/api/connection"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -27,11 +26,11 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type NetworkServiceRequest struct {
-	Connection           *connection.Connection  `protobuf:"bytes,1,opt,name=connection,proto3" json:"connection,omitempty"`
-	MechanismPreferences []*connection.Mechanism `protobuf:"bytes,2,rep,name=mechanism_preferences,json=mechanismPreferences,proto3" json:"mechanism_preferences,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
-	XXX_unrecognized     []byte                  `json:"-"`
-	XXX_sizecache        int32                   `json:"-"`
+	Connection           *Connection  `protobuf:"bytes,1,opt,name=connection,proto3" json:"connection,omitempty"`
+	MechanismPreferences []*Mechanism `protobuf:"bytes,2,rep,name=mechanism_preferences,json=mechanismPreferences,proto3" json:"mechanism_preferences,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *NetworkServiceRequest) Reset()         { *m = NetworkServiceRequest{} }
@@ -59,14 +58,14 @@ func (m *NetworkServiceRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_NetworkServiceRequest proto.InternalMessageInfo
 
-func (m *NetworkServiceRequest) GetConnection() *connection.Connection {
+func (m *NetworkServiceRequest) GetConnection() *Connection {
 	if m != nil {
 		return m.Connection
 	}
 	return nil
 }
 
-func (m *NetworkServiceRequest) GetMechanismPreferences() []*connection.Mechanism {
+func (m *NetworkServiceRequest) GetMechanismPreferences() []*Mechanism {
 	if m != nil {
 		return m.MechanismPreferences
 	}
@@ -112,8 +111,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type NetworkServiceClient interface {
-	Request(ctx context.Context, in *NetworkServiceRequest, opts ...grpc.CallOption) (*connection.Connection, error)
-	Close(ctx context.Context, in *connection.Connection, opts ...grpc.CallOption) (*empty.Empty, error)
+	Request(ctx context.Context, in *NetworkServiceRequest, opts ...grpc.CallOption) (*Connection, error)
+	Close(ctx context.Context, in *Connection, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
 type networkServiceClient struct {
@@ -124,8 +123,8 @@ func NewNetworkServiceClient(cc *grpc.ClientConn) NetworkServiceClient {
 	return &networkServiceClient{cc}
 }
 
-func (c *networkServiceClient) Request(ctx context.Context, in *NetworkServiceRequest, opts ...grpc.CallOption) (*connection.Connection, error) {
-	out := new(connection.Connection)
+func (c *networkServiceClient) Request(ctx context.Context, in *NetworkServiceRequest, opts ...grpc.CallOption) (*Connection, error) {
+	out := new(Connection)
 	err := c.cc.Invoke(ctx, "/networkservice.NetworkService/Request", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -133,7 +132,7 @@ func (c *networkServiceClient) Request(ctx context.Context, in *NetworkServiceRe
 	return out, nil
 }
 
-func (c *networkServiceClient) Close(ctx context.Context, in *connection.Connection, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *networkServiceClient) Close(ctx context.Context, in *Connection, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
 	err := c.cc.Invoke(ctx, "/networkservice.NetworkService/Close", in, out, opts...)
 	if err != nil {
@@ -144,18 +143,18 @@ func (c *networkServiceClient) Close(ctx context.Context, in *connection.Connect
 
 // NetworkServiceServer is the server API for NetworkService service.
 type NetworkServiceServer interface {
-	Request(context.Context, *NetworkServiceRequest) (*connection.Connection, error)
-	Close(context.Context, *connection.Connection) (*empty.Empty, error)
+	Request(context.Context, *NetworkServiceRequest) (*Connection, error)
+	Close(context.Context, *Connection) (*empty.Empty, error)
 }
 
 // UnimplementedNetworkServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedNetworkServiceServer struct {
 }
 
-func (*UnimplementedNetworkServiceServer) Request(ctx context.Context, req *NetworkServiceRequest) (*connection.Connection, error) {
+func (*UnimplementedNetworkServiceServer) Request(ctx context.Context, req *NetworkServiceRequest) (*Connection, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Request not implemented")
 }
-func (*UnimplementedNetworkServiceServer) Close(ctx context.Context, req *connection.Connection) (*empty.Empty, error) {
+func (*UnimplementedNetworkServiceServer) Close(ctx context.Context, req *Connection) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Close not implemented")
 }
 
@@ -182,7 +181,7 @@ func _NetworkService_Request_Handler(srv interface{}, ctx context.Context, dec f
 }
 
 func _NetworkService_Close_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(connection.Connection)
+	in := new(Connection)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -194,7 +193,7 @@ func _NetworkService_Close_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/networkservice.NetworkService/Close",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NetworkServiceServer).Close(ctx, req.(*connection.Connection))
+		return srv.(NetworkServiceServer).Close(ctx, req.(*Connection))
 	}
 	return interceptor(ctx, in, info, handler)
 }

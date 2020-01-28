@@ -21,7 +21,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/networkservicemesh/api/pkg/api/connection"
+
+	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
 // Mechanism - a vxlan mechanism utility wrapper
@@ -49,7 +50,7 @@ type Mechanism interface {
 }
 
 type mechanism struct {
-	*connection.Mechanism
+	*networkservice.Mechanism
 }
 
 func (m mechanism) SrcHostIP() (string, error) {
@@ -93,7 +94,7 @@ func (m mechanism) DstHardwareAddress() (string, error) {
 }
 
 // ToMechanism - convert unified mechanism to useful wrapper
-func ToMechanism(m *connection.Mechanism) Mechanism {
+func ToMechanism(m *networkservice.Mechanism) Mechanism {
 	if m.Type == MECHANISM {
 		return &mechanism{
 			m,
@@ -102,7 +103,7 @@ func ToMechanism(m *connection.Mechanism) Mechanism {
 	return nil
 }
 
-func getIPParameter(m *connection.Mechanism, name string) (string, error) {
+func getIPParameter(m *networkservice.Mechanism, name string) (string, error) {
 	ip, err := getStringParameter(m, name)
 	if err != nil {
 		return "", err
@@ -116,7 +117,7 @@ func getIPParameter(m *connection.Mechanism, name string) (string, error) {
 	return ip, nil
 }
 
-func getStringParameter(m *connection.Mechanism, name string) (string, error) {
+func getStringParameter(m *networkservice.Mechanism, name string) (string, error) {
 	if m == nil {
 		return "", errors.New("mechanism cannot be nil")
 	}

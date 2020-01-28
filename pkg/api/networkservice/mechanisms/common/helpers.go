@@ -22,20 +22,21 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/networkservicemesh/api/pkg/api/connection"
+
+	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
 // GetSrcIP returns the source IP parameter of the Mechanism
-func GetSrcIP(m *connection.Mechanism) (string, error) {
+func GetSrcIP(m *networkservice.Mechanism) (string, error) {
 	return getIPParameter(m, SrcIP)
 }
 
 // GetDstIP returns the destination IP parameter of the Mechanism
-func GetDstIP(m *connection.Mechanism) (string, error) {
+func GetDstIP(m *networkservice.Mechanism) (string, error) {
 	return getIPParameter(m, DstIP)
 }
 
-func getIPParameter(m *connection.Mechanism, name string) (string, error) {
+func getIPParameter(m *networkservice.Mechanism, name string) (string, error) {
 	if m == nil {
 		return "", errors.New("mechanism cannot be nil")
 	}

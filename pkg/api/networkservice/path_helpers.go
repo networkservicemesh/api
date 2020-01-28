@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco and/or its affiliates.
+// Copyright (c) 2020 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -14,7 +14,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package connectioncontext provides the ConnectionContext NSM API Message
-package connectioncontext
+// Package  contains the API and helpers for the Network Service Mesh Connection
+package networkservice
 
-//go:generate bash -c "protoc -I . -I ../../ connectioncontext.proto --go_out=plugins=grpc,paths=source_relative:."
+import (
+	proto "github.com/golang/protobuf/proto"
+	"github.com/pkg/errors"
+)
+
+// Clone clones 
+func (m *Path) Clone() *Path {
+	return proto.Clone(m).(*Path)
+}
+
+// IsValid returns true if Path p is Valid
+func (m *Path) IsValid() error {
+	if m == nil {
+		return nil
+	}
+	if int(m.GetIndex()) >= len(m.GetPathSegments()) {
+		return errors.New("Path.Index >= len(Path.PathSegments)")
+	}
+	return nil
+}

@@ -21,8 +21,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/networkservicemesh/api/pkg/api/connection"
-	"github.com/networkservicemesh/api/pkg/api/connection/mechanisms/common"
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
+
+	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
 // Mechanism - a vxlan mechanism utility wrapper
@@ -36,11 +37,11 @@ type Mechanism interface {
 }
 
 type mechanism struct {
-	*connection.Mechanism
+	*networkservice.Mechanism
 }
 
 // ToMechanism - convert unified mechanism to useful wrapper
-func ToMechanism(m *connection.Mechanism) Mechanism {
+func ToMechanism(m *networkservice.Mechanism) Mechanism {
 	if m.Type == MECHANISM {
 		return &mechanism{
 			m,

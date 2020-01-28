@@ -19,8 +19,6 @@ package networkservice
 import (
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
-
-	"github.com/networkservicemesh/api/pkg/api/connection"
 )
 
 // Clone clones request
@@ -29,25 +27,25 @@ func (m *NetworkServiceRequest) Clone() *NetworkServiceRequest {
 }
 
 // GetRequestConnection returns request connection
-func (m *NetworkServiceRequest) GetRequestConnection() *connection.Connection {
+func (m *NetworkServiceRequest) GetRequestConnection() *Connection {
 	return m.GetConnection()
 }
 
 // SetRequestConnection sets request connection
-func (m *NetworkServiceRequest) SetRequestConnection(conn *connection.Connection) {
+func (m *NetworkServiceRequest) SetRequestConnection(conn *Connection) {
 	m.Connection = conn
 }
 
 // GetRequestMechanismPreferences returns request mechanism preferences
-func (m *NetworkServiceRequest) GetRequestMechanismPreferences() []*connection.Mechanism {
-	preferences := make([]*connection.Mechanism, 0, len(m.MechanismPreferences))
+func (m *NetworkServiceRequest) GetRequestMechanismPreferences() []*Mechanism {
+	preferences := make([]*Mechanism, 0, len(m.MechanismPreferences))
 	preferences = append(preferences, m.MechanismPreferences...)
 
 	return preferences
 }
 
 // SetRequestMechanismPreferences sets request mechanism preferences
-func (m *NetworkServiceRequest) SetRequestMechanismPreferences(mechanismPreferences []*connection.Mechanism) {
+func (m *NetworkServiceRequest) SetRequestMechanismPreferences(mechanismPreferences []*Mechanism) {
 	m.MechanismPreferences = mechanismPreferences
 }
 
