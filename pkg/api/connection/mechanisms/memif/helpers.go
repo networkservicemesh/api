@@ -26,7 +26,7 @@ import (
 type Mechanism interface {
 	GetSocketFilename() string
 	GetWorkspace() string
-	GetNetNsInode() string
+	GetNetNSInode() string
 }
 
 type mechanism struct {
@@ -61,9 +61,9 @@ func (m *mechanism) GetSocketFilename() string {
 }
 
 // GetNetNsInode get the name of the Netns Inode
-func (m *mechanism) GetNetNsInode() string {
+func (m *mechanism) GetNetNSInode() string {
 	if m == nil || m.GetParameters() == nil {
 		return ""
 	}
-	return m.GetParameters()[common.NetNsInodeKey]
+	return m.GetParameters()[common.NetNSInodeKey]
 }

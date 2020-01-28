@@ -35,6 +35,6 @@ const (
 	WorkspaceNSEName = "workspaceNseName"
 	// MemifSocket - memif socket filename
 	MemifSocket = "memif.sock"
-	// NsmBaseDirEnv - NSM location directory
-	NsmBaseDirEnv = "NSM_BASE_DIR"
+	// NSMBaseDirEnv - NSM location directory
+	NSMBaseDirEnv = "NSM_BASE_DIR"
 )

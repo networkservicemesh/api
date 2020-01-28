@@ -22,8 +22,8 @@ const (
 	// DstIP - key for DstIP parameters
 	DstIP = "dst_ip"
 
-	// NetNsInodeKey - netns inode mechanism property key
-	NetNsInodeKey = "netnsInode"
+	// NetNSInodeKey - netns inode mechanism property key
+	NetNSInodeKey = "netnsInode"
 	// Workspace - NSM workspace location mechanism property key
 	Workspace = "workspace"
 	// InterfaceNameKey - interface name mechanism property key

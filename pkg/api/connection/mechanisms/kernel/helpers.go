@@ -25,8 +25,8 @@ import (
 
 // Mechanism - kernel mechanism helper
 type Mechanism interface {
-	// GetNetNsInode - return net ns inode
-	GetNetNsInode() string
+	// GetNetNSInode - return net ns inode
+	GetNetNSInode() string
 	GetParameters() map[string]string
 }
 
@@ -51,9 +51,9 @@ func (m *mechanism) GetParameters() map[string]string {
 	return m.Parameters
 }
 
-func (m *mechanism) GetNetNsInode() string {
+func (m *mechanism) GetNetNSInode() string {
 	if m == nil || m.GetParameters() == nil {
 		return ""
 	}
-	return m.GetParameters()[common.NetNsInodeKey]
+	return m.GetParameters()[common.NetNSInodeKey]
 }
