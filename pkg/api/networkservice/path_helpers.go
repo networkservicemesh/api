@@ -14,7 +14,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package  contains the API and helpers for the Network Service Mesh Connection
 package networkservice
 
 import (
@@ -22,7 +21,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Clone clones 
+// Clone clones
 func (m *Path) Clone() *Path {
 	return proto.Clone(m).(*Path)
 }

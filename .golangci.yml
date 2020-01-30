@@ -157,11 +157,11 @@ issues:
   max-issues-per-linter: 0
   max-same-issues: 0
   exclude-rules:
-    - path: pkg/api/connection/mechanism_helpers.go
+    - path: pkg/api/networkservice/mechanism_helpers.go
       linters:
         - interfacer
       text: "can be `github.com/golang/protobuf/proto.Message"
-    - path: pkg/api/connection/connection_helpers.go
+    - path: pkg/api/networkservice/connection_helpers.go
       linters:
         - interfacer
       text: "can be `github.com/golang/protobuf/proto.Message"
