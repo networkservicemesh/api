@@ -14,12 +14,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package sriovuserspace provides a Mechanism for using sriov NICs in userspace.
-package sriovuserspace
+// Package vfio provides a Mechanism for using vfio devices.
+package vfio
 
 const (
 	// MECHANISM string
-	MECHANISM = "SRIOV_USERSPACE"
+	MECHANISM = "VFIO"
 
 	// Mechanism parameters
 
