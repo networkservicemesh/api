@@ -37,4 +37,7 @@ const (
 	MemifSocket = "memif.sock"
 	// NSMBaseDirEnv - NSM location directory
 	NSMBaseDirEnv = "NSM_BASE_DIR"
+
+	// PCIAddress string
+	PCIAddress = "PCIAddress"
 )
