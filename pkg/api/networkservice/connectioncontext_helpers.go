@@ -20,7 +20,6 @@ import (
 	"net"
 
 	"github.com/pkg/errors"
-
 )
 
 // IsEthernetContextEmtpy returns true if ethernet config is empty

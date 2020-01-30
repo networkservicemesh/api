@@ -14,11 +14,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package sriovkernel
+// Package sriovuserspace provides a Mechanism for using sriov NICs in userspace.
+package sriovuserspace
 
 const (
 	// MECHANISM string
-	MECHANISM = "SRIOV_KERNEL"
+	MECHANISM = "SRIOV_USERSPACE"
 
 	// Mechanism parameters
 

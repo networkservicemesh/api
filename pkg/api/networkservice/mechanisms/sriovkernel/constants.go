@@ -14,11 +14,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package sriovuserspace
+// Package sriovkernel provides a mechanism for sriov backed kernel interfaces
+package sriovkernel
 
 const (
 	// MECHANISM string
-	MECHANISM = "SRIOV_USERSPACE"
+	MECHANISM = "SRIOV_KERNEL"
 
 	// Mechanism parameters
 

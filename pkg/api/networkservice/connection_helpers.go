@@ -19,7 +19,6 @@ package networkservice
 import (
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
-
 )
 
 // IsRemote returns if connection is remote

@@ -14,26 +14,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package sriovuserspace
+package sriovkernel
 
 import (
-	"github.com/networkservicemesh/api/pkg/api/connection"
-	"github.com/networkservicemesh/api/pkg/api/connection/mechanisms/common"
+	"github.com/networkservicemesh/api/pkg/api/networkservice"
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
 )
 
-// Mechanism - SRIOV userspace interface mechanism helper
+// Mechanism represents SRIOV kernel stack interface mechanism helper
 type Mechanism interface {
-	GetNetNsInode() string
+	GetNetNSInode() string
 	GetParameters() map[string]string
 	GetPCIAddress() string
 }
 
 type mechanism struct {
-	*connection.Mechanism
+	*networkservice.Mechanism
 }
 
 // ToMechanism converts unified mechanism to helper
-func ToMechanism(m *connection.Mechanism) Mechanism {
+func ToMechanism(m *networkservice.Mechanism) Mechanism {
 	if m.GetType() == MECHANISM {
 		return &mechanism{
 			m,
@@ -51,11 +51,11 @@ func (m *mechanism) GetParameters() map[string]string {
 }
 
 // GetParameters returns network namespace Inode
-func (m *mechanism) GetNetNsInode() string {
+func (m *mechanism) GetNetNSInode() string {
 	if m == nil || m.GetParameters() == nil {
 		return ""
 	}
-	return m.GetParameters()[common.NetNsInodeKey]
+	return m.GetParameters()[common.NetNSInodeKey]
 }
 
 // GetPCIAddress returns PCI address of the VF device
