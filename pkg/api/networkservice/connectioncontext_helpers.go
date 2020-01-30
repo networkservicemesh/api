@@ -14,12 +14,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package connectioncontext
+package networkservice
 
 import (
 	"net"
 
 	"github.com/pkg/errors"
+
 )
 
 // IsEthernetContextEmtpy returns true if ethernet config is empty

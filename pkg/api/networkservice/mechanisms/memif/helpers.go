@@ -18,8 +18,9 @@
 package memif
 
 import (
-	"github.com/networkservicemesh/api/pkg/api/connection"
-	"github.com/networkservicemesh/api/pkg/api/connection/mechanisms/common"
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
+
+	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
 // Mechanism provides helper methods for mechanisms of type memif
@@ -30,12 +31,12 @@ type Mechanism interface {
 }
 
 type mechanism struct {
-	*connection.Mechanism
+	*networkservice.Mechanism
 }
 
-// ToMechanism turns a connection.Mechanism into a version with helper methods for memif
+// ToMechanism turns a networkservice.Mechanism into a version with helper methods for memif
 // If Mechanism m is *not* of type memif.MECHANISM, it returns nil
-func ToMechanism(m *connection.Mechanism) Mechanism {
+func ToMechanism(m *networkservice.Mechanism) Mechanism {
 	if m.GetType() == MECHANISM {
 		return &mechanism{
 			m,

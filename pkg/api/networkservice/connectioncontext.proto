@@ -19,7 +19,7 @@
 syntax = "proto3";
 
 package connectioncontext;
-option go_package = "github.com/networkservicemesh/api/pkg/api/connectioncontext";
+option go_package = "github.com/networkservicemesh/api/pkg/api/networkservice";
 
 message IpNeighbor {
     string ip = 1;

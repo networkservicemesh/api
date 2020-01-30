@@ -18,9 +18,9 @@
 package kernel
 
 import (
-	"github.com/networkservicemesh/api/pkg/api/connection/mechanisms/common"
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
 
-	"github.com/networkservicemesh/api/pkg/api/connection"
+	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
 // Mechanism - kernel mechanism helper
@@ -31,11 +31,11 @@ type Mechanism interface {
 }
 
 type mechanism struct {
-	*connection.Mechanism
+	*networkservice.Mechanism
 }
 
 // ToMechanism - convert unified mechanism to helper
-func ToMechanism(m *connection.Mechanism) Mechanism {
+func ToMechanism(m *networkservice.Mechanism) Mechanism {
 	if m.GetType() == MECHANISM {
 		return &mechanism{
 			m,

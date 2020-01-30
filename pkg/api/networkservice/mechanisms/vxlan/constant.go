@@ -14,11 +14,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package connectioncontext
+// Package vxlan provides helper methods for the Mechanism vxlan
+package vxlan
+
+import (
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
+)
 
 const (
-	// DNSConfigShouldNotBeNil -
-	DNSConfigShouldNotBeNil = "dnsConfig should not be nil"
-	// DNSServerIpsShouldHaveRecords -
-	DNSServerIpsShouldHaveRecords = "dnsConfig should have records"
+	// MECHANISM string
+	MECHANISM = "VXLAN"
+
+	// Mechanism parameters
+
+	// SrcIP - source IP
+	SrcIP = common.SrcIP
+	// DstIP - destitiona IP
+	DstIP = common.DstIP
+	// SrcOriginalIP - original src IP
+	SrcOriginalIP = "orig_src_ip"
+	// DstExternalIP - external destination ip
+	DstExternalIP = "ext_src_ip"
+	// VNI - vni
+	VNI = "vni"
 )

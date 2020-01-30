@@ -14,13 +14,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package connection
+package networkservice
 
 import (
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
 
-	"github.com/networkservicemesh/api/pkg/api/connectioncontext"
 )
 
 // IsRemote returns if connection is remote
@@ -67,7 +66,7 @@ func (m *Connection) Clone() *Connection {
 }
 
 // UpdateContext checks and tries to set connection context
-func (m *Connection) UpdateContext(context *connectioncontext.ConnectionContext) error {
+func (m *Connection) UpdateContext(context *ConnectionContext) error {
 	if err := context.MeetsRequirements(m.Context); err != nil {
 		return err
 	}
@@ -90,7 +89,7 @@ func (m *Connection) IsValid() error {
 	}
 
 	if m.GetNetworkService() == "" {
-		return errors.Errorf("connection.NetworkService cannot be empty: %v", m)
+		return errors.Errorf("NetworkService cannot be empty: %v", m)
 	}
 
 	if m.GetMechanism() != nil {
@@ -113,7 +112,7 @@ func (m *Connection) IsComplete() error {
 	}
 
 	if m.GetId() == "" {
-		return errors.Errorf("connection.Id cannot be empty: %v", m)
+		return errors.Errorf("Id cannot be empty: %v", m)
 	}
 
 	if err := m.GetContext().IsValid(); err != nil {

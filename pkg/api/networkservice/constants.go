@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco Systems, Inc.
+// Copyright (c) 2019-2020 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -14,27 +14,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package vxlan provides helper methods for the Mechanism vxlan
-package vxlan
-
-import (
-	"github.com/networkservicemesh/api/pkg/api/connection/mechanisms/common"
-)
+package networkservice
 
 const (
-	// MECHANISM string
-	MECHANISM = "VXLAN"
+	// Workspace - NSM workspace location mechanism property key
+	Workspace = "workspace"
+	// PodNameKey - pod name a container is running in
+	PodNameKey = "podName"
+	// NamespaceKey - namespace a container is running in
+	NamespaceKey = "namespace"
 
-	// Mechanism parameters
-
-	// SrcIP - source IP
-	SrcIP = common.SrcIP
-	// DstIP - destitiona IP
-	DstIP = common.DstIP
-	// SrcOriginalIP - original src IP
-	SrcOriginalIP = "orig_src_ip"
-	// DstExternalIP - external destination ip
-	DstExternalIP = "ext_src_ip"
-	// VNI - vni
-	VNI = "vni"
+	// DNSConfigShouldNotBeNil -
+	DNSConfigShouldNotBeNil = "dnsConfig should not be nil"
+	// DNSServerIpsShouldHaveRecords -
+	DNSServerIpsShouldHaveRecords = "dnsConfig should have records"
 )
