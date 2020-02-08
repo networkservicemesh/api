@@ -14,14 +14,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package sriovuserspace
+package vfio
 
 import (
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
 )
 
-// Mechanism - SRIOV userspace interface mechanism helper
+// Mechanism - vfio mechanism helper
 type Mechanism interface {
 	GetNetNSInode() string
 	GetParameters() map[string]string
