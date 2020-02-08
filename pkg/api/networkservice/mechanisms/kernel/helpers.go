@@ -27,7 +27,12 @@ import (
 type Mechanism interface {
 	// GetNetNSInode - return net ns inode
 	GetNetNSInode() string
+	// GetParameters() returns the map of all parameters for the mechanism
 	GetParameters() map[string]string
+	// GetPCIAddress() returns the PCI address to be used to back the kernel interface if set.
+	// If the PCIAddress is set, the mechanism should be backed by that PCI device
+	// If "" this is not a kernel interface backed by a PCI Device
+	GetPCIAddress() string
 }
 
 type mechanism struct {
@@ -56,4 +61,17 @@ func (m *mechanism) GetNetNSInode() string {
 		return ""
 	}
 	return m.GetParameters()[common.NetNSInodeKey]
+}
+
+// GetPCIAddress returns PCI address of the device
+func (m *mechanism) GetPCIAddress() string {
+	if m == nil || m.GetParameters() == nil {
+		return ""
+	}
+	return m.GetParameters()[PCIAddress]
+}
+
+// IsPCIDevice - true if this mechanism is for a PCI device
+func (m *mechanism) IsPCIDevice() bool {
+	return m.GetPCIAddress() == ""
 }
