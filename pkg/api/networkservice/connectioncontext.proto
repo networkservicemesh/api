@@ -39,9 +39,9 @@ message IpFamily {
 }
 
 message ExtraPrefixRequest {
-    IpFamily addr_family = 1;
-    uint32 prefix_len = 2;
-    uint32 required_number = 3;
+    IpFamily addr_family    = 1;
+    uint32 prefix_len       = 2;
+    uint32 required_number  = 3;
     uint32 requested_number = 4;
 }
 
@@ -79,16 +79,8 @@ message EthernetContext {
     string dst_mac = 2;
 }
 
-message MetricsContext {
-    /* Enable or Disable receiving of statistics events*/
-    bool enabled = 1;
-    /* Interval to receive events in */
-    int64 interval = 2;
-}
-
 message ConnectionContext {
     IPContext ip_context = 1; /* IP related context */
     DNSContext dns_context = 2; /* DNS related context */
     EthernetContext ethernet_context = 3;
-    MetricsContext metrics_context = 4; /* Metrics related context */
 }

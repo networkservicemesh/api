@@ -25,64 +25,54 @@ import "ptypes/timestamp/timestamp.proto";
 import "connectioncontext.proto";
 
 message Mechanism {
-    string cls = 1;
-    string type = 2;
-    map<string, string> parameters = 3;
+  string cls = 1;
+  string type = 2;
+  map<string, string> parameters = 3;
 }
 
 enum State {
-    UP = 0;
-    DOWN = 1;
+  UP = 0;
+  DOWN = 1;
 }
 
 message PathSegment {
-    string name = 1;
-    string id = 2;
-    string token = 3;
-    google.protobuf.Timestamp expires = 4;
+  string name      = 1;
+  string id        = 2;
+  string token = 3;
+  google.protobuf.Timestamp expires = 4;
+  map<string, string> metrics = 5;
 }
 message Path {
-    uint32 index = 1;
-    repeated PathSegment path_segments = 2;
+  uint32 index = 1;
+  repeated PathSegment path_segments = 2;
 }
 
 message Connection {
-    string id = 1;
-    string network_service = 2;
-    Mechanism mechanism = 3;
-    connectioncontext.ConnectionContext context = 4;
-    map<string, string> labels = 5;
-    Path path = 6;
-    string network_service_endpoint_name = 7;
-    State state = 9;
-}
-
-message MetricsSegment {
-    string name = 1;
-    string id = 2;
-    map<string, string> metrics = 3;
-}
-
-message Metrics {
-    repeated MetricsSegment metrics_segment = 1;
+  string id = 1;
+  string network_service = 2;
+  Mechanism mechanism = 3;
+  connectioncontext.ConnectionContext context = 4;
+  map<string, string> labels = 5;
+  Path path = 6;
+  string network_service_endpoint_name = 7;
+  State state = 9;
 }
 
 enum ConnectionEventType {
-    INITIAL_STATE_TRANSFER = 0;
-    UPDATE = 1;
-    DELETE = 2;
+  INITIAL_STATE_TRANSFER = 0;
+  UPDATE = 1;
+  DELETE = 2;
 }
 
 message ConnectionEvent {
-    ConnectionEventType type = 1;
-    map<string, Connection> connections = 2;
-    map<string, Metrics> metrics = 3;
+  ConnectionEventType type = 1;
+  map<string, Connection> connections = 2;
 }
 
 message MonitorScopeSelector {
-    repeated PathSegment path_segments = 1;
+  repeated PathSegment path_segments = 1;
 }
 
 service MonitorConnection {
-    rpc MonitorConnections (MonitorScopeSelector) returns (stream ConnectionEvent);
+  rpc MonitorConnections(MonitorScopeSelector) returns (stream ConnectionEvent);
 }
