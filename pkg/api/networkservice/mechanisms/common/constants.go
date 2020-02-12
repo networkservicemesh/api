@@ -14,6 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package common constants for Mechanism parameters shared between multiple Mechanism types
 package common
 
 const (

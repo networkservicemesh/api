@@ -17,11 +17,10 @@
 package vxlan
 
 import (
+	"net"
 	"strconv"
 
 	"github.com/pkg/errors"
-
-	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
 
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
@@ -29,9 +28,9 @@ import (
 // Mechanism - a vxlan mechanism utility wrapper
 type Mechanism interface {
 	// SrcIP -  src ip
-	SrcIP() (string, error)
+	SrcIP() net.IP
 	// DstIP - dst ip
-	DstIP() (string, error)
+	DstIP() net.IP
 	// VNI - vni
 	VNI() (uint32, error)
 }
@@ -50,12 +49,12 @@ func ToMechanism(m *networkservice.Mechanism) Mechanism {
 	return nil
 }
 
-func (m *mechanism) SrcIP() (string, error) {
-	return common.GetSrcIP(m.Mechanism)
+func (m *mechanism) SrcIP() net.IP {
+	return net.ParseIP(m.GetParameters()[SrcIP])
 }
 
-func (m *mechanism) DstIP() (string, error) {
-	return common.GetDstIP(m.Mechanism)
+func (m *mechanism) DstIP() net.IP {
+	return net.ParseIP(m.GetParameters()[DstIP])
 }
 
 // VNI returns the VNI parameter of the Mechanism
