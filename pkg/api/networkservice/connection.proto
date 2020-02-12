@@ -40,6 +40,7 @@ message PathSegment {
   string id        = 2;
   string token = 3;
   google.protobuf.Timestamp expires = 4;
+  map<string, string> metrics = 5;
 }
 message Path {
   uint32 index = 1;
