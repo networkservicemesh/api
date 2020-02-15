@@ -127,3 +127,14 @@ jobs:
       - name: Check for changes in generated code
         run: |
           git diff --name-only --exit-code pkg/ || ( echo "Rerun go generate ./... locally and resubmit" && false )
+
+  excludereplace:
+    name: Exclude Replace in go.mod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v1
+      - name: Exclude replace in go.mod
+        run: |
+          grep ^replace go.mod || exit 0
+          exit 1
