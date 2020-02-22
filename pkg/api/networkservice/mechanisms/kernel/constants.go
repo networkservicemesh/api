@@ -16,6 +16,10 @@
 
 package kernel
 
+import (
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
+)
+
 const (
 
 	// MECHANISM string
@@ -25,6 +29,7 @@ const (
 
 	// LinuxIfMaxLength - Linux has a limit of 15 characters for an interface name
 	LinuxIfMaxLength = 15
+
 	// SocketFilename - socket filename memif mechanism property key
 	SocketFilename = "socketfile"
 	// Master - NSMgr name
@@ -40,4 +45,12 @@ const (
 
 	// PCIAddress string
 	PCIAddress = "PCIAddress"
+
+	// NetNSInodeKey - netns inode mechanism property key
+	NetNSInodeKey = common.NetNSInodeKey
+
+	// InterfaceNameKey - interface name mechanism property key
+	InterfaceNameKey = common.InterfaceNameKey
+	// InterfaceDescriptionKey - interface description mechanism property key
+	InterfaceDescriptionKey = common.InterfaceNameKey
 )

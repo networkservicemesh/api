@@ -18,6 +18,8 @@
 package kernel
 
 import (
+	"fmt"
+
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
 
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
@@ -33,6 +35,10 @@ type Mechanism interface {
 	// If the PCIAddress is set, the mechanism should be backed by that PCI device
 	// If "" this is not a kernel interface backed by a PCI Device
 	GetPCIAddress() string
+	// GetInterfaceName - returns the Kernel Interface Name
+	//                    this is Mechanism.Parameters[InterfaceNameKey] if set
+	//                    otherwise returns a name computed from networkservice.Connection 'conn'
+	GetInterfaceName(conn *networkservice.Connection) string
 }
 
 type mechanism struct {
@@ -74,4 +80,27 @@ func (m *mechanism) GetPCIAddress() string {
 // IsPCIDevice - true if this mechanism is for a PCI device
 func (m *mechanism) IsPCIDevice() bool {
 	return m.GetPCIAddress() == ""
+}
+
+// GetInterfaceName - returns the Kernel Interface Name
+//                    this is Mechanism.Parameters[InterfaceNameKey] if set
+//                    otherwise returns a name computed from networkservice.Connection 'conn'
+func (m *mechanism) GetInterfaceName(conn *networkservice.Connection) string {
+	if m == nil || m.GetParameters()[InterfaceNameKey] == "" {
+		ns := conn.GetNetworkService()
+		nsMaxLength := LinuxIfMaxLength - 5
+		if len(ns) > nsMaxLength {
+			ns = ns[:nsMaxLength]
+		}
+		name := fmt.Sprintf("%s-%s", ns, conn.GetId())
+		if len(name) > LinuxIfMaxLength {
+			name = name[:LinuxIfMaxLength]
+		}
+		return name
+	}
+	name := m.GetParameters()[InterfaceNameKey]
+	if len(name) > LinuxIfMaxLength {
+		name = name[:LinuxIfMaxLength]
+	}
+	return name
 }
