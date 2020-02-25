@@ -20,8 +20,6 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/pkg/errors"
-
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
@@ -32,13 +30,13 @@ type Mechanism interface {
 	// DstIP - dst ip
 	DstIP() net.IP
 	// SrcPublicKey - source public key
-	SrcPublicKey() (string, error)
+	SrcPublicKey() string
 	// DstPublicKey - destination public key
-	DstPublicKey() (string, error)
+	DstPublicKey() string
 	// SrcPort - Source interface listening port
-	SrcPort() (int, error)
+	SrcPort() int
 	// SrcPort - Destination interface listening port
-	DstPort() (int, error)
+	DstPort() int
 }
 
 type mechanism struct {
@@ -63,61 +61,43 @@ func (m *mechanism) DstIP() net.IP {
 	return net.ParseIP(m.GetParameters()[DstIP])
 }
 
-func (m *mechanism) stringValue(parameter string) (string, error) {
-	if m == nil {
-		return "", errors.New("mechanism cannot be nil")
-	}
-
-	if m.GetParameters() == nil {
-		return "", errors.Errorf("mechanism.Parameters cannot be nil: %v", m)
-	}
-
-	value, ok := m.Parameters[parameter]
-	if !ok {
-		return "", errors.Errorf("mechanism.Type %s requires mechanism.Parameters[%s]", m.GetType(), parameter)
-	}
-
-	return value, nil
-}
-
 // SrcPublicKey returns the SrcPublicKey parameter of the Mechanism
-func (m *mechanism) SrcPublicKey() (string, error) {
-	return m.stringValue(SrcPublicKey)
+func (m *mechanism) SrcPublicKey() string {
+	return m.GetParameters()[SrcPublicKey]
 }
 
 // DstPublicKey returns the DstPublicKey parameter of the Mechanism
-func (m *mechanism) DstPublicKey() (string, error) {
-	return m.stringValue(DstPublicKey)
+func (m *mechanism) DstPublicKey() string {
+	return m.GetParameters()[DstPublicKey]
 }
 
 // SrcPort - Source interface listening port
-func (m *mechanism) SrcPort() (int, error) {
-	srcPortStr, err := m.stringValue(SrcPort)
-	if err != nil {
-		return 0, err
+func (m *mechanism) SrcPort() int {
+	srcPortStr := m.GetParameters()[SrcPort]
+	if srcPortStr == "" {
+		return 0
 	}
-
 	srcPort, err := strconv.ParseInt(srcPortStr, 10, 64)
 	if err != nil {
-		return 0, errors.Wrapf(err, "cannot parse mechanism.Parameters[%s]=%v value", SrcPort, srcPortStr)
+		return 0
 	}
 
-	return int(srcPort), nil
+	return int(srcPort)
 }
 
 // DstPort - Destination interface listening port
-func (m *mechanism) DstPort() (int, error) {
-	dstPortStr, err := m.stringValue(DstPort)
-	if err != nil {
-		return 0, err
+func (m *mechanism) DstPort() int {
+	dstPortStr := m.GetParameters()[DstPort]
+	if dstPortStr != "" {
+		return 0
 	}
 
 	dstPort, err := strconv.ParseInt(dstPortStr, 10, 64)
 	if err != nil {
-		return 0, errors.Wrapf(err, "cannot parse mechanism.Parameters[%s]=%v value", DstPort, dstPortStr)
+		return 0
 	}
 
-	return int(dstPort), nil
+	return int(dstPort)
 }
 
 // GetPort - returns unique port by connection ID for wireguard connection
