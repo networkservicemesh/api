@@ -43,10 +43,6 @@ const (
 	DstPort = "dst_port"
 	// SrcPublicKey - Source public key
 	SrcPublicKey = "src_public_key"
-	// SrcPrivateKey - Source private key
-	SrcPrivateKey = "src_private_key"
 	// DstPublicKey - Destination public key
 	DstPublicKey = "dst_public_key"
-	// DstPrivateKey - Source private key
-	DstPrivateKey = "dst_private_key"
 )

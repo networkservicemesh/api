@@ -35,10 +35,6 @@ type Mechanism interface {
 	SrcPublicKey() (string, error)
 	// DstPublicKey - destination public key
 	DstPublicKey() (string, error)
-	// SrcPrivateKey - source private key
-	SrcPrivateKey() (string, error)
-	// dstPrivateKey - destination private key
-	DstPrivateKey() (string, error)
 	// SrcPort - Source interface listening port
 	SrcPort() (int, error)
 	// SrcPort - Destination interface listening port
@@ -92,16 +88,6 @@ func (m *mechanism) SrcPublicKey() (string, error) {
 // DstPublicKey returns the DstPublicKey parameter of the Mechanism
 func (m *mechanism) DstPublicKey() (string, error) {
 	return m.stringValue(DstPublicKey)
-}
-
-// SrcPrivateKey returns the SrcPrivateKey parameter of the Mechanism
-func (m *mechanism) SrcPrivateKey() (string, error) {
-	return m.stringValue(SrcPrivateKey)
-}
-
-// DstPrivateKey returns the DstPrivateKey parameter of the Mechanism
-func (m *mechanism) DstPrivateKey() (string, error) {
-	return m.stringValue(DstPrivateKey)
 }
 
 // SrcPort - Source interface listening port
