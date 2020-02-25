@@ -120,8 +120,8 @@ func (m *mechanism) DstPort() (int, error) {
 	return int(dstPort), nil
 }
 
-// AssignPort - generate unique port by connection ID for wireguard connection
-func AssignPort(connID string) string {
+// GetPort - returns unique port by connection ID for wireguard connection
+func GetPort(connID string) string {
 	id, err := strconv.ParseUint(connID, 16, 64)
 	if err != nil {
 		id = 0
