@@ -19,82 +19,83 @@ package srv6
 import (
 	"net"
 
-	"github.com/pkg/errors"
-
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
 // Mechanism - a vxlan mechanism utility wrapper
 type Mechanism interface {
 	// SrcHostIP -  src localsid of mgmt interface
-	SrcHostIP() (string, error)
+	SrcHostIP() string
 	// DstHostIP - dst localsid of mgmt interface
-	DstHostIP() (string, error)
+	DstHostIP() string
 	// SrcBSID -  src BSID
-	SrcBSID() (string, error)
+	SrcBSID() string
 	// DstBSID - dst BSID
-	DstBSID() (string, error)
+	DstBSID() string
 	// SrcLocalSID -  src LocalSID
-	SrcLocalSID() (string, error)
+	SrcLocalSID() string
 	// DstLocalSID - dst LocalSID
-	DstLocalSID() (string, error)
+	DstLocalSID() string
 	// SrcHostLocalSID -  src host unique LocalSID
-	SrcHostLocalSID() (string, error)
+	SrcHostLocalSID() string
 	// DstHostLocalSID - dst host unique LocalSID
-	DstHostLocalSID() (string, error)
+	DstHostLocalSID() string
 	// SrcHardwareAddress -  src hw address
-	SrcHardwareAddress() (string, error)
+	SrcHardwareAddress() string
 	// DstHardwareAddress - dst hw address
-	DstHardwareAddress() (string, error)
+	DstHardwareAddress() string
 }
 
 type mechanism struct {
 	*networkservice.Mechanism
 }
 
-func (m mechanism) SrcHostIP() (string, error) {
+func (m mechanism) SrcHostIP() string {
 	return getIPParameter(m.Mechanism, SrcHostIP)
 }
 
-func (m mechanism) DstHostIP() (string, error) {
+func (m mechanism) DstHostIP() string {
 	return getIPParameter(m.Mechanism, DstHostIP)
 }
 
-func (m mechanism) SrcBSID() (string, error) {
+func (m mechanism) SrcBSID() string {
 	return getIPParameter(m.Mechanism, SrcBSID)
 }
 
-func (m mechanism) DstBSID() (string, error) {
+func (m mechanism) DstBSID() string {
 	return getIPParameter(m.Mechanism, DstBSID)
 }
 
-func (m mechanism) SrcLocalSID() (string, error) {
+func (m mechanism) SrcLocalSID() string {
 	return getIPParameter(m.Mechanism, SrcLocalSID)
 }
 
-func (m mechanism) DstLocalSID() (string, error) {
+func (m mechanism) DstLocalSID() string {
 	return getIPParameter(m.Mechanism, DstLocalSID)
 }
 
-func (m mechanism) SrcHostLocalSID() (string, error) {
+func (m mechanism) SrcHostLocalSID() string {
 	return getIPParameter(m.Mechanism, SrcHostLocalSID)
 }
 
-func (m mechanism) DstHostLocalSID() (string, error) {
+func (m mechanism) DstHostLocalSID() string {
 	return getIPParameter(m.Mechanism, DstHostLocalSID)
 }
 
-func (m mechanism) SrcHardwareAddress() (string, error) {
-	return getStringParameter(m.Mechanism, SrcHardwareAddress)
+func (m mechanism) SrcHardwareAddress() string {
+	return m.Mechanism.GetParameters()[SrcHardwareAddress]
 }
 
-func (m mechanism) DstHardwareAddress() (string, error) {
-	return getStringParameter(m.Mechanism, DstHardwareAddress)
+func (m mechanism) DstHardwareAddress() string {
+	return m.Mechanism.GetParameters()[DstHardwareAddress]
 }
 
 // ToMechanism - convert unified mechanism to useful wrapper
 func ToMechanism(m *networkservice.Mechanism) Mechanism {
 	if m.Type == MECHANISM {
+		if m.Parameters == nil {
+			m.Parameters = map[string]string{}
+		}
 		return &mechanism{
 			m,
 		}
@@ -102,33 +103,11 @@ func ToMechanism(m *networkservice.Mechanism) Mechanism {
 	return nil
 }
 
-func getIPParameter(m *networkservice.Mechanism, name string) (string, error) {
-	ip, err := getStringParameter(m, name)
-	if err != nil {
-		return "", err
-	}
-
+func getIPParameter(m *networkservice.Mechanism, name string) string {
+	ip := m.GetParameters()[name]
 	parsedIP := net.ParseIP(ip)
 	if parsedIP == nil {
-		return "", errors.Errorf("mechanism.Parameters[%s] must be a valid IPv4 or IPv6 address, instead was: %s: %v", name, ip, m)
+		return ""
 	}
-
-	return ip, nil
-}
-
-func getStringParameter(m *networkservice.Mechanism, name string) (string, error) {
-	if m == nil {
-		return "", errors.New("mechanism cannot be nil")
-	}
-
-	if m.GetParameters() == nil {
-		return "", errors.Errorf("mechanism.Parameters cannot be nil: %v", m)
-	}
-
-	v, ok := m.Parameters[name]
-	if !ok {
-		return "", errors.Errorf("mechanism.Type %s requires mechanism.Parameters[%s]", m.GetType(), name)
-	}
-
-	return v, nil
+	return ip
 }
