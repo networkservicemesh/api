@@ -46,6 +46,9 @@ type mechanism struct {
 // ToMechanism - convert unified mechanism to useful wrapper
 func ToMechanism(m *networkservice.Mechanism) Mechanism {
 	if m.Type == MECHANISM {
+		if m.GetParameters() == nil {
+			m.Parameters = map[string]string{}
+		}
 		return &mechanism{
 			m,
 		}
