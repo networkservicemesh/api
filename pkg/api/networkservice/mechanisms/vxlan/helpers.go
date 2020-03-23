@@ -20,8 +20,6 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/pkg/errors"
-
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
@@ -32,7 +30,7 @@ type Mechanism interface {
 	// DstIP - dst ip
 	DstIP() net.IP
 	// VNI - vni
-	VNI() (uint32, error)
+	VNI() uint32
 }
 
 type mechanism struct {
@@ -42,6 +40,9 @@ type mechanism struct {
 // ToMechanism - convert unified mechanism to useful wrapper
 func ToMechanism(m *networkservice.Mechanism) Mechanism {
 	if m.GetType() == MECHANISM {
+		if m.Parameters == nil {
+			m.Parameters = map[string]string{}
+		}
 		return &mechanism{
 			m,
 		}
@@ -58,25 +59,22 @@ func (m *mechanism) DstIP() net.IP {
 }
 
 // VNI returns the VNI parameter of the Mechanism
-func (m *mechanism) VNI() (uint32, error) {
+func (m *mechanism) VNI() uint32 {
 	if m == nil {
-		return 0, errors.New("mechanism cannot be nil")
+		return 0
 	}
 
 	if m.GetParameters() == nil {
-		return 0, errors.Errorf("mechanism.Parameters cannot be nil: %v", m)
+		return 0
 	}
 
-	vxlanvni, ok := m.Parameters[VNI]
-	if !ok {
-		return 0, errors.Errorf("mechanism.Type %s requires mechanism.Parameters[%s]", m.GetType(), VNI)
-	}
+	vxlanvni := m.Parameters[VNI]
 
 	vni, err := strconv.ParseUint(vxlanvni, 10, 24)
 
 	if err != nil {
-		return 0, errors.Wrapf(err, "mechanism.Parameters[%s] must be a valid 24-bit unsigned integer, instead was: %s: %v", VNI, vxlanvni, m)
+		return 0
 	}
 
-	return uint32(vni), nil
+	return uint32(vni)
 }
