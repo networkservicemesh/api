@@ -92,8 +92,8 @@ func (m mechanism) DstHardwareAddress() string {
 
 // ToMechanism - convert unified mechanism to useful wrapper
 func ToMechanism(m *networkservice.Mechanism) Mechanism {
-	if m.Type == MECHANISM {
-		if m.Parameters == nil {
+	if m.GetType() == MECHANISM {
+		if m.GetParameters() == nil {
 			m.Parameters = map[string]string{}
 		}
 		return &mechanism{
