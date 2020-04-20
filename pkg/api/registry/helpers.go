@@ -31,3 +31,20 @@ func (nse *NSERegistration) GetEndpointNSMName() EndpointNSMName {
 func NewEndpointNSMName(endpoint *NetworkServiceEndpoint, manager *NetworkServiceManager) EndpointNSMName {
 	return EndpointNSMName(endpoint.Name + ":" + manager.Url)
 }
+
+// ServiceNames - returns grpc ServiceNames implemented by impl
+func ServiceNames(impl interface{}, existingServiceNames ...string) []string {
+	if _, ok := impl.(NetworkServiceRegistryServer); ok {
+		existingServiceNames = append(existingServiceNames, _NetworkServiceRegistry_serviceDesc.ServiceName)
+	}
+	if _, ok := impl.(NetworkServiceRegistryClient); ok {
+		existingServiceNames = append(existingServiceNames, _NetworkServiceRegistry_serviceDesc.ServiceName)
+	}
+	if _, ok := impl.(NetworkServiceDiscoveryServer); ok {
+		existingServiceNames = append(existingServiceNames, _NetworkServiceDiscovery_serviceDesc.ServiceName)
+	}
+	if _, ok := impl.(NetworkServiceDiscoveryClient); ok {
+		existingServiceNames = append(existingServiceNames, _NetworkServiceDiscovery_serviceDesc.ServiceName)
+	}
+	return existingServiceNames
+}
