@@ -73,3 +73,20 @@ func (m *NetworkServiceRequest) IsValid() error {
 
 	return nil
 }
+
+// ServiceNames - returns grpc ServiceNames implemented by impl
+func ServiceNames(impl interface{}, existingServiceNames ...string) []string {
+	if _, ok := impl.(NetworkServiceServer); ok {
+		existingServiceNames = append(existingServiceNames, _NetworkService_serviceDesc.ServiceName)
+	}
+	if _, ok := impl.(NetworkServiceClient); ok {
+		existingServiceNames = append(existingServiceNames, _NetworkService_serviceDesc.ServiceName)
+	}
+	if _, ok := impl.(MonitorConnectionServer); ok {
+		existingServiceNames = append(existingServiceNames, _MonitorConnection_serviceDesc.ServiceName)
+	}
+	if _, ok := impl.(MonitorConnectionClient); ok {
+		existingServiceNames = append(existingServiceNames, _MonitorConnection_serviceDesc.ServiceName)
+	}
+	return existingServiceNames
+}
