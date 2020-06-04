@@ -24,15 +24,13 @@ message Destination {
 
 message NetworkServiceEndpoint {
     string name = 1;
-    string payload = 2;
-    string network_service_name = 3;
-    map<string, string> labels = 4;
-    string state = 5;
+    repeated string network_service_name = 2;
+    map<string, string> labels = 3;
     // Endpoint callback address, could be any of unix/tcp/callback schema ones.
-    string url = 6;
+    string url = 4;
     // Network service manager URL for the endpoint.
-    string network_service_manger_url = 7;
-    google.protobuf.Timestamp expiration_time = 8;
+    string network_service_manger_url = 5;
+    google.protobuf.Timestamp expiration_time = 6;
 }
 
 service NetworkServiceEndpointRegistry {
@@ -50,7 +48,7 @@ service NetworkServiceRegistry {
 }
 
 message NetworkServiceSelector {
-    string network_service_name = 1;
+    repeated string network_service_name = 1;
     string payload = 2;
 }
 
