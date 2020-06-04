@@ -36,14 +36,14 @@ message NetworkServiceEndpoint {
 service NetworkServiceEndpointRegistry {
     rpc RegisterOrUpdate (NetworkServiceEndpoint) returns (NetworkServiceEndpoint);
     rpc Monitor (NetworkServiceEndpointSelector) returns (stream NetworkServiceEndpoint);
-    rpc Find (NetworkServiceEndpointSelector) returns (stream NetworkServiceEndpoint);
+    rpc Find (NetworkServiceEndpointSelector) returns (stream NetworkServiceEndpointList);
     rpc Unregister (NetworkServiceEndpoint) returns (google.protobuf.Empty);
 }
 
 service NetworkServiceRegistry {
     rpc RegisterOrUpdate (NetworkService) returns (NetworkService);
     rpc Monitor (NetworkServiceSelector) returns (stream NetworkService);
-    rpc Find (NetworkServiceSelector) returns (stream NetworkService);
+    rpc Find (NetworkServiceSelector) returns (stream NetworkServiceList);
     rpc Unregister (NetworkService) returns (google.protobuf.Empty);
 }
 
@@ -57,4 +57,12 @@ message NetworkServiceEndpointSelector {
     string network_service_manger_url = 2;
     map<string, string> labels = 3;
     NetworkServiceSelector service_selector = 4;
+}
+
+message NetworkServiceList {
+   repeated NetworkService list = 1;
+}
+
+message NetworkServiceEndpointList {
+   repeated NetworkServiceEndpoint list = 1;
 }
