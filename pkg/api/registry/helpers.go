@@ -19,14 +19,6 @@ package registry
 // EndpointNSMName -  - a type to hold endpoint and nsm url composite type.
 type EndpointNSMName string
 
-// GetEndpointNSMName - return a Endpoint.Name + ":" + NetworkServiceManager.Url
-func (nse *NSERegistration) GetEndpointNSMName() EndpointNSMName {
-	if nse == nil {
-		return ""
-	}
-	return NewEndpointNSMName(nse.NetworkServiceEndpoint, nse.NetworkServiceManager)
-}
-
 // NewEndpointNSMName - construct an NewEndpointNSMName from endpoint and manager
 func NewEndpointNSMName(endpoint, manager *NetworkServiceEndpoint) EndpointNSMName {
 	return EndpointNSMName(endpoint.Name + ":" + manager.Url)
@@ -40,11 +32,11 @@ func ServiceNames(impl interface{}, existingServiceNames ...string) []string {
 	if _, ok := impl.(NetworkServiceRegistryClient); ok {
 		existingServiceNames = append(existingServiceNames, _NetworkServiceRegistry_serviceDesc.ServiceName)
 	}
-	if _, ok := impl.(NetworkServiceDiscoveryServer); ok {
-		existingServiceNames = append(existingServiceNames, _NetworkServiceDiscovery_serviceDesc.ServiceName)
+	if _, ok := impl.(NetworkServiceEndpointRegistryServer); ok {
+		existingServiceNames = append(existingServiceNames, _NetworkServiceEndpointRegistry_serviceDesc.ServiceName)
 	}
-	if _, ok := impl.(NetworkServiceDiscoveryClient); ok {
-		existingServiceNames = append(existingServiceNames, _NetworkServiceDiscovery_serviceDesc.ServiceName)
+	if _, ok := impl.(NetworkServiceEndpointRegistryClient); ok {
+		existingServiceNames = append(existingServiceNames, _NetworkServiceEndpointRegistry_serviceDesc.ServiceName)
 	}
 	return existingServiceNames
 }

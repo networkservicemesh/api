@@ -30,36 +30,33 @@ message NetworkServiceEndpoint {
     string state = 5;
     // Endpoint callback address, could be any of unix/tcp/callback schema ones.
     string url = 6;
-    google.protobuf.Timestamp expiration_time = 7;
+    // Network service manager URL for the endpoint.
+    string network_service_manger_url = 7;
+    google.protobuf.Timestamp expiration_time = 8;
 }
 
-message NSERegistration {
-    NetworkService network_service = 1;
-    NetworkServiceEndpoint network_service_manager = 2;
-    NetworkServiceEndpoint network_service_endpoint = 3;
+service NetworkServiceEndpointRegistry {
+    rpc RegisterOrUpdate (NetworkServiceEndpoint) returns (NetworkServiceEndpoint);
+    rpc Monitor (NetworkServiceEndpointSelector) returns (stream NetworkServiceEndpoint);
+    rpc Find (NetworkServiceEndpointSelector) returns (stream NetworkServiceEndpoint);
+    rpc Unregister (NetworkServiceEndpoint) returns (google.protobuf.Empty);
 }
 
 service NetworkServiceRegistry {
-    rpc Register (NSERegistration) returns (NSERegistration);
-    rpc Monitor (NetworkServiceSelector) returns (stream NSERegistration);
-    rpc Remove (NetworkServiceSelector) returns (google.protobuf.Empty);
-    rpc Update (NSERegistration) returns (NSERegistration);
-}
-
-service NetworkServiceDiscovery {
-    rpc FindNetworkService (NetworkServiceSelector) returns (stream NSERegistration);
-}
-
-enum NetworkServiceKind {
-    CROSS_CONNECT_NSE = 0;
-    NETWORK_SERVICE_MANAGER = 1;
-    NETWORK_SERVICE_ENDPOINT = 2;
+    rpc RegisterOrUpdate (NetworkService) returns (NetworkService);
+    rpc Monitor (NetworkServiceSelector) returns (stream NetworkService);
+    rpc Find (NetworkServiceSelector) returns (stream NetworkService);
+    rpc Unregister (NetworkService) returns (google.protobuf.Empty);
 }
 
 message NetworkServiceSelector {
-    NetworkServiceKind kind = 1;
-    string network_service_endpoint_name = 2;
-    string network_service_name = 3;
-    map<string, string> labels = 4;
-    string payload = 5;
+    string network_service_name = 1;
+    string payload = 2;
+}
+
+message NetworkServiceEndpointSelector {
+    string network_service_endpoint_name = 1;
+    string network_service_manger_url = 2;
+    map<string, string> labels = 3;
+    NetworkServiceSelector service_selector = 4;
 }
