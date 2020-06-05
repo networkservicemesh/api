@@ -38,14 +38,14 @@ message NetworkServiceEndpoint {
 }
 
 service NetworkServiceEndpointRegistry {
-    rpc RegisterOrUpdate (NetworkServiceEndpoint) returns (NetworkServiceEndpoint);
+    rpc Register (NetworkServiceEndpoint) returns (NetworkServiceEndpoint);
     rpc Monitor (NetworkServiceEndpointQuery) returns (stream NetworkServiceEndpoint);
     rpc Find (NetworkServiceEndpointQuery) returns (stream NetworkServiceEndpointList);
     rpc Unregister (NetworkServiceEndpoint) returns (google.protobuf.Empty);
 }
 
 service NetworkServiceRegistry {
-    rpc RegisterOrUpdate (NetworkService) returns (NetworkService);
+    rpc Register (NetworkService) returns (NetworkService);
     rpc Monitor (NetworkServiceQuery) returns (stream NetworkService);
     rpc Find (NetworkServiceQuery) returns (stream NetworkServiceList);
     rpc Unregister (NetworkService) returns (google.protobuf.Empty);
