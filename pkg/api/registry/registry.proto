@@ -22,10 +22,14 @@ message Destination {
     uint32 weight = 2;
 }
 
+message NetworkServiceLabels {
+    map<string, string> labels = 1;
+}
+
 message NetworkServiceEndpoint {
     string name = 1;
     repeated string network_service_name = 2;
-    map<string, string> labels = 3;
+    map<string, NetworkServiceLabels> labels = 3;
     // Endpoint callback address, could be any of unix/tcp/callback schema ones.
     string url = 4;
     // Network service manager URL for the endpoint.
