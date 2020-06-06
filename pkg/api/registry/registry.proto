@@ -29,7 +29,7 @@ message NetworkServiceLabels {
 message NetworkServiceEndpoint {
     string name = 1;
     repeated string network_service_name = 2;
-    map<string, NetworkServiceLabels> labels = 3;
+    map<string, NetworkServiceLabels> network_service_labels = 3;
     // Endpoint callback address, could be any of unix/tcp/callback schema ones.
     string url = 4;
     // Network service manager URL for the endpoint.

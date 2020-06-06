@@ -16,14 +16,6 @@
 
 package registry
 
-// EndpointNSMName -  - a type to hold endpoint and nsm url composite type.
-type EndpointNSMName string
-
-// NewEndpointNSMName - construct an NewEndpointNSMName from endpoint and manager
-func NewEndpointNSMName(endpoint, manager *NetworkServiceEndpoint) EndpointNSMName {
-	return EndpointNSMName(endpoint.Name + ":" + manager.Url)
-}
-
 // ServiceNames - returns grpc ServiceNames implemented by impl
 func ServiceNames(impl interface{}, existingServiceNames ...string) []string {
 	if _, ok := impl.(NetworkServiceRegistryServer); ok {
