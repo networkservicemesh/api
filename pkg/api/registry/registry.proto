@@ -22,61 +22,37 @@ message Destination {
     uint32 weight = 2;
 }
 
-message NetworkServiceManager {
-    string name = 1;
-    string url = 2;
-    google.protobuf.Timestamp expiration_time = 3;
-    string state = 4;
+message NetworkServiceLabels {
+    map<string, string> labels = 1;
 }
 
 message NetworkServiceEndpoint {
     string name = 1;
-    string payload = 2;
-    string network_service_name = 3;
-    string network_service_manager_name = 4;
-    map<string, string> labels = 5;
-    string state = 6;
-
-    // Endpoint callback address, could be any of unix/tcp/callback schema ones.
-    string url = 7;
+    repeated string network_service_name = 2;
+    map<string, NetworkServiceLabels> network_service_labels = 3;
+    string url = 4;
+    google.protobuf.Timestamp expiration_time = 5;
 }
 
-message FindNetworkServiceRequest {
-    string network_service_name = 1;
-}
-
-message FindNetworkServiceResponse {
-    string payload = 1;
-    NetworkService network_service = 2;
-    map<string, NetworkServiceManager> network_service_managers = 3;
-    repeated NetworkServiceEndpoint network_service_endpoints = 4;
-}
-
-message NSERegistration {
-    NetworkService network_service = 1;
-    NetworkServiceManager network_service_manager = 2;
-    NetworkServiceEndpoint network_service_endpoint = 3;
-}
-
-message RemoveNSERequest {
-    string network_service_endpoint_name = 1;
+service NetworkServiceEndpointRegistry {
+    rpc Register (NetworkServiceEndpoint) returns (NetworkServiceEndpoint);
+    rpc Monitor (NetworkServiceEndpointQuery) returns (stream NetworkServiceEndpoint);
+    rpc Find (NetworkServiceEndpointQuery) returns (stream NetworkServiceEndpoint);
+    rpc Unregister (NetworkServiceEndpoint) returns (google.protobuf.Empty);
 }
 
 service NetworkServiceRegistry {
-    rpc RegisterNSE (NSERegistration) returns (NSERegistration);
-    rpc BulkRegisterNSE (stream NSERegistration) returns (stream NSERegistration);
-    rpc RemoveNSE (RemoveNSERequest) returns (google.protobuf.Empty);
+    rpc Register (NetworkService) returns (NetworkService);
+    rpc Monitor (NetworkServiceQuery) returns (stream NetworkService);
+    rpc Find (NetworkServiceQuery) returns (stream NetworkService);
+    rpc Unregister (NetworkService) returns (google.protobuf.Empty);
 }
 
-service NetworkServiceDiscovery {
-    rpc FindNetworkService (FindNetworkServiceRequest) returns (FindNetworkServiceResponse);
+message NetworkServiceQuery {
+    NetworkService network_service = 1;
 }
 
-message NetworkServiceEndpointList {
-    repeated NetworkServiceEndpoint network_service_endpoints = 1;
-}
-
-service NsmRegistry {
-    rpc RegisterNSM (NetworkServiceManager) returns (NetworkServiceManager);
-    rpc GetEndpoints (google.protobuf.Empty) returns (NetworkServiceEndpointList);
+message NetworkServiceEndpointQuery {
+    NetworkServiceEndpoint network_service_endpoint = 1;
+    NetworkService network_service = 2;
 }
