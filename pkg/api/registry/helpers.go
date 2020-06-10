@@ -24,11 +24,5 @@ func ServiceNames(impl interface{}, existingServiceNames ...string) []string {
 	if _, ok := impl.(NetworkServiceRegistryClient); ok {
 		existingServiceNames = append(existingServiceNames, _NetworkServiceRegistry_serviceDesc.ServiceName)
 	}
-	if _, ok := impl.(NetworkServiceEndpointRegistryServer); ok {
-		existingServiceNames = append(existingServiceNames, _NetworkServiceEndpointRegistry_serviceDesc.ServiceName)
-	}
-	if _, ok := impl.(NetworkServiceEndpointRegistryClient); ok {
-		existingServiceNames = append(existingServiceNames, _NetworkServiceEndpointRegistry_serviceDesc.ServiceName)
-	}
 	return existingServiceNames
 }
