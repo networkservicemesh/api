@@ -34,25 +34,19 @@ message NetworkServiceEndpoint {
     google.protobuf.Timestamp expiration_time = 5;
 }
 
-service NetworkServiceEndpointRegistry {
-    rpc Register (NetworkServiceEndpoint) returns (NetworkServiceEndpoint);
-    rpc Find (NetworkServiceEndpointQuery) returns (stream NetworkServiceEndpoint);
-    rpc Unregister (NetworkServiceEndpoint) returns (google.protobuf.Empty);
-}
-
 service NetworkServiceRegistry {
-    rpc Register (NetworkService) returns (NetworkService);
-    rpc Find (NetworkServiceQuery) returns (stream NetworkService);
-    rpc Unregister (NetworkService) returns (google.protobuf.Empty);
+    rpc Register (Registration) returns (NetworkService);
+    rpc Find (NetworkServiceRegistryQuery) returns (stream Registration);
+    rpc Unregister (Registration) returns (google.protobuf.Empty);
 }
 
-message NetworkServiceQuery {
-    NetworkService network_service = 1;
-    bool watch = 2;
-}
-
-message NetworkServiceEndpointQuery {
+message NetworkServiceRegistryQuery {
     NetworkServiceEndpoint network_service_endpoint = 1;
     NetworkService network_service = 2;
     bool watch = 3;
+}
+
+message Registration {
+    NetworkServiceEndpoint network_service_endpoint = 1;
+    repeated NetworkService network_services = 2;
 }
