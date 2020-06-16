@@ -36,22 +36,40 @@ func ServiceNames(impl interface{}, existingServiceNames ...string) []string {
 // ReadNetworkServiceList read list of NetworkServices from passed stream
 func ReadNetworkServiceList(stream NetworkServiceRegistry_FindClient) []*NetworkService {
 	var result []*NetworkService
-	for msg, err := stream.Recv(); true; msg, err = stream.Recv() {
-		if err != nil {
-			break
-		}
+	for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
 		result = append(result, msg)
 	}
+	return result
+}
+
+// ReadNetworkServiceChannel reads NetworkServices from the stream and puts it into result channel
+func ReadNetworkServiceChannel(stream NetworkServiceRegistry_FindClient) <-chan *NetworkService {
+	result := make(chan *NetworkService)
+	go func() {
+		for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
+			result <- msg
+		}
+		close(result)
+	}()
+	return result
+}
+
+// ReadNetworkServiceEndpointChannel reads NetworkServiceEndpoint from the stream and puts it into result channel
+func ReadNetworkServiceEndpointChannel(stream NetworkServiceEndpointRegistry_FindClient) <-chan *NetworkServiceEndpoint {
+	result := make(chan *NetworkServiceEndpoint)
+	go func() {
+		for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
+			result <- msg
+		}
+		close(result)
+	}()
 	return result
 }
 
 // ReadNetworkServiceEndpointList read list of NetworkServiceEndpoints from passed stream
 func ReadNetworkServiceEndpointList(stream NetworkServiceEndpointRegistry_FindClient) []*NetworkServiceEndpoint {
 	var result []*NetworkServiceEndpoint
-	for msg, err := stream.Recv(); true; msg, err = stream.Recv() {
-		if err != nil {
-			break
-		}
+	for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
 		result = append(result, msg)
 	}
 	return result
