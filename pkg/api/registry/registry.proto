@@ -53,6 +53,5 @@ message NetworkServiceQuery {
 
 message NetworkServiceEndpointQuery {
     NetworkServiceEndpoint network_service_endpoint = 1;
-    NetworkService network_service = 2;
-    bool watch = 3;
+    bool watch = 2;
 }
