@@ -28,7 +28,7 @@ message NetworkServiceLabels {
 
 message NetworkServiceEndpoint {
     string name = 1;
-    repeated string network_service_name = 2;
+    repeated string network_service_names = 2;
     map<string, NetworkServiceLabels> network_service_labels = 3;
     string url = 4;
     google.protobuf.Timestamp expiration_time = 5;
