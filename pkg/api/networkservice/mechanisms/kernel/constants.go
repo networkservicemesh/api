@@ -30,19 +30,6 @@ const (
 	// LinuxIfMaxLength - Linux has a limit of 15 characters for an interface name
 	LinuxIfMaxLength = 15
 
-	// SocketFilename - socket filename memif mechanism property key
-	SocketFilename = "socketfile"
-	// Master - NSMgr name
-	Master = "master"
-	// Slave - NSMgr name
-	Slave = "slave"
-	// WorkspaceNSEName - NSE workspace name mechanism property key
-	WorkspaceNSEName = "workspaceNseName"
-	// MemifSocket - memif socket filename
-	MemifSocket = "memif.sock"
-	// NSMBaseDirEnv - NSM location directory
-	NSMBaseDirEnv = "NSM_BASE_DIR"
-
 	// PCIAddress string
 	PCIAddress = "PCIAddress"
 
@@ -51,6 +38,4 @@ const (
 
 	// InterfaceNameKey - interface name mechanism property key
 	InterfaceNameKey = common.InterfaceNameKey
-	// InterfaceDescriptionKey - interface description mechanism property key
-	InterfaceDescriptionKey = common.InterfaceNameKey
 )

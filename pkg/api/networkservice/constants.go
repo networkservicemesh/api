@@ -17,13 +17,6 @@
 package networkservice
 
 const (
-	// Workspace - NSM workspace location mechanism property key
-	Workspace = "workspace"
-	// PodNameKey - pod name a container is running in
-	PodNameKey = "podName"
-	// NamespaceKey - namespace a container is running in
-	NamespaceKey = "namespace"
-
 	// DNSConfigShouldNotBeNil -
 	DNSConfigShouldNotBeNil = "dnsConfig should not be nil"
 	// DNSServerIpsShouldHaveRecords -
