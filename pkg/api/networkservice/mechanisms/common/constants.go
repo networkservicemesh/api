@@ -29,6 +29,4 @@ const (
 	Workspace = "workspace"
 	// InterfaceNameKey - interface name mechanism property key
 	InterfaceNameKey = "name"
-	// InterfaceDescriptionKey - interface description mechanism property key
-	InterfaceDescriptionKey = "description"
 )

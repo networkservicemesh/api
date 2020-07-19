@@ -22,12 +22,6 @@ const (
 
 	// Mechanism parameters
 
-	// MemifSocket - memif socket filename
-	MemifSocket = "memif.sock"
 	// SocketFilename - name of the memif socketfile
 	SocketFilename = "socketfile"
-	// Master - NSMgr name
-	Master = "master"
-	// Slave - NSMgr name
-	Slave = "slave"
 )
