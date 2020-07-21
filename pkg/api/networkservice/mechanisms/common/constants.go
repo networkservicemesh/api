@@ -29,4 +29,7 @@ const (
 	Workspace = "workspace"
 	// InterfaceNameKey - interface name mechanism property key
 	InterfaceNameKey = "name"
+
+	// InodeURL - url of the for inode://${dev}/${ino} to represent various netns, memif socket files etc
+	InodeURL = "inodeURL"
 )

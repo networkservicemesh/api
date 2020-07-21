@@ -38,4 +38,7 @@ const (
 
 	// InterfaceNameKey - interface name mechanism property key
 	InterfaceNameKey = common.InterfaceNameKey
+
+	// NetNSURL - url representing an inode - fmt.Sprintf("inode://%d/%d",dev,ino)
+	NetNSURL = common.InodeURL
 )
