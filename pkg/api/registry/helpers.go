@@ -16,6 +16,10 @@
 
 package registry
 
+import (
+	"github.com/golang/protobuf/proto"
+)
+
 // ServiceNames - returns grpc ServiceNames implemented by impl
 func ServiceNames(impl interface{}, existingServiceNames ...string) []string {
 	if _, ok := impl.(NetworkServiceRegistryServer); ok {
@@ -73,4 +77,14 @@ func ReadNetworkServiceEndpointList(stream NetworkServiceEndpointRegistry_FindCl
 		result = append(result, msg)
 	}
 	return result
+}
+
+// Clone clones request
+func (m *NetworkService) Clone() *NetworkService {
+	return proto.Clone(m).(*NetworkService)
+}
+
+// Clone clones request
+func (m *NetworkServiceEndpoint) Clone() *NetworkServiceEndpoint {
+	return proto.Clone(m).(*NetworkServiceEndpoint)
 }
