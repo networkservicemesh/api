@@ -20,6 +20,7 @@ package kernel
 import (
 	"fmt"
 
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
 
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
@@ -39,6 +40,9 @@ type Mechanism interface {
 	//                    this is Mechanism.Parameters[InterfaceNameKey] if set
 	//                    otherwise returns a name computed from networkservice.Connection 'conn'
 	GetInterfaceName(conn *networkservice.Connection) string
+	// GetNetNSURL - returns the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+	GetNetNSURL() string
+	SetNetNSURL(urlString string)
 }
 
 type mechanism struct {
@@ -53,6 +57,17 @@ func ToMechanism(m *networkservice.Mechanism) Mechanism {
 		}
 	}
 	return nil
+}
+
+// New - return *networkservice.Mechanism of type kernel using the given netnsURL (inode://${dev}/${ino})
+func New(netnsURL string) *networkservice.Mechanism {
+	return &networkservice.Mechanism{
+		Cls:  cls.LOCAL,
+		Type: MECHANISM,
+		Parameters: map[string]string{
+			NetNSURL: netnsURL,
+		},
+	}
 }
 
 func (m *mechanism) GetParameters() map[string]string {
@@ -103,4 +118,22 @@ func (m *mechanism) GetInterfaceName(conn *networkservice.Connection) string {
 		name = name[:LinuxIfMaxLength]
 	}
 	return name
+}
+
+// GetNetNSURL - returns the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+func (m *mechanism) GetNetNSURL() string {
+	if m == nil || m.GetParameters() == nil {
+		return ""
+	}
+	return m.GetParameters()[NetNSURL]
+}
+
+func (m *mechanism) SetNetNSURL(urlString string) {
+	if m == nil {
+		return
+	}
+	if m.Parameters == nil {
+		m.Parameters = make(map[string]string)
+	}
+	m.GetParameters()[NetNSURL] = urlString
 }
