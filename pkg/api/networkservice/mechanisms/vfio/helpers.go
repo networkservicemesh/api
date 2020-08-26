@@ -1,4 +1,5 @@
 // Copyright (c) 2020 Intel Corporation. All Rights Reserved.
+// Copyright (c) 2020 Doc.ai and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -17,51 +18,114 @@
 package vfio
 
 import (
+	"strconv"
+
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
-	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
 )
 
 // Mechanism - vfio mechanism helper
-type Mechanism interface {
-	GetNetNSInode() string
-	GetParameters() map[string]string
-	GetPCIAddress() string
-}
-
-type mechanism struct {
+type Mechanism struct {
 	*networkservice.Mechanism
 }
 
 // ToMechanism converts unified mechanism to helper
-func ToMechanism(m *networkservice.Mechanism) Mechanism {
+func ToMechanism(m *networkservice.Mechanism) *Mechanism {
 	if m.GetType() == MECHANISM {
-		return &mechanism{
+		return &Mechanism{
 			m,
 		}
 	}
 	return nil
 }
 
-// GetParameters returns map of mechanism parameters
-func (m *mechanism) GetParameters() map[string]string {
-	if m == nil {
-		return nil
-	}
-	return m.Parameters
-}
-
-// GetParameters returns network namespace Inode
-func (m *mechanism) GetNetNSInode() string {
-	if m == nil || m.GetParameters() == nil {
+// GetCgroupDir returns client on host cgroup directory
+func (m *Mechanism) GetCgroupDir() string {
+	if m.Parameters == nil {
 		return ""
 	}
-	return m.GetParameters()[common.NetNSInodeKey]
+	return m.GetParameters()[CgroupDirKey]
 }
 
-// GetPCIAddress returns PCI address of the VF device
-func (m *mechanism) GetPCIAddress() string {
-	if m == nil || m.GetParameters() == nil {
-		return ""
+// SetCgroupDir sets client on host cgroup directory
+func (m *Mechanism) SetCgroupDir(cgroupDir string) {
+	if m.Parameters == nil {
+		m.Parameters = map[string]string{}
 	}
-	return m.GetParameters()[PCIAddress]
+	m.Parameters[CgroupDirKey] = cgroupDir
+}
+
+// GetVfioMajor returns /dev/vfio major number
+func (m *Mechanism) GetVfioMajor() uint32 {
+	if m.Parameters == nil {
+		return 0
+	}
+	return atou(m.Parameters[VfioMajorKey])
+}
+
+// SetVfioMajor sets /dev/vfio major number
+func (m *Mechanism) SetVfioMajor(vfioMajor uint32) {
+	if m.Parameters == nil {
+		m.Parameters = map[string]string{}
+	}
+	m.Parameters[VfioMajorKey] = utoa(vfioMajor)
+}
+
+// GetVfioMinor returns /dev/vfio minor number
+func (m *Mechanism) GetVfioMinor() uint32 {
+	if m.Parameters == nil {
+		return 0
+	}
+	return atou(m.Parameters[VfioMinorKey])
+}
+
+// SetVfioMinor sets /dev/vfio minor number
+func (m *Mechanism) SetVfioMinor(vfioMinor uint32) {
+	if m.Parameters == nil {
+		m.Parameters = map[string]string{}
+	}
+	m.Parameters[VfioMinorKey] = utoa(vfioMinor)
+}
+
+// GetDeviceMajor returns /dev/${igid} major number
+func (m *Mechanism) GetDeviceMajor() uint32 {
+	if m.Parameters == nil {
+		return 0
+	}
+	return atou(m.Parameters[DeviceMajorKey])
+}
+
+// SetDeviceMajor sets /dev/${igid} major number
+func (m *Mechanism) SetDeviceMajor(deviceMajor uint32) {
+	if m.Parameters == nil {
+		m.Parameters = map[string]string{}
+	}
+	m.Parameters[DeviceMajorKey] = utoa(deviceMajor)
+}
+
+// GetDeviceMinor returns /dev/${igid} minor number
+func (m *Mechanism) GetDeviceMinor() uint32 {
+	if m.Parameters == nil {
+		return 0
+	}
+	return atou(m.Parameters[DeviceMinorKey])
+}
+
+// SetDeviceMinor sets /dev/${igid} minor number
+func (m *Mechanism) SetDeviceMinor(deviceMinor uint32) {
+	if m.Parameters == nil {
+		m.Parameters = map[string]string{}
+	}
+	m.Parameters[DeviceMinorKey] = utoa(deviceMinor)
+}
+
+func atou(a string) uint32 {
+	u, err := strconv.ParseUint(a, 10, 32)
+	if err != nil {
+		return 0
+	}
+	return uint32(u)
+}
+
+func utoa(u uint32) string {
+	return strconv.FormatUint(uint64(u), 10)
 }

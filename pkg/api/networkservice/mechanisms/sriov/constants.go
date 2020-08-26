@@ -1,4 +1,3 @@
-// Copyright (c) 2020 Intel Corporation. All Rights Reserved.
 // Copyright (c) 2020 Doc.ai and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -15,27 +14,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package vfio provides a Mechanism for using vfio devices.
-package vfio
+// Package sriov provides common parameters for SR-IOV mechanisms
+package sriov
 
 const (
-	// MECHANISM string
-	MECHANISM = "VFIO"
+	// EndpointVfPCIAddressKey is an endpoint VF PCI address property key
+	EndpointVfPCIAddressKey = "endpointVfPCIAddress"
 
-	// Parameters
+	// ClientPfPCIAddressKey is a client PF PCI address property key
+	ClientPfPCIAddressKey = "clientPfPCIAddress"
 
-	// CgroupDirKey is a client on host cgroup directory property key
-	CgroupDirKey = "cgroupDir"
+	// ClientVfPCIAddressKey is a client VF PCI address property key
+	ClientVfPCIAddressKey = "clientVfPCIAddress"
 
-	// VfioMajorKey is a /dev/vfio major number property key
-	VfioMajorKey = "vfioMajor"
-
-	// VfioMinorKey is a /dev/vfio minor number property key
-	VfioMinorKey = "vfioMinor"
-
-	// DeviceMajorKey is a /dev/${igid} major number property key
-	DeviceMajorKey = "deviceMajor"
-
-	// DeviceMinorKey is a /dev/${igid} minor number property key
-	DeviceMinorKey = "deviceMinor"
+	// IommuGroupKey is a IOMMU group id property key
+	IommuGroupKey = "iommuGroup"
 )
