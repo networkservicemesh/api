@@ -79,17 +79,9 @@ message EthernetContext {
     string dst_mac = 2;
 }
 
-message SRIOVContext {
-    string endpoint_vf_pci_address = 1;
-    string client_pf_pci_address = 2;
-    string client_vf_pci_address = 3;
-    uint32 iommu_group = 4;
-}
-
 message ConnectionContext {
     IPContext ip_context = 1; /* IP related context */
     DNSContext dns_context = 2; /* DNS related context */
     EthernetContext ethernet_context = 3;
-    SRIOVContext sriov_context = 4; /* SR-IOV related context */
-    map<string, string> extra_context = 5; /* a k,v map for transfering arbitrary information from an NSE to an NSC or dataplane */
+    map<string, string> extra_context = 4; /* a k,v map for transfering arbitrary information from an NSE to an NSC or dataplane */
 }
