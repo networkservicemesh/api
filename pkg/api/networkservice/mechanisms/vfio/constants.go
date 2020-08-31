@@ -27,6 +27,12 @@ const (
 	// CgroupDirKey is a client on host cgroup directory property key
 	CgroupDirKey = "cgroupDir"
 
+	// IommuGroupKey is a IOMMU group id property key
+	IommuGroupKey = "iommuGroup"
+
+	// PCIAddressKey is a PCI address property key
+	PCIAddressKey = "pciAddress"
+
 	// VfioMajorKey is a /dev/vfio major number property key
 	VfioMajorKey = "vfioMajor"
 
