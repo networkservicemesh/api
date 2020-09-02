@@ -32,4 +32,7 @@ const (
 
 	// InodeURL - url of the for inode://${dev}/${ino} to represent various netns, memif socket files etc
 	InodeURL = "inodeURL"
+
+	// PCIAddressKey - PCI address of the device for the SR-IOV supported mechanisms
+	PCIAddressKey = "pciAddress"
 )

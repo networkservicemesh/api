@@ -30,8 +30,8 @@ const (
 	// LinuxIfMaxLength - Linux has a limit of 15 characters for an interface name
 	LinuxIfMaxLength = 15
 
-	// PCIAddress string
-	PCIAddress = "PCIAddress"
+	// PCIAddressKey - device PCI address property key
+	PCIAddressKey = common.PCIAddressKey
 
 	// NetNSInodeKey - netns inode mechanism property key
 	NetNSInodeKey = common.NetNSInodeKey

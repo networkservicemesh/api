@@ -18,6 +18,8 @@
 // Package vfio provides a Mechanism for using vfio devices.
 package vfio
 
+import "github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
+
 const (
 	// MECHANISM string
 	MECHANISM = "VFIO"
@@ -31,7 +33,7 @@ const (
 	IommuGroupKey = "iommuGroup"
 
 	// PCIAddressKey is a PCI address property key
-	PCIAddressKey = "pciAddress"
+	PCIAddressKey = common.PCIAddressKey
 
 	// VfioMajorKey is a /dev/vfio major number property key
 	VfioMajorKey = "vfioMajor"
@@ -39,9 +41,9 @@ const (
 	// VfioMinorKey is a /dev/vfio minor number property key
 	VfioMinorKey = "vfioMinor"
 
-	// DeviceMajorKey is a /dev/${igid} major number property key
+	// DeviceMajorKey is a /dev/${IOMMU group id} major number property key
 	DeviceMajorKey = "deviceMajor"
 
-	// DeviceMinorKey is a /dev/${igid} minor number property key
+	// DeviceMinorKey is a /dev/${IOMMU group id} minor number property key
 	DeviceMinorKey = "deviceMinor"
 )
