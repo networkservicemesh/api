@@ -14,10 +14,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package raw provides a Mechanism for raw, no-mechanism connection
-package raw
+package noop
 
-const (
-	// MECHANISM string
-	MECHANISM = "RAW"
+import (
+	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
+
+// Mechanism - vlan mechanism helper
+type Mechanism struct {
+	*networkservice.Mechanism
+}
+
+// ToMechanism converts unified mechanism to helper
+func ToMechanism(m *networkservice.Mechanism) *Mechanism {
+	if m.GetType() == MECHANISM {
+		return &Mechanism{
+			m,
+		}
+	}
+	return nil
+}

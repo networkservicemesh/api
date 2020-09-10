@@ -14,23 +14,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package raw
+// Package noop provides a Mechanism for noop mechanism connection
+package noop
 
-import (
-	"github.com/networkservicemesh/api/pkg/api/networkservice"
+const (
+	// MECHANISM string
+	MECHANISM = "NOOP"
 )
-
-// Mechanism - vlan mechanism helper
-type Mechanism struct {
-	*networkservice.Mechanism
-}
-
-// ToMechanism converts unified mechanism to helper
-func ToMechanism(m *networkservice.Mechanism) *Mechanism {
-	if m.GetType() == MECHANISM {
-		return &Mechanism{
-			m,
-		}
-	}
-	return nil
-}
