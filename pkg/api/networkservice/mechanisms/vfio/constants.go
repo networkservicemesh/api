@@ -1,4 +1,5 @@
 // Copyright (c) 2020 Intel Corporation. All Rights Reserved.
+// Copyright (c) 2020 Doc.ai and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -17,12 +18,32 @@
 // Package vfio provides a Mechanism for using vfio devices.
 package vfio
 
+import "github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
+
 const (
 	// MECHANISM string
 	MECHANISM = "VFIO"
 
-	// Mechanism parameters
+	// Parameters
 
-	// PCIAddress string
-	PCIAddress = "PCIAddress"
+	// CgroupDirKey is a client on host cgroup directory property key
+	CgroupDirKey = "cgroupDir"
+
+	// IommuGroupKey is a IOMMU group id property key
+	IommuGroupKey = "iommuGroup"
+
+	// PCIAddressKey is a PCI address property key
+	PCIAddressKey = common.PCIAddressKey
+
+	// VfioMajorKey is a /dev/vfio major number property key
+	VfioMajorKey = "vfioMajor"
+
+	// VfioMinorKey is a /dev/vfio minor number property key
+	VfioMinorKey = "vfioMinor"
+
+	// DeviceMajorKey is a /dev/${IOMMU group id} major number property key
+	DeviceMajorKey = "deviceMajor"
+
+	// DeviceMinorKey is a /dev/${IOMMU group id} minor number property key
+	DeviceMinorKey = "deviceMinor"
 )

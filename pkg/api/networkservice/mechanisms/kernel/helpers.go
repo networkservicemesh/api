@@ -20,46 +20,16 @@ package kernel
 import (
 	"fmt"
 
-	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"
-	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
-
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"
 )
 
-// Mechanism - kernel mechanism helper
-type Mechanism interface {
-	// GetNetNSInode - return net ns inode
-	GetNetNSInode() string
-	// GetParameters() returns the map of all parameters for the mechanism
-	GetParameters() map[string]string
-	// GetPCIAddress() returns the PCI address to be used to back the kernel interface if set.
-	// If the PCIAddress is set, the mechanism should be backed by that PCI device
-	// If "" this is not a kernel interface backed by a PCI Device
-	GetPCIAddress() string
-	// GetInterfaceName - returns the Kernel Interface Name
-	//                    this is Mechanism.Parameters[InterfaceNameKey] if set
-	//                    otherwise returns a name computed from networkservice.Connection 'conn'
-	GetInterfaceName(conn *networkservice.Connection) string
-	// GetNetNSURL - returns the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
-	GetNetNSURL() string
-	SetNetNSURL(urlString string)
-}
-
-type mechanism struct {
+// Mechanism is a kernel mechanism helper
+type Mechanism struct {
 	*networkservice.Mechanism
 }
 
-// ToMechanism - convert unified mechanism to helper
-func ToMechanism(m *networkservice.Mechanism) Mechanism {
-	if m.GetType() == MECHANISM {
-		return &mechanism{
-			m,
-		}
-	}
-	return nil
-}
-
-// New - return *networkservice.Mechanism of type kernel using the given netnsURL (inode://${dev}/${ino})
+// New returns *networkservice.Mechanism of type kernel using the given netnsURL (inode://${dev}/${ino})
 func New(netnsURL string) *networkservice.Mechanism {
 	return &networkservice.Mechanism{
 		Cls:  cls.LOCAL,
@@ -70,38 +40,57 @@ func New(netnsURL string) *networkservice.Mechanism {
 	}
 }
 
-func (m *mechanism) GetParameters() map[string]string {
+// ToMechanism converts unified mechanism to helper
+func ToMechanism(m *networkservice.Mechanism) *Mechanism {
+	if m.GetType() == MECHANISM {
+		return &Mechanism{
+			m,
+		}
+	}
+	return nil
+}
+
+// GetParameters returns the map of all parameters to the mechanism
+func (m *Mechanism) GetParameters() map[string]string {
 	if m == nil {
-		return nil
+		return map[string]string{}
+	}
+	if m.Parameters == nil {
+		m.Parameters = map[string]string{}
 	}
 	return m.Parameters
 }
 
-func (m *mechanism) GetNetNSInode() string {
-	if m == nil || m.GetParameters() == nil {
-		return ""
-	}
-	return m.GetParameters()[common.NetNSInodeKey]
+// GetNetNSInode returns the NetNS inode
+func (m *Mechanism) GetNetNSInode() string {
+	return m.GetParameters()[NetNSInodeKey]
 }
 
-// GetPCIAddress returns PCI address of the device
-func (m *mechanism) GetPCIAddress() string {
-	if m == nil || m.GetParameters() == nil {
-		return ""
-	}
-	return m.GetParameters()[PCIAddress]
+// SetNetNSInode sets the NetNS inode
+func (m *Mechanism) SetNetNSInode(netNSInode string) {
+	m.GetParameters()[NetNSInodeKey] = netNSInode
 }
 
-// IsPCIDevice - true if this mechanism is for a PCI device
-func (m *mechanism) IsPCIDevice() bool {
-	return m.GetPCIAddress() == ""
+// GetPCIAddress returns the PCI address of the device
+func (m *Mechanism) GetPCIAddress() string {
+	return m.GetParameters()[PCIAddressKey]
 }
 
-// GetInterfaceName - returns the Kernel Interface Name
-//                    this is Mechanism.Parameters[InterfaceNameKey] if set
-//                    otherwise returns a name computed from networkservice.Connection 'conn'
-func (m *mechanism) GetInterfaceName(conn *networkservice.Connection) string {
-	if m == nil || m.GetParameters()[InterfaceNameKey] == "" {
+// SetPCIAddress sets the PCI address of the device
+func (m *Mechanism) SetPCIAddress(pciAddress string) {
+	m.GetParameters()[PCIAddressKey] = pciAddress
+}
+
+// IsPCIDevice returns if this mechanism is for a PCI device
+func (m *Mechanism) IsPCIDevice() bool {
+	return m.GetPCIAddress() != ""
+}
+
+// GetInterfaceName returns the Kernel Interface Name
+//                  this is Mechanism.Parameters[InterfaceNameKey] if set
+//                  otherwise returns a name computed from networkservice.Connection 'conn'
+func (m *Mechanism) GetInterfaceName(conn *networkservice.Connection) string {
+	if m.GetParameters()[InterfaceNameKey] == "" {
 		ns := conn.GetNetworkService()
 		nsMaxLength := LinuxIfMaxLength - 5
 		if len(ns) > nsMaxLength {
@@ -120,20 +109,17 @@ func (m *mechanism) GetInterfaceName(conn *networkservice.Connection) string {
 	return name
 }
 
-// GetNetNSURL - returns the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
-func (m *mechanism) GetNetNSURL() string {
-	if m == nil || m.GetParameters() == nil {
-		return ""
-	}
+// SetInterfaceName sets the Kernel Interface Name
+func (m *Mechanism) SetInterfaceName(interfaceName string) {
+	m.GetParameters()[InterfaceNameKey] = interfaceName
+}
+
+// GetNetNSURL returns the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+func (m *Mechanism) GetNetNSURL() string {
 	return m.GetParameters()[NetNSURL]
 }
 
-func (m *mechanism) SetNetNSURL(urlString string) {
-	if m == nil {
-		return
-	}
-	if m.Parameters == nil {
-		m.Parameters = make(map[string]string)
-	}
+// SetNetNSURL sets the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+func (m *Mechanism) SetNetNSURL(urlString string) {
 	m.GetParameters()[NetNSURL] = urlString
 }
