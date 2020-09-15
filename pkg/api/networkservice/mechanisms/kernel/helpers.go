@@ -52,6 +52,9 @@ func ToMechanism(m *networkservice.Mechanism) *Mechanism {
 
 // GetParameters returns the map of all parameters to the mechanism
 func (m *Mechanism) GetParameters() map[string]string {
+	if m == nil {
+		return map[string]string{}
+	}
 	if m.Parameters == nil {
 		m.Parameters = map[string]string{}
 	}
@@ -76,6 +79,11 @@ func (m *Mechanism) GetPCIAddress() string {
 // SetPCIAddress sets the PCI address of the device
 func (m *Mechanism) SetPCIAddress(pciAddress string) {
 	m.GetParameters()[PCIAddressKey] = pciAddress
+}
+
+// IsPCIDevice returns if this mechanism is for a PCI device
+func (m *Mechanism) IsPCIDevice() bool {
+	return m.GetPCIAddress() != ""
 }
 
 // GetInterfaceName returns the Kernel Interface Name

@@ -52,6 +52,9 @@ func ToMechanism(m *networkservice.Mechanism) *Mechanism {
 
 // GetParameters returns the map of all parameters to the mechanism
 func (m *Mechanism) GetParameters() map[string]string {
+	if m == nil {
+		return map[string]string{}
+	}
 	if m.Parameters == nil {
 		m.Parameters = map[string]string{}
 	}
@@ -65,17 +68,17 @@ func (m *Mechanism) GetCgroupDir() string {
 
 // SetCgroupDir sets client on host cgroup directory
 func (m *Mechanism) SetCgroupDir(cgroupDir string) {
-	m.Parameters[CgroupDirKey] = cgroupDir
+	m.GetParameters()[CgroupDirKey] = cgroupDir
 }
 
 // GetIommuGroup returns IOMMU group id
 func (m *Mechanism) GetIommuGroup() uint {
-	return atou(m.Parameters[IommuGroupKey])
+	return atou(m.GetParameters()[IommuGroupKey])
 }
 
 // SetIommuGroup sets IOMMU group id
 func (m *Mechanism) SetIommuGroup(iommuGroup uint) {
-	m.Parameters[IommuGroupKey] = utoa(iommuGroup)
+	m.GetParameters()[IommuGroupKey] = utoa(iommuGroup)
 }
 
 // GetPCIAddress returns PCI address
@@ -85,47 +88,47 @@ func (m *Mechanism) GetPCIAddress() string {
 
 // SetPCIAddress sets PCI address
 func (m *Mechanism) SetPCIAddress(pciAddress string) {
-	m.Parameters[PCIAddressKey] = pciAddress
+	m.GetParameters()[PCIAddressKey] = pciAddress
 }
 
 // GetVfioMajor returns /dev/vfio major number
 func (m *Mechanism) GetVfioMajor() uint32 {
-	return uint32(atou(m.Parameters[VfioMajorKey]))
+	return uint32(atou(m.GetParameters()[VfioMajorKey]))
 }
 
 // SetVfioMajor sets /dev/vfio major number
 func (m *Mechanism) SetVfioMajor(vfioMajor uint32) {
-	m.Parameters[VfioMajorKey] = utoa(uint(vfioMajor))
+	m.GetParameters()[VfioMajorKey] = utoa(uint(vfioMajor))
 }
 
 // GetVfioMinor returns /dev/vfio minor number
 func (m *Mechanism) GetVfioMinor() uint32 {
-	return uint32(atou(m.Parameters[VfioMinorKey]))
+	return uint32(atou(m.GetParameters()[VfioMinorKey]))
 }
 
 // SetVfioMinor sets /dev/vfio minor number
 func (m *Mechanism) SetVfioMinor(vfioMinor uint32) {
-	m.Parameters[VfioMinorKey] = utoa(uint(vfioMinor))
+	m.GetParameters()[VfioMinorKey] = utoa(uint(vfioMinor))
 }
 
 // GetDeviceMajor returns /dev/${iommuGroup} major number
 func (m *Mechanism) GetDeviceMajor() uint32 {
-	return uint32(atou(m.Parameters[DeviceMajorKey]))
+	return uint32(atou(m.GetParameters()[DeviceMajorKey]))
 }
 
 // SetDeviceMajor sets /dev/${iommuGroup} major number
 func (m *Mechanism) SetDeviceMajor(deviceMajor uint32) {
-	m.Parameters[DeviceMajorKey] = utoa(uint(deviceMajor))
+	m.GetParameters()[DeviceMajorKey] = utoa(uint(deviceMajor))
 }
 
 // GetDeviceMinor returns /dev/${iommuGroup} minor number
 func (m *Mechanism) GetDeviceMinor() uint32 {
-	return uint32(atou(m.Parameters[DeviceMinorKey]))
+	return uint32(atou(m.GetParameters()[DeviceMinorKey]))
 }
 
 // SetDeviceMinor sets /dev/${iommuGroup} minor number
 func (m *Mechanism) SetDeviceMinor(deviceMinor uint32) {
-	m.Parameters[DeviceMinorKey] = utoa(uint(deviceMinor))
+	m.GetParameters()[DeviceMinorKey] = utoa(uint(deviceMinor))
 }
 
 func atou(a string) uint {
