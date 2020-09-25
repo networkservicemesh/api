@@ -26,19 +26,17 @@ func (m *NetworkServiceRequest) Clone() *NetworkServiceRequest {
 	return proto.Clone(m).(*NetworkServiceRequest)
 }
 
-// Clone clones ConnectionEvents
-func (m *ConnectionEvent) Clone() *ConnectionEvent {
-	return proto.Clone(m).(*ConnectionEvent)
-}
-
 // GetRequestConnection returns request connection
 func (m *NetworkServiceRequest) GetRequestConnection() *Connection {
 	return m.GetConnection()
 }
 
 // SetRequestConnection sets request connection
-func (m *NetworkServiceRequest) SetRequestConnection(conn *Connection) {
-	m.Connection = conn
+func (m *NetworkServiceRequest) SetRequestConnection(conn *Connection) *NetworkServiceRequest {
+	if m != nil {
+		m.Connection = conn
+	}
+	return m
 }
 
 // GetRequestMechanismPreferences returns request mechanism preferences

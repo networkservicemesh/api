@@ -165,3 +165,7 @@ issues:
       linters:
         - interfacer
       text: "can be `github.com/golang/protobuf/proto.Message"
+    - path: pkg/api/networkservice/path_segment_helpers.go
+      linters:
+        - interfacer
+      text: "can be `github.com/golang/protobuf/proto.Message"
