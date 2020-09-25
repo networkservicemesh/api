@@ -157,6 +157,48 @@ func (m *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector)
 	return false
 }
 
+// GetCurrentPathSegment - Get the current path segment of the connection
+func (m *Connection) GetCurrentPathSegment() *PathSegment {
+	if m == nil {
+		return nil
+	}
+	if m.GetPath().GetPathSegments() == nil {
+		return nil
+	}
+	if len(m.GetPath().GetPathSegments())-1 < int(m.GetPath().GetIndex()) {
+		return nil
+	}
+	return m.GetPath().GetPathSegments()[m.GetPath().GetIndex()]
+}
+
+// GetPrevPathSegment - Get the previous path segment of the connection
+func (m *Connection) GetPrevPathSegment() *PathSegment {
+	if m == nil {
+		return nil
+	}
+	if m.GetPath().GetPathSegments() == nil {
+		return nil
+	}
+	if len(m.GetPath().GetPathSegments())-1 < int(m.GetPath().GetIndex()) {
+		return nil
+	}
+	return m.GetPath().GetPathSegments()[m.GetPath().GetIndex()-1]
+}
+
+// GetNextPathSegment - Get the next path segment of the connection
+func (m *Connection) GetNextPathSegment() *PathSegment {
+	if m == nil {
+		return nil
+	}
+	if m.GetPath().GetPathSegments() == nil {
+		return nil
+	}
+	if len(m.GetPath().GetPathSegments())-1 < int(m.GetPath().GetIndex())+1 {
+		return nil
+	}
+	return m.GetPath().GetPathSegments()[m.GetPath().GetIndex()+1]
+}
+
 // FilterMapOnManagerScopeSelector - Filters out of map[string]*Connection Connections not matching the selector
 func FilterMapOnManagerScopeSelector(c map[string]*Connection, selector *MonitorScopeSelector) map[string]*Connection {
 	rv := make(map[string]*Connection)
