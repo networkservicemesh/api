@@ -16,6 +16,10 @@
 
 package memif
 
+import (
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
+)
+
 const (
 	// MECHANISM string
 	MECHANISM = "MEMIF"
@@ -24,4 +28,7 @@ const (
 
 	// SocketFilename - name of the memif socketfile
 	SocketFilename = "socketfile"
+
+	// SocketFileURL - file url for the memif socketfile
+	SocketFileURL = common.InodeURL
 )

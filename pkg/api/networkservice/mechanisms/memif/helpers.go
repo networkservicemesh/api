@@ -24,29 +24,34 @@ import (
 )
 
 // Mechanism provides helper methods for mechanisms of type memif
-type Mechanism interface {
-	GetSocketFilename() string
-	GetWorkspace() string
-	GetNetNSInode() string
-}
-
-type mechanism struct {
+type Mechanism struct {
 	*networkservice.Mechanism
 }
 
 // ToMechanism turns a networkservice.Mechanism into a version with helper methods for memif
 // If Mechanism m is *not* of type memif.MECHANISM, it returns nil
-func ToMechanism(m *networkservice.Mechanism) Mechanism {
+func ToMechanism(m *networkservice.Mechanism) *Mechanism {
 	if m.GetType() == MECHANISM {
-		return &mechanism{
+		return &Mechanism{
 			m,
 		}
 	}
 	return nil
 }
 
+// GetParameters returns the map of all parameters to the mechanism
+func (m *Mechanism) GetParameters() map[string]string {
+	if m == nil {
+		return map[string]string{}
+	}
+	if m.Parameters == nil {
+		m.Parameters = map[string]string{}
+	}
+	return m.Parameters
+}
+
 // GetWorkspace get the name of the Workspace directory
-func (m *mechanism) GetWorkspace() string {
+func (m *Mechanism) GetWorkspace() string {
 	if m == nil || m.GetParameters() == nil {
 		return ""
 	}
@@ -54,17 +59,19 @@ func (m *mechanism) GetWorkspace() string {
 }
 
 // GetSocketFilename returns memif mechanism socket filename
-func (m *mechanism) GetSocketFilename() string {
+func (m *Mechanism) GetSocketFilename() string {
 	if m == nil || m.GetParameters() == nil {
 		return ""
 	}
 	return m.GetParameters()[SocketFilename]
 }
 
-// GetNetNsInode get the name of the Netns Inode
-func (m *mechanism) GetNetNSInode() string {
-	if m == nil || m.GetParameters() == nil {
-		return ""
-	}
-	return m.GetParameters()[common.NetNSInodeKey]
+// GetSocketFileURL returns the SocketFileURL
+func (m *Mechanism) GetSocketFileURL() string {
+	return m.GetParameters()[SocketFileURL]
+}
+
+// SetSocketFileURL sets the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+func (m *Mechanism) SetSocketFileURL(urlString string) {
+	m.GetParameters()[SocketFileURL] = urlString
 }
