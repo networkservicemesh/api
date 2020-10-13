@@ -41,4 +41,7 @@ const (
 
 	// NetNSURL - url representing an inode - fmt.Sprintf("inode://%d/%d",dev,ino)
 	NetNSURL = common.InodeURL
+
+	// NetNSURLScheme - expected scheme of NetNSURLs
+	NetNSURLScheme = "file"
 )

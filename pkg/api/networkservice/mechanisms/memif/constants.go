@@ -31,4 +31,7 @@ const (
 
 	// SocketFileURL - file url for the memif socketfile
 	SocketFileURL = common.InodeURL
+
+	// SocketFileScheme - expected scheme of the SocketFileURL
+	SocketFileScheme = "file"
 )
