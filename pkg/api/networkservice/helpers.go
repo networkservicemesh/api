@@ -22,56 +22,56 @@ import (
 )
 
 // Clone clones request
-func (m *NetworkServiceRequest) Clone() *NetworkServiceRequest {
-	return proto.Clone(m).(*NetworkServiceRequest)
+func (x *NetworkServiceRequest) Clone() *NetworkServiceRequest {
+	return proto.Clone(x).(*NetworkServiceRequest)
 }
 
 // GetRequestConnection returns request connection
-func (m *NetworkServiceRequest) GetRequestConnection() *Connection {
-	return m.GetConnection()
+func (x *NetworkServiceRequest) GetRequestConnection() *Connection {
+	return x.GetConnection()
 }
 
 // SetRequestConnection sets request connection
-func (m *NetworkServiceRequest) SetRequestConnection(conn *Connection) *NetworkServiceRequest {
-	if m != nil {
-		m.Connection = conn
+func (x *NetworkServiceRequest) SetRequestConnection(conn *Connection) *NetworkServiceRequest {
+	if x != nil {
+		x.Connection = conn
 	}
-	return m
+	return x
 }
 
 // GetRequestMechanismPreferences returns request mechanism preferences
-func (m *NetworkServiceRequest) GetRequestMechanismPreferences() []*Mechanism {
-	preferences := make([]*Mechanism, 0, len(m.MechanismPreferences))
-	preferences = append(preferences, m.MechanismPreferences...)
+func (x *NetworkServiceRequest) GetRequestMechanismPreferences() []*Mechanism {
+	preferences := make([]*Mechanism, 0, len(x.MechanismPreferences))
+	preferences = append(preferences, x.MechanismPreferences...)
 
 	return preferences
 }
 
 // SetRequestMechanismPreferences sets request mechanism preferences
-func (m *NetworkServiceRequest) SetRequestMechanismPreferences(mechanismPreferences []*Mechanism) {
-	m.MechanismPreferences = mechanismPreferences
+func (x *NetworkServiceRequest) SetRequestMechanismPreferences(mechanismPreferences []*Mechanism) {
+	x.MechanismPreferences = mechanismPreferences
 }
 
 // IsValid returns if request is valid
-func (m *NetworkServiceRequest) IsValid() error {
-	if m == nil {
+func (x *NetworkServiceRequest) IsValid() error {
+	if x == nil {
 		return errors.New("request cannot be nil")
 	}
 
-	if m.GetConnection() == nil {
-		return errors.Errorf("request.Connection cannot be nil %v", m)
+	if x.GetConnection() == nil {
+		return errors.Errorf("request.Connection cannot be nil %v", x)
 	}
 
-	if err := m.GetConnection().IsValid(); err != nil {
-		return errors.Errorf("request.Connection is invalid: %s: %v", err, m)
+	if err := x.GetConnection().IsValid(); err != nil {
+		return errors.Errorf("request.Connection is invalid: %s: %v", err, x)
 	}
 
-	if m.GetMechanismPreferences() == nil {
-		return errors.Errorf("request.MechanismPreferences cannot be nil: %v", m)
+	if x.GetMechanismPreferences() == nil {
+		return errors.Errorf("request.MechanismPreferences cannot be nil: %v", x)
 	}
 
-	if len(m.GetMechanismPreferences()) < 1 {
-		return errors.Errorf("request.MechanismPreferences must have at least one entry: %v", m)
+	if len(x.GetMechanismPreferences()) < 1 {
+		return errors.Errorf("request.MechanismPreferences must have at least one entry: %v", x)
 	}
 
 	return nil

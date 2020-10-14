@@ -25,14 +25,14 @@ import (
 )
 
 // Equals returns if mechanism equals given mechanism
-func (m *Mechanism) Equals(mechanism protoreflect.ProtoMessage) bool {
+func (x *Mechanism) Equals(mechanism protoreflect.ProtoMessage) bool {
 	// use as an proto.Message
-	return proto.Equal(m, mechanism)
+	return proto.Equal(x, mechanism)
 }
 
 // Clone clones mechanism
-func (m *Mechanism) Clone() *Mechanism {
-	return proto.Clone(m).(*Mechanism)
+func (x *Mechanism) Clone() *Mechanism {
+	return proto.Clone(x).(*Mechanism)
 }
 
 var mechanismValidators map[string]func(*Mechanism) error
@@ -46,13 +46,13 @@ func AddMechanism(mtype string, validator func(*Mechanism) error) {
 }
 
 // IsValid - is the Mechanism Valid?
-func (m *Mechanism) IsValid() error {
-	if m == nil {
+func (x *Mechanism) IsValid() error {
+	if x == nil {
 		return errors.New("mechanism cannot be nil")
 	}
-	validator, ok := mechanismValidators[m.GetType()]
+	validator, ok := mechanismValidators[x.GetType()]
 	if ok {
-		return validator(m)
+		return validator(x)
 	}
 	// NOTE: this means that we intentionally decide that Mechanisms are valid
 	// unless we have a Validator that says otherwise

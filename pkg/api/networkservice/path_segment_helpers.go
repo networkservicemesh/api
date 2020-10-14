@@ -22,11 +22,11 @@ import (
 )
 
 // Equal returns true if PathSegment m == p
-func (m *PathSegment) Equal(p protoreflect.ProtoMessage) bool {
-	return proto.Equal(m, p)
+func (x *PathSegment) Equal(p protoreflect.ProtoMessage) bool {
+	return proto.Equal(x, p)
 }
 
 // Clone clones PathSegment
-func (m *PathSegment) Clone() *PathSegment {
-	return proto.Clone(m).(*PathSegment)
+func (x *PathSegment) Clone() *PathSegment {
+	return proto.Clone(x).(*PathSegment)
 }

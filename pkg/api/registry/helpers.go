@@ -80,11 +80,11 @@ func ReadNetworkServiceEndpointList(stream NetworkServiceEndpointRegistry_FindCl
 }
 
 // Clone clones request
-func (m *NetworkService) Clone() *NetworkService {
-	return proto.Clone(m).(*NetworkService)
+func (x *NetworkService) Clone() *NetworkService {
+	return proto.Clone(x).(*NetworkService)
 }
 
 // Clone clones request
-func (m *NetworkServiceEndpoint) Clone() *NetworkServiceEndpoint {
-	return proto.Clone(m).(*NetworkServiceEndpoint)
+func (x *NetworkServiceEndpoint) Clone() *NetworkServiceEndpoint {
+	return proto.Clone(x).(*NetworkServiceEndpoint)
 }

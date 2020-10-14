@@ -23,16 +23,16 @@ import (
 )
 
 // IsEthernetContextEmtpy returns true if ethernet config is empty
-func (c *ConnectionContext) IsEthernetContextEmtpy() bool {
-	return c.EthernetContext == nil || (c.EthernetContext.SrcMac == "" && c.EthernetContext.DstMac == "")
+func (x *ConnectionContext) IsEthernetContextEmtpy() bool {
+	return x.EthernetContext == nil || (x.EthernetContext.SrcMac == "" && x.EthernetContext.DstMac == "")
 }
 
 // IsValid - checks ConnectionContext validation
-func (c *ConnectionContext) IsValid() error {
-	if c == nil {
+func (x *ConnectionContext) IsValid() error {
+	if x == nil {
 		return errors.New("ConnectionContext should not be nil")
 	}
-	ip := c.GetIpContext()
+	ip := x.GetIpContext()
 	for _, route := range append(ip.GetSrcRoutes(), ip.GetDstRoutes()...) {
 		if route.GetPrefix() == "" {
 			return errors.Errorf("ConnectionContext.Route.Prefix is required and cannot be empty/nil: %v", ip)
@@ -55,20 +55,20 @@ func (c *ConnectionContext) IsValid() error {
 }
 
 // MeetsRequirements - checks required context parameters have bin set
-func (c *ConnectionContext) MeetsRequirements(original *ConnectionContext) error {
-	if c == nil {
+func (x *ConnectionContext) MeetsRequirements(original *ConnectionContext) error {
+	if x == nil {
 		return errors.New("ConnectionContext should not be nil")
 	}
 
-	err := c.IsValid()
+	err := x.IsValid()
 	if err != nil {
 		return err
 	}
-	if original.GetIpContext().GetDstIpRequired() && c.GetIpContext().GetDstIpAddr() == "" {
-		return errors.Errorf("ConnectionContext.DestIp is required and cannot be empty/nil: %v", c)
+	if original.GetIpContext().GetDstIpRequired() && x.GetIpContext().GetDstIpAddr() == "" {
+		return errors.Errorf("ConnectionContext.DestIp is required and cannot be empty/nil: %v", x)
 	}
-	if original.GetIpContext().GetSrcIpRequired() && c.GetIpContext().GetSrcIpAddr() == "" {
-		return errors.Errorf("ConnectionContext.SrcIp is required cannot be empty/nil: %v", c)
+	if original.GetIpContext().GetSrcIpRequired() && x.GetIpContext().GetSrcIpAddr() == "" {
+		return errors.Errorf("ConnectionContext.SrcIp is required cannot be empty/nil: %v", x)
 	}
 
 	return nil

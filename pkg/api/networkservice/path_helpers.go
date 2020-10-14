@@ -22,16 +22,16 @@ import (
 )
 
 // Clone clones
-func (m *Path) Clone() *Path {
-	return proto.Clone(m).(*Path)
+func (x *Path) Clone() *Path {
+	return proto.Clone(x).(*Path)
 }
 
 // IsValid returns true if Path p is Valid
-func (m *Path) IsValid() error {
-	if m == nil {
+func (x *Path) IsValid() error {
+	if x == nil {
 		return nil
 	}
-	if int(m.GetIndex()) >= len(m.GetPathSegments()) {
+	if int(x.GetIndex()) >= len(x.GetPathSegments()) {
 		return errors.New("Path.Index >= len(Path.PathSegments)")
 	}
 	return nil
