@@ -16,9 +16,9 @@
 
 package networkservice
 
-import proto "github.com/golang/protobuf/proto"
+import "google.golang.org/protobuf/proto"
 
 // Clone clones ConnectionEvents
-func (m *ConnectionEvent) Clone() *ConnectionEvent {
-	return proto.Clone(m).(*ConnectionEvent)
+func (x *ConnectionEvent) Clone() *ConnectionEvent {
+	return proto.Clone(x).(*ConnectionEvent)
 }
