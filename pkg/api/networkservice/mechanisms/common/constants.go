@@ -25,8 +25,7 @@ const (
 
 	// NetNSInodeKey - netns inode mechanism property key
 	NetNSInodeKey = "netnsInode"
-	// Workspace - NSM workspace location mechanism property key
-	Workspace = "workspace"
+
 	// InterfaceNameKey - interface name mechanism property key
 	InterfaceNameKey = "name"
 

@@ -18,8 +18,6 @@
 package memif
 
 import (
-	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
-
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
@@ -48,14 +46,6 @@ func (m *Mechanism) GetParameters() map[string]string {
 		m.Parameters = map[string]string{}
 	}
 	return m.Parameters
-}
-
-// GetWorkspace get the name of the Workspace directory
-func (m *Mechanism) GetWorkspace() string {
-	if m == nil || m.GetParameters() == nil {
-		return ""
-	}
-	return m.GetParameters()[common.Workspace]
 }
 
 // GetSocketFilename returns memif mechanism socket filename
