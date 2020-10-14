@@ -126,6 +126,7 @@ jobs:
         run: go generate ./...
       - name: Check for changes in generated code
         run: |
+          protoc --version
           git diff --name-only --exit-code pkg/ || ( echo "Rerun go generate ./... locally and resubmit" && false )
 
   excludereplace:
