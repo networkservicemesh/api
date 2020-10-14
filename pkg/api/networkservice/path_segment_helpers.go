@@ -16,10 +16,13 @@
 
 package networkservice
 
-import proto "github.com/golang/protobuf/proto"
+import (
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
+)
 
 // Equal returns true if PathSegment m == p
-func (m *PathSegment) Equal(p *PathSegment) bool {
+func (m *PathSegment) Equal(p protoreflect.ProtoMessage) bool {
 	return proto.Equal(m, p)
 }
 

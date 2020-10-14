@@ -23,7 +23,7 @@ package networkservice;
 option go_package = "github.com/networkservicemesh/api/pkg/api/networkservice";
 
 import "connection.proto";
-import "ptypes/empty/empty.proto";
+import "google/protobuf/empty.proto";
 
 message NetworkServiceRequest {
   connection.Connection connection = 1;

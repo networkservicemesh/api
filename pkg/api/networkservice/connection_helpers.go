@@ -17,64 +17,65 @@
 package networkservice
 
 import (
-	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 // IsRemote returns if connection is remote
-func (m *Connection) IsRemote() bool {
-	if m == nil {
+func (x *Connection) IsRemote() bool {
+	if x == nil {
 		return false
 	}
 	// If we have two or more, it is remote
-	return len(m.GetPath().GetPathSegments()) > 1
+	return len(x.GetPath().GetPathSegments()) > 1
 }
 
 // GetSourceNetworkServiceManagerName - return source network service manager name
-func (m *Connection) GetSourceNetworkServiceManagerName() string {
-	if m == nil {
+func (x *Connection) GetSourceNetworkServiceManagerName() string {
+	if x == nil {
 		return ""
 	}
-	if len(m.GetPath().GetPathSegments()) > 0 {
-		return m.GetPath().GetPathSegments()[0].GetName()
+	if len(x.GetPath().GetPathSegments()) > 0 {
+		return x.GetPath().GetPathSegments()[0].GetName()
 	}
 	return ""
 }
 
 // GetDestinationNetworkServiceManagerName - return destination network service manager name
-func (m *Connection) GetDestinationNetworkServiceManagerName() string {
-	if m == nil {
+func (x *Connection) GetDestinationNetworkServiceManagerName() string {
+	if x == nil {
 		return ""
 	}
-	if len(m.GetPath().GetPathSegments()) >= 2 {
-		return m.GetPath().GetPathSegments()[1].GetName()
+	if len(x.GetPath().GetPathSegments()) >= 2 {
+		return x.GetPath().GetPathSegments()[1].GetName()
 	}
 	return ""
 }
 
 // Equals returns if connection equals given connection
-func (m *Connection) Equals(connection *Connection) bool {
+func (x *Connection) Equals(connection protoreflect.ProtoMessage) bool {
 	// use as proto.Message
-	return proto.Equal(m, connection)
+	return proto.Equal(x, connection)
 }
 
 // Clone clones connection
-func (m *Connection) Clone() *Connection {
+func (x *Connection) Clone() *Connection {
 	// use as proto.Message
-	return proto.Clone(m).(*Connection)
+	return proto.Clone(x).(*Connection)
 }
 
 // UpdateContext checks and tries to set connection context
-func (m *Connection) UpdateContext(context *ConnectionContext) error {
-	if err := context.MeetsRequirements(m.Context); err != nil {
+func (x *Connection) UpdateContext(context *ConnectionContext) error {
+	if err := context.MeetsRequirements(x.Context); err != nil {
 		return err
 	}
 
-	oldContext := m.Context
-	m.Context = context
+	oldContext := x.Context
+	x.Context = context
 
-	if err := m.IsValid(); err != nil {
-		m.Context = oldContext
+	if err := x.IsValid(); err != nil {
+		x.Context = oldContext
 		return err
 	}
 
@@ -82,22 +83,22 @@ func (m *Connection) UpdateContext(context *ConnectionContext) error {
 }
 
 // IsValid checks if connection is minimally valid
-func (m *Connection) IsValid() error {
-	if m == nil {
+func (x *Connection) IsValid() error {
+	if x == nil {
 		return errors.New("connection cannot be nil")
 	}
 
-	if m.GetNetworkService() == "" {
-		return errors.Errorf("NetworkService cannot be empty: %v", m)
+	if x.GetNetworkService() == "" {
+		return errors.Errorf("NetworkService cannot be empty: %v", x)
 	}
 
-	if m.GetMechanism() != nil {
-		if err := m.GetMechanism().IsValid(); err != nil {
-			return errors.Wrapf(err, "invalid Mechanism in %v", m)
+	if x.GetMechanism() != nil {
+		if err := x.GetMechanism().IsValid(); err != nil {
+			return errors.Wrapf(err, "invalid Mechanism in %v", x)
 		}
 	}
 
-	if err := m.GetPath().IsValid(); err != nil {
+	if err := x.GetPath().IsValid(); err != nil {
 		return err
 	}
 
@@ -105,16 +106,16 @@ func (m *Connection) IsValid() error {
 }
 
 // IsComplete checks if connection is complete valid
-func (m *Connection) IsComplete() error {
-	if err := m.IsValid(); err != nil {
+func (x *Connection) IsComplete() error {
+	if err := x.IsValid(); err != nil {
 		return err
 	}
 
-	if m.GetId() == "" {
-		return errors.Errorf("Id cannot be empty: %v", m)
+	if x.GetId() == "" {
+		return errors.Errorf("Id cannot be empty: %v", x)
 	}
 
-	if err := m.GetContext().IsValid(); err != nil {
+	if err := x.GetContext().IsValid(); err != nil {
 		return err
 	}
 
@@ -122,8 +123,8 @@ func (m *Connection) IsComplete() error {
 }
 
 // MatchesMonitorScopeSelector - Returns true of the connection matches the selector
-func (m *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector) bool {
-	if m == nil {
+func (x *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector) bool {
+	if x == nil {
 		return false
 	}
 	// Note: Empty selector always matches a non-nil Connection
@@ -133,10 +134,10 @@ func (m *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector)
 	// Iterate through the Connection.NetworkServiceManagers array looking for a subarray that matches
 	// the selector.NetworkServiceManagers array, treating "" in the selector.NetworkServiceManagers array
 	// as a wildcard
-	for i := range m.GetPath().GetPathSegments() {
+	for i := range x.GetPath().GetPathSegments() {
 		// If there aren't enough elements left in the Connection.NetworkServiceManagers array to match
 		// all of the elements in the select.NetworkServiceManager array...clearly we can't match
-		if i+len(selector.GetPathSegments()) > len(m.GetPath().GetPathSegments()) {
+		if i+len(selector.GetPathSegments()) > len(x.GetPath().GetPathSegments()) {
 			return false
 		}
 		// Iterate through the selector.NetworkServiceManagers array to see is the subarray starting at
@@ -144,7 +145,7 @@ func (m *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector)
 		for j := range selector.GetPathSegments() {
 			// "" matches as a wildcard... failure to match either as wildcard or exact match means the subarray
 			// starting at Connection.NetworkServiceManagers[i] doesn't match selectors.NetworkServiceManagers
-			if selector.GetPathSegments()[j].GetName() != "" && m.GetPath().GetPathSegments()[i+j].GetName() != selector.GetPathSegments()[j].GetName() {
+			if selector.GetPathSegments()[j].GetName() != "" && x.GetPath().GetPathSegments()[i+j].GetName() != selector.GetPathSegments()[j].GetName() {
 				break
 			}
 			// If this is the last element in the selector.NetworkServiceManagers array and we still are matching...
@@ -158,45 +159,45 @@ func (m *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector)
 }
 
 // GetCurrentPathSegment - Get the current path segment of the connection
-func (m *Connection) GetCurrentPathSegment() *PathSegment {
-	if m == nil {
+func (x *Connection) GetCurrentPathSegment() *PathSegment {
+	if x == nil {
 		return nil
 	}
-	if m.GetPath().GetPathSegments() == nil {
+	if x.GetPath().GetPathSegments() == nil {
 		return nil
 	}
-	if len(m.GetPath().GetPathSegments())-1 < int(m.GetPath().GetIndex()) {
+	if len(x.GetPath().GetPathSegments())-1 < int(x.GetPath().GetIndex()) {
 		return nil
 	}
-	return m.GetPath().GetPathSegments()[m.GetPath().GetIndex()]
+	return x.GetPath().GetPathSegments()[x.GetPath().GetIndex()]
 }
 
 // GetPrevPathSegment - Get the previous path segment of the connection
-func (m *Connection) GetPrevPathSegment() *PathSegment {
-	if m == nil {
+func (x *Connection) GetPrevPathSegment() *PathSegment {
+	if x == nil {
 		return nil
 	}
-	if m.GetPath().GetPathSegments() == nil {
+	if x.GetPath().GetPathSegments() == nil {
 		return nil
 	}
-	if len(m.GetPath().GetPathSegments())-1 < int(m.GetPath().GetIndex()) {
+	if len(x.GetPath().GetPathSegments())-1 < int(x.GetPath().GetIndex()) {
 		return nil
 	}
-	return m.GetPath().GetPathSegments()[m.GetPath().GetIndex()-1]
+	return x.GetPath().GetPathSegments()[x.GetPath().GetIndex()-1]
 }
 
 // GetNextPathSegment - Get the next path segment of the connection
-func (m *Connection) GetNextPathSegment() *PathSegment {
-	if m == nil {
+func (x *Connection) GetNextPathSegment() *PathSegment {
+	if x == nil {
 		return nil
 	}
-	if m.GetPath().GetPathSegments() == nil {
+	if x.GetPath().GetPathSegments() == nil {
 		return nil
 	}
-	if len(m.GetPath().GetPathSegments())-1 < int(m.GetPath().GetIndex())+1 {
+	if len(x.GetPath().GetPathSegments())-1 < int(x.GetPath().GetIndex())+1 {
 		return nil
 	}
-	return m.GetPath().GetPathSegments()[m.GetPath().GetIndex()+1]
+	return x.GetPath().GetPathSegments()[x.GetPath().GetIndex()+1]
 }
 
 // FilterMapOnManagerScopeSelector - Filters out of map[string]*Connection Connections not matching the selector

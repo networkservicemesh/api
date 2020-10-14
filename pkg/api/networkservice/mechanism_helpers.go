@@ -19,12 +19,13 @@ package networkservice
 import (
 	"sync"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 // Equals returns if mechanism equals given mechanism
-func (m *Mechanism) Equals(mechanism *Mechanism) bool {
+func (m *Mechanism) Equals(mechanism protoreflect.ProtoMessage) bool {
 	// use as an proto.Message
 	return proto.Equal(m, mechanism)
 }

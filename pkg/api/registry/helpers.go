@@ -17,7 +17,7 @@
 package registry
 
 import (
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 // ServiceNames - returns grpc ServiceNames implemented by impl
