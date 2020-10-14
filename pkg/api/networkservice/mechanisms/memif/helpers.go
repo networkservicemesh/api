@@ -18,12 +18,27 @@
 package memif
 
 import (
+	"net/url"
+
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"
 )
 
 // Mechanism provides helper methods for mechanisms of type memif
 type Mechanism struct {
 	*networkservice.Mechanism
+}
+
+// New returns *networkservice.Mechanism of type  memif using the given socketPath (file://socketPath)
+func New(socketPath string) *networkservice.Mechanism {
+	return &networkservice.Mechanism{
+		Cls:  cls.LOCAL,
+		Type: MECHANISM,
+		Parameters: map[string]string{
+			SocketFilename: socketPath,
+			SocketFileURL:  (&url.URL{Scheme: SocketFileScheme, Path: socketPath}).String(),
+		},
+	}
 }
 
 // ToMechanism turns a networkservice.Mechanism into a version with helper methods for memif
