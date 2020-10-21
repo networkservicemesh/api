@@ -76,38 +76,27 @@ func (m *mechanism) DstPublicKey() string {
 
 // SrcPort - Source interface listening port
 func (m *mechanism) SrcPort() int {
-	srcPortStr := m.GetParameters()[SrcPort]
-	if srcPortStr == "" {
-		return 0
-	}
-	srcPort, err := strconv.ParseInt(srcPortStr, 10, 64)
-	if err != nil {
-		return 0
-	}
-
-	return int(srcPort)
+	return atoi(m.GetParameters()[SrcPort])
 }
 
 // DstPort - Destination interface listening port
 func (m *mechanism) DstPort() int {
-	dstPortStr := m.GetParameters()[DstPort]
-	if dstPortStr != "" {
-		return 0
-	}
-
-	dstPort, err := strconv.ParseInt(dstPortStr, 10, 64)
-	if err != nil {
-		return 0
-	}
-
-	return int(dstPort)
+	return atoi(m.GetParameters()[DstPort])
 }
 
 // GetPort - returns unique port by connection ID for wireguard connection
 func GetPort(connID string) string {
-	id, err := strconv.ParseUint(connID, 16, 64)
+	id, err := strconv.ParseUint(connID, 16, 0)
 	if err != nil {
 		id = 0
 	}
 	return strconv.FormatUint(BasePort+id, 10)
+}
+
+func atoi(a string) int {
+	i, err := strconv.ParseInt(a, 10, strconv.IntSize)
+	if err != nil {
+		return 0
+	}
+	return int(i)
 }
