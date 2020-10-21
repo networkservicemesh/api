@@ -7,9 +7,22 @@ on:
 
 jobs:
   update-dependent-repositories:
+    continue-on-error: true
     strategy:
+      fail-fast: false
       matrix:
-        repository: [sdk]
+        repository:
+          - sdk
+          - sdk-vppagent
+          - sdk-kernel
+          - sdk-sriov
+          - cmd-nsmgr
+          - cmd-nsmgr-proxy
+          - cmd-registry-memory
+          - cmd-registry-proxy-dns
+          - cmd-forwarder-vppagent
+          - cmd-forwarder-sriov
+          - cmd-nsc
     name: Update ${{ matrix.repository }}
     runs-on: ubuntu-latest
     steps:
