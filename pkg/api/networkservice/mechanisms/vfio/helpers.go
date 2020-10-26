@@ -93,46 +93,46 @@ func (m *Mechanism) SetPCIAddress(pciAddress string) {
 
 // GetVfioMajor returns /dev/vfio major number
 func (m *Mechanism) GetVfioMajor() uint32 {
-	return uint32(atou(m.GetParameters()[VfioMajorKey]))
+	return atou32(m.GetParameters()[VfioMajorKey])
 }
 
 // SetVfioMajor sets /dev/vfio major number
 func (m *Mechanism) SetVfioMajor(vfioMajor uint32) {
-	m.GetParameters()[VfioMajorKey] = utoa(uint(vfioMajor))
+	m.GetParameters()[VfioMajorKey] = u32toa(vfioMajor)
 }
 
 // GetVfioMinor returns /dev/vfio minor number
 func (m *Mechanism) GetVfioMinor() uint32 {
-	return uint32(atou(m.GetParameters()[VfioMinorKey]))
+	return atou32(m.GetParameters()[VfioMinorKey])
 }
 
 // SetVfioMinor sets /dev/vfio minor number
 func (m *Mechanism) SetVfioMinor(vfioMinor uint32) {
-	m.GetParameters()[VfioMinorKey] = utoa(uint(vfioMinor))
+	m.GetParameters()[VfioMinorKey] = u32toa(vfioMinor)
 }
 
 // GetDeviceMajor returns /dev/${iommuGroup} major number
 func (m *Mechanism) GetDeviceMajor() uint32 {
-	return uint32(atou(m.GetParameters()[DeviceMajorKey]))
+	return atou32(m.GetParameters()[DeviceMajorKey])
 }
 
 // SetDeviceMajor sets /dev/${iommuGroup} major number
 func (m *Mechanism) SetDeviceMajor(deviceMajor uint32) {
-	m.GetParameters()[DeviceMajorKey] = utoa(uint(deviceMajor))
+	m.GetParameters()[DeviceMajorKey] = u32toa(deviceMajor)
 }
 
 // GetDeviceMinor returns /dev/${iommuGroup} minor number
 func (m *Mechanism) GetDeviceMinor() uint32 {
-	return uint32(atou(m.GetParameters()[DeviceMinorKey]))
+	return atou32(m.GetParameters()[DeviceMinorKey])
 }
 
 // SetDeviceMinor sets /dev/${iommuGroup} minor number
 func (m *Mechanism) SetDeviceMinor(deviceMinor uint32) {
-	m.GetParameters()[DeviceMinorKey] = utoa(uint(deviceMinor))
+	m.GetParameters()[DeviceMinorKey] = u32toa(deviceMinor)
 }
 
 func atou(a string) uint {
-	u, err := strconv.ParseUint(a, 10, 0)
+	u, err := strconv.ParseUint(a, 10, strconv.IntSize)
 	if err != nil {
 		return 0
 	}
@@ -140,5 +140,17 @@ func atou(a string) uint {
 }
 
 func utoa(u uint) string {
+	return strconv.FormatUint(uint64(u), 10)
+}
+
+func atou32(a string) uint32 {
+	u, err := strconv.ParseUint(a, 10, 32)
+	if err != nil {
+		return 0
+	}
+	return uint32(u)
+}
+
+func u32toa(u uint32) string {
 	return strconv.FormatUint(uint64(u), 10)
 }

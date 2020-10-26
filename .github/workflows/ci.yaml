@@ -8,75 +8,61 @@ jobs:
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
-      - name: Setup Python
-        uses: actions/setup-python@v1
-      - name: Install yamllint
-        run: pip install --user yamllint
-      - name: Run yamllint
-        run: ~/.local/bin/yamllint -c .yamllint.yml --strict .
-  shellcheck:
-    name: shellcheck
-    runs-on: ubuntu-latest
+      - name: yaml-lint
+        uses: ibiqlik/action-yamllint@v1
+        with:
+          config_file: .ci/yamllint.yml
+          strict: true
+
+  build-and-test:
+    name: build and test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v2
-      - name: shellcheck
-        uses: fkautz/shell-linter@v1.0.1
-  build:
-    name: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v1
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Setup Go
+        uses: actions/setup-go@v1
         with:
           go-version: 1.15
-      - run: |
-          go build -race  ./...
-  test:
-    name: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v1
-        with:
-          go-version: 1.15
-      - name: Install gotestsum
-        run: go get gotest.tools/gotestsum@v0.4.0
-      - name: Run tests
-        run: |
-          eval $(go env)
-          mkdir -p ~/junit/
-          ${GOPATH}/bin/gotestsum --junitfile ~/junit/unit-tests.xml -- -race -short $(go list ./...)
+      - name: Build
+        run: go build -race  ./...
+      - name: Test
+        run: go test -race ./...
+
   golangci-lint:
     name: golangci-lint
     runs-on: ubuntu-latest
-    env:
-      GOLANGCI_LINT_CONTAINER: golangci/golangci-lint:v1.23.2
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
-      - name: Pull golangci-lint docker container
-        run: docker pull ${GOLANGCI_LINT_CONTAINER}
-      - name: Run golangci-lint
-        run: docker run --rm -v $(pwd):/app -w /app ${GOLANGCI_LINT_CONTAINER} golangci-lint run
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.31
 
   excludeFmtErrorf:
     name: exclude fmt.Errorf
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Exclude fmt.Errorf
         run: |
           if grep -r --include=*.go fmt.Errorf . ; then
-           echo "Please use errors.Errorf (or errors.New or errors.Wrap or errors.Wrapf) as appropriate rather than fmt.Errorf"
-           exit 1
+            echo "Please use errors.Errorf (or errors.New or errors.Wrap or errors.Wrapf) as appropriate rather than fmt.Errorf"
+            exit 1
           fi
 
   restrictNSMDeps:
     name: Restrict dependencies on github.com/networkservicemesh/*
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Restrict dependencies on github.com/networkservicemesh/*
         run: |
-          for i in $(grep github.com/networkservicemesh/ go.mod | gsed 's;.*\(github.com\/networkservicemesh\/[a-zA-z\/]*\).*;\1;g' | sort -u);do
+          for i in $(grep github.com/networkservicemesh/ go.mod | grep -v '^module' | sed 's;.*\(github.com\/networkservicemesh\/[^ ]*\).*;\1;g');do
             echo Dependency on "${i}" is forbidden
             exit 1
           done
@@ -94,23 +80,9 @@ jobs:
         run: |
           git diff --name-only --exit-code go.mod || ( echo "Run go tidy" && false )
           git diff --name-only --exit-code go.sum || ( echo "Run go tidy" && false )
-  license:
-    name: license header check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v1
-        with:
-          go-version: 1.15
-      - name: Install go-header
-        run: 'go get github.com/denis-tingajkin/go-header@v0.2.2'
-      - name: Run go-header
-        run: |
-          eval $(go env)
-          ${GOPATH}/bin/go-header
 
-  protobuf:
-    name: Check protobuf generation
+  gogenerate:
+    name: Check generated files
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -122,15 +94,14 @@ jobs:
           go-version: 1.15
       - name: Install proto-gen-go
         run: go get -u github.com/golang/protobuf/protoc-gen-go@v1.4.2
-      - name: Generate protobufs
+      - name: Generate files
         run: go generate ./...
       - name: Check for changes in generated code
         run: |
-          protoc --version
-          git diff --name-only --exit-code pkg/ || ( echo "Rerun go generate ./... locally and resubmit" && false )
+          git diff -- '*.pb.go' || ( echo "Rerun go generate ./... locally and resubmit" && false )
 
   excludereplace:
-    name: Exclude Replace in go.mod
+    name: Exclude replace in go.mod
     runs-on: ubuntu-latest
     steps:
       - name: Check out the code
@@ -139,9 +110,3 @@ jobs:
         run: |
           grep ^replace go.mod || exit 0
           exit 1
-
-  captureRunEnv:
-    name: Capture CI Run Env
-    runs-on: ubuntu-latest
-    steps:
-      - run: printenv

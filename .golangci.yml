@@ -1,10 +1,20 @@
 ---
 run:
   # concurrency: 6
-  timeout: 1m
+  timeout: 2m
   issues-exit-code: 1
   tests: true
 linters-settings:
+  goheader:
+    template-path: ".ci/license/template.txt"
+    values:
+      const:
+        year: 2020
+      regexp:
+        year-range: ((\d\d\d\d-{{year}})|({{year}}))
+        company: .*
+        copyright-holder: Copyright \(c\) {{year-range}} {{company}}\n\n
+        copyright-holders: ({{copyright-holder}})+
   errcheck:
     check-type-assertions: false
     check-blank: false
@@ -120,6 +130,7 @@ linters:
   disable-all: true
   enable:
     # - rowserrcheck
+    - goheader
     - bodyclose
     - deadcode
     - depguard
