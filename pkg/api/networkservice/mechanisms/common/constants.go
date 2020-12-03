@@ -23,6 +23,11 @@ const (
 	// DstIP - key for DstIP parameters
 	DstIP = "dst_ip"
 
+	// SrcOriginalIP - original src IP
+	SrcOriginalIP = "orig_src_ip"
+	// DstExternalIP - external destination ip
+	DstExternalIP = "ext_src_ip"
+
 	// NetNSInodeKey - netns inode mechanism property key
 	NetNSInodeKey = "netnsInode"
 
