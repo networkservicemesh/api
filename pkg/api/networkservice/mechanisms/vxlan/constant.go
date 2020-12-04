@@ -32,9 +32,9 @@ const (
 	// DstIP - destitiona IP
 	DstIP = common.DstIP
 	// SrcOriginalIP - original src IP
-	SrcOriginalIP = "orig_src_ip"
+	SrcOriginalIP = common.SrcOriginalIP
 	// DstExternalIP - external destination ip
-	DstExternalIP = "ext_src_ip"
+	DstExternalIP = common.DstExternalIP
 	// VNI - vni
 	VNI = "vni"
 )
