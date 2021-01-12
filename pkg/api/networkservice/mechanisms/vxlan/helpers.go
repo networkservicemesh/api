@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco Systems, Inc.
+// Copyright (c) 2020-2021 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -66,7 +66,7 @@ func (m *Mechanism) SetSrcIP(ip net.IP) *Mechanism {
 		return nil
 	}
 	srcIP, ok := m.GetParameters()[SrcIP]
-	if ok {
+	if ok && !ip.Equal(net.ParseIP(srcIP)) {
 		_, ok := m.GetParameters()[SrcOriginalIP]
 		if !ok {
 			m.GetParameters()[SrcOriginalIP] = srcIP
@@ -87,7 +87,7 @@ func (m *Mechanism) SetDstIP(ip net.IP) *Mechanism {
 		return nil
 	}
 	dstIP, ok := m.GetParameters()[DstIP]
-	if ok {
+	if ok && !ip.Equal(net.ParseIP(dstIP)) {
 		_, ok := m.GetParameters()[DstExternalIP]
 		if !ok {
 			m.GetParameters()[DstExternalIP] = dstIP
