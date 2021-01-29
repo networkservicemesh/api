@@ -50,10 +50,15 @@ func ReadNetworkServiceList(stream NetworkServiceRegistry_FindClient) []*Network
 func ReadNetworkServiceChannel(stream NetworkServiceRegistry_FindClient) <-chan *NetworkService {
 	result := make(chan *NetworkService)
 	go func() {
+		defer close(result)
 		for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
-			result <- msg
+			select {
+			case result <- msg:
+				continue
+			case <-stream.Context().Done():
+				return
+			}
 		}
-		close(result)
 	}()
 	return result
 }
@@ -62,10 +67,15 @@ func ReadNetworkServiceChannel(stream NetworkServiceRegistry_FindClient) <-chan 
 func ReadNetworkServiceEndpointChannel(stream NetworkServiceEndpointRegistry_FindClient) <-chan *NetworkServiceEndpoint {
 	result := make(chan *NetworkServiceEndpoint)
 	go func() {
+		defer close(result)
 		for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
-			result <- msg
+			select {
+			case result <- msg:
+				continue
+			case <-stream.Context().Done():
+				return
+			}
 		}
-		close(result)
 	}()
 	return result
 }
