@@ -23,7 +23,7 @@ import (
 const (
 
 	// MECHANISM string
-	MECHANISM = "KERNEL_INTERFACE"
+	MECHANISM = "KERNEL"
 
 	// Parameters
 
