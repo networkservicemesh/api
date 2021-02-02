@@ -35,13 +35,16 @@ jobs:
   golangci-lint:
     name: golangci-lint
     runs-on: ubuntu-latest
+    if: github.repository != 'networkservicemesh/cmd-template'
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.31
+          version: v1.35.0
 
   excludeFmtErrorf:
     name: exclude fmt.Errorf
