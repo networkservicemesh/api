@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco Systems, Inc.
+// Copyright (c) 2020-2021 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -23,7 +23,7 @@ import (
 const (
 
 	// MECHANISM string
-	MECHANISM = "KERNEL_INTERFACE"
+	MECHANISM = "KERNEL"
 
 	// Parameters
 
