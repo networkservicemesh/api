@@ -1,4 +1,6 @@
-// Copyright (c) 2018-2020 VMware, Inc.
+// Copyright (c) 2018-2021 VMware, Inc.
+//
+// Copyright (c) 2021 Doc.ai and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -163,7 +165,7 @@ func (x *Connection) GetCurrentPathSegment() *PathSegment {
 	if x == nil {
 		return nil
 	}
-	if x.GetPath().GetPathSegments() == nil {
+	if len(x.GetPath().GetPathSegments()) == 0 {
 		return nil
 	}
 	if len(x.GetPath().GetPathSegments())-1 < int(x.GetPath().GetIndex()) {
@@ -177,10 +179,13 @@ func (x *Connection) GetPrevPathSegment() *PathSegment {
 	if x == nil {
 		return nil
 	}
-	if x.GetPath().GetPathSegments() == nil {
+	if len(x.GetPath().GetPathSegments()) == 0 {
 		return nil
 	}
-	if len(x.GetPath().GetPathSegments())-1 < int(x.GetPath().GetIndex()) {
+	if int(x.GetPath().GetIndex()) == 0 {
+		return nil
+	}
+	if int(x.GetPath().GetIndex())-1 > len(x.GetPath().GetPathSegments()) {
 		return nil
 	}
 	return x.GetPath().GetPathSegments()[x.GetPath().GetIndex()-1]
@@ -191,7 +196,7 @@ func (x *Connection) GetNextPathSegment() *PathSegment {
 	if x == nil {
 		return nil
 	}
-	if x.GetPath().GetPathSegments() == nil {
+	if len(x.GetPath().GetPathSegments()) == 0 {
 		return nil
 	}
 	if len(x.GetPath().GetPathSegments())-1 < int(x.GetPath().GetIndex())+1 {
