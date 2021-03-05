@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Doc.ai and/or its affiliates.
+// Copyright (c) 2020-2021 Doc.ai and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -23,80 +23,112 @@ import (
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
-// Mechanism - a wireguard mechanism utility wrapper
-type Mechanism interface {
-	// SrcIP -  src ip
-	SrcIP() net.IP
-	// DstIP - dst ip
-	DstIP() net.IP
-	// SrcPublicKey - source public key
-	SrcPublicKey() string
-	// DstPublicKey - destination public key
-	DstPublicKey() string
-	// SrcPort - Source interface listening port
-	SrcPort() int
-	// SrcPort - Destination interface listening port
-	DstPort() int
-}
-
-type mechanism struct {
+// Mechanism is a wireguard mechanism helper
+type Mechanism struct {
 	*networkservice.Mechanism
 }
 
 // ToMechanism - convert unified mechanism to useful wrapper
-func ToMechanism(m *networkservice.Mechanism) Mechanism {
+func ToMechanism(m *networkservice.Mechanism) *Mechanism {
 	if m.Type == MECHANISM {
 		if m.GetParameters() == nil {
 			m.Parameters = map[string]string{}
 		}
-		return &mechanism{
+		return &Mechanism{
 			m,
 		}
 	}
 	return nil
 }
 
-func (m *mechanism) SrcIP() net.IP {
+// SrcIP returns source ip
+func (m *Mechanism) SrcIP() net.IP {
 	return net.ParseIP(m.GetParameters()[SrcIP])
 }
 
-func (m *mechanism) DstIP() net.IP {
+// SetSrcIP sets source ip
+func (m *Mechanism) SetSrcIP(ip net.IP) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[SrcIP] = ip.String()
+	return m
+}
+
+// DstIP returns destination ip
+func (m *Mechanism) DstIP() net.IP {
 	return net.ParseIP(m.GetParameters()[DstIP])
 }
 
+// SetDstIP sets destination ip
+func (m *Mechanism) SetDstIP(ip net.IP) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[DstIP] = ip.String()
+	return m
+}
+
 // SrcPublicKey returns the SrcPublicKey parameter of the Mechanism
-func (m *mechanism) SrcPublicKey() string {
+func (m *Mechanism) SrcPublicKey() string {
 	return m.GetParameters()[SrcPublicKey]
 }
 
+// SetSrcPublicKey sets new source public key
+func (m *Mechanism) SetSrcPublicKey(key string) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[SrcPublicKey] = key
+	return m
+}
+
 // DstPublicKey returns the DstPublicKey parameter of the Mechanism
-func (m *mechanism) DstPublicKey() string {
+func (m *Mechanism) DstPublicKey() string {
 	return m.GetParameters()[DstPublicKey]
 }
 
+// SetDstPublicKey sets new destination public key
+func (m *Mechanism) SetDstPublicKey(key string) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[DstPublicKey] = key
+	return m
+}
+
 // SrcPort - Source interface listening port
-func (m *mechanism) SrcPort() int {
-	return atoi(m.GetParameters()[SrcPort])
+func (m *Mechanism) SrcPort() uint16 {
+	return atou16(m.GetParameters()[SrcPort])
+}
+
+// SetSrcPort sets source udp port
+func (m *Mechanism) SetSrcPort(port uint16) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[SrcPort] = strconv.FormatUint(uint64(port), 16)
+	return m
 }
 
 // DstPort - Destination interface listening port
-func (m *mechanism) DstPort() int {
-	return atoi(m.GetParameters()[DstPort])
+func (m *Mechanism) DstPort() uint16 {
+	return atou16(m.GetParameters()[DstPort])
 }
 
-// GetPort - returns unique port by connection ID for wireguard connection
-func GetPort(connID string) string {
-	id, err := strconv.ParseUint(connID, 16, 0)
-	if err != nil {
-		id = 0
+// SetDstPort sets destination udp port
+func (m *Mechanism) SetDstPort(port uint16) *Mechanism {
+	if m == nil {
+		return nil
 	}
-	return strconv.FormatUint(BasePort+id, 10)
+	m.GetParameters()[DstPort] = strconv.FormatUint(uint64(port), 16)
+	return m
 }
 
-func atoi(a string) int {
-	i, err := strconv.ParseInt(a, 10, strconv.IntSize)
+func atou16(a string) uint16 {
+	u, err := strconv.ParseUint(a, 10, 16)
 	if err != nil {
 		return 0
 	}
-	return int(i)
+	return uint16(u)
 }
