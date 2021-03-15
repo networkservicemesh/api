@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco Systems, Inc.
+// Copyright (c) 2020-2021 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -34,4 +34,7 @@ const (
 
 	// SocketFileScheme - expected scheme of the SocketFileURL
 	SocketFileScheme = "file"
+
+	// Mode - type of payload (Ethernet/IP)
+	Mode = "mode"
 )

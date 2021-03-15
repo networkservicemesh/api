@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2020 Cisco Systems, Inc.
+// Copyright (c) 2019-2021 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -19,6 +19,7 @@ package memif
 
 import (
 	"net/url"
+	"strconv"
 
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"
@@ -77,6 +78,28 @@ func (m *Mechanism) GetSocketFileURL() string {
 }
 
 // SetSocketFileURL sets the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
-func (m *Mechanism) SetSocketFileURL(urlString string) {
+func (m *Mechanism) SetSocketFileURL(urlString string) *Mechanism {
+	if m == nil {
+		return nil
+	}
 	m.GetParameters()[SocketFileURL] = urlString
+	return m
+}
+
+// GetMode returns type of memif payload
+func (m *Mechanism) GetMode() uint32 {
+	mode, err := strconv.ParseUint(m.GetParameters()[Mode], 10, 32)
+	if err != nil {
+		return 0
+	}
+	return uint32(mode)
+}
+
+// SetMode sets type of memif payload
+func (m *Mechanism) SetMode(mode uint32) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[Mode] = strconv.FormatUint(uint64(mode), 10)
+	return m
 }
