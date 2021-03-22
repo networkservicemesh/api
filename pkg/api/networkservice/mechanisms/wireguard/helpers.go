@@ -107,7 +107,7 @@ func (m *Mechanism) SetSrcPort(port uint16) *Mechanism {
 	if m == nil {
 		return nil
 	}
-	m.GetParameters()[SrcPort] = strconv.FormatUint(uint64(port), 16)
+	m.GetParameters()[SrcPort] = strconv.FormatUint(uint64(port), 10)
 	return m
 }
 
@@ -121,7 +121,7 @@ func (m *Mechanism) SetDstPort(port uint16) *Mechanism {
 	if m == nil {
 		return nil
 	}
-	m.GetParameters()[DstPort] = strconv.FormatUint(uint64(port), 16)
+	m.GetParameters()[DstPort] = strconv.FormatUint(uint64(port), 10)
 	return m
 }
 
