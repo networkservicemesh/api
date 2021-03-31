@@ -130,7 +130,7 @@ func (m *Mechanism) SetVNI(vni uint32) *Mechanism {
 // EvenVNI - true if the VNI issues by the NSE should be even, false otherwise
 func (m *Mechanism) EvenVNI() bool {
 	srcStr, ok := m.GetParameters()[SrcOriginalIP]
-	if ok {
+	if !ok {
 		srcStr = m.GetParameters()[SrcIP]
 	}
 	src := net.ParseIP(srcStr)
@@ -138,7 +138,7 @@ func (m *Mechanism) EvenVNI() bool {
 		return true
 	}
 	dstStr, ok := m.GetParameters()[DstExternalIP]
-	if ok {
+	if !ok {
 		dstStr = m.GetParameters()[DstIP]
 	}
 	dst := net.ParseIP(dstStr)
