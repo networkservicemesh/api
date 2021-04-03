@@ -101,7 +101,7 @@ jobs:
         run: go generate ./...
       - name: Check for changes in generated code
         run: |
-          git diff -- '*.pb.go' || ( echo "Rerun go generate ./... locally and resubmit" && false )
+          git diff -- '*.pb.go' || (echo "Rerun go generate ./... locally and resubmit" && exit -1)
 
   excludereplace:
     name: Exclude replace in go.mod
