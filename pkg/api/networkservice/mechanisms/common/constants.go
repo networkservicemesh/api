@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco Systems, Inc.
+// Copyright (c) 2020-2021 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -39,4 +39,7 @@ const (
 
 	// PCIAddressKey - PCI address of the device for the SR-IOV supported mechanisms
 	PCIAddressKey = "pciAddress"
+
+	// MTU - Maximum Transmission Unit
+	MTU = "MTU"
 )

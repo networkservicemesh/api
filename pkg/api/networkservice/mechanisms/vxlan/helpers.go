@@ -173,3 +173,23 @@ func compareIps(ip1, ip2 net.IP) int {
 	}
 	return 0
 }
+
+// MTU - return MTU value - 0 if unset
+func (m *Mechanism) MTU() uint32 {
+	mtu, err := strconv.ParseUint(m.GetParameters()[MTU], 10, 32)
+	if err != nil {
+		return 0
+	}
+
+	return uint32(mtu)
+}
+
+// SetMTU - set the MTU value
+func (m *Mechanism) SetMTU(mtu uint32) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[MTU] = strconv.FormatUint(uint64(mtu), 10)
+
+	return m
+}
