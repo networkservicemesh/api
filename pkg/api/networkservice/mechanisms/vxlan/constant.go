@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco Systems, Inc.
+// Copyright (c) 2020-2021 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -37,4 +37,6 @@ const (
 	DstExternalIP = common.DstExternalIP
 	// VNI - vni
 	VNI = "vni"
+	// MTU - maximum transmission unit
+	MTU = common.MTU
 )
