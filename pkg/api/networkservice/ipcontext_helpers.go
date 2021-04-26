@@ -21,13 +21,13 @@ import (
 )
 
 // GetSrcIPNet - GetSrcIpAddr() converted to *net.IPNet or nil if empty or cannot be parsed
-func (i *IPContext) GetSrcIPNet() *net.IPNet {
-	return strToIPNet(i.GetSrcIpAddr())
+func (i *IPContext) GetSrcIPNet() []*net.IPNet {
+	return strsToIPNets(i.GetSrcIpAddr())
 }
 
 // GetDstIPNet - GetDstIpAddr() converted to *net.IPNet or nil if empty or cannot be parsed
-func (i *IPContext) GetDstIPNet() *net.IPNet {
-	return strToIPNet(i.GetDstIpAddr())
+func (i *IPContext) GetDstIPNet() []*net.IPNet {
+	return strsToIPNets(i.GetDstIpAddr())
 }
 
 // GetExcludedPrefixesIPNet - GetExcludedPrefixes() converted to []*net.IPNet prefixes that are empty or cannot be parsed are omitted
@@ -56,6 +56,13 @@ func (n *IpNeighbor) GetIP() net.IP {
 // GetPrefixIPNet - GetPrefix() converted to *net.IPNet or nil if empty or cannot be parsed
 func (r *Route) GetPrefixIPNet() *net.IPNet {
 	return strToIPNet(r.GetPrefix())
+}
+
+func strsToIPNets(in []string) (out []*net.IPNet) {
+	for _, str := range in {
+		out = append(out, strToIPNet(str))
+	}
+	return out
 }
 
 func strToIPNet(in string) *net.IPNet {
