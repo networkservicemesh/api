@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco and/or its affiliates.
+// Copyright (c) 2020-2021 Cisco and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -18,6 +18,8 @@ package networkservice
 
 import (
 	"net"
+
+	"google.golang.org/protobuf/proto"
 )
 
 // GetSrcIPNet - GetSrcIpAddr() converted to *net.IPNet or nil if empty or cannot be parsed
@@ -58,9 +60,22 @@ func (r *Route) GetPrefixIPNet() *net.IPNet {
 	return strToIPNet(r.GetPrefix())
 }
 
+// GetNextHopIP - GetNextHop() converted to net.IP or nil if empty or cannot be parsed
+func (r *Route) GetNextHopIP() net.IP {
+	return net.ParseIP(r.GetNextHop())
+}
+
+// Clone clones route
+func (r *Route) Clone() *Route {
+	// use as proto.Message
+	return proto.Clone(r).(*Route)
+}
+
 func strsToIPNets(in []string) (out []*net.IPNet) {
 	for _, str := range in {
-		out = append(out, strToIPNet(str))
+		if ip := strToIPNet(str); ip != nil {
+			out = append(out, ip)
+		}
 	}
 	return out
 }
