@@ -28,6 +28,8 @@ message IpNeighbor {
 
 message Route {
     string prefix = 1; /* destination address + prefix in format <address>/<prefix> */
+    string nextHop = 2; /* nexthop ip address - if empty, presume {Src/Dst}IP of same address family
+                           from the opposite end of the link */
 }
 
 message IpFamily {
@@ -46,8 +48,8 @@ message ExtraPrefixRequest {
 }
 
 message IPContext {
-    string src_ip_addr = 1; /* source ip address + prefix in format <address>/<prefix> */
-    string dst_ip_addr = 2; /* destination ip address + prefix in format <address>/<prefix> */
+    repeated string src_ip_addrs = 1; /* source ip address + prefix in format <address>/<prefix> */
+    repeated string dst_ip_addrs = 2; /* destination ip address + prefix in format <address>/<prefix> */
 
     bool src_ip_required = 3; /* if specified src_ip is required from NSE. */
     bool dst_ip_required = 4; /* if specified dst_ip is required from NSE */

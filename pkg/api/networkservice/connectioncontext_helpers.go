@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco and/or its affiliates.
+// Copyright (c) 2020-2021 Cisco and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -64,10 +64,10 @@ func (x *ConnectionContext) MeetsRequirements(original *ConnectionContext) error
 	if err != nil {
 		return err
 	}
-	if original.GetIpContext().GetDstIpRequired() && x.GetIpContext().GetDstIpAddr() == "" {
+	if original.GetIpContext().GetDstIpRequired() && len(x.GetIpContext().GetDstIpAddrs()) > 0 {
 		return errors.Errorf("ConnectionContext.DestIp is required and cannot be empty/nil: %v", x)
 	}
-	if original.GetIpContext().GetSrcIpRequired() && x.GetIpContext().GetSrcIpAddr() == "" {
+	if original.GetIpContext().GetSrcIpRequired() && len(x.GetIpContext().GetSrcIpAddrs()) > 0 {
 		return errors.Errorf("ConnectionContext.SrcIp is required cannot be empty/nil: %v", x)
 	}
 
