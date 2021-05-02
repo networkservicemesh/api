@@ -22,14 +22,121 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// GetSrcIPNet - GetSrcIpAddr() converted to *net.IPNet or nil if empty or cannot be parsed
-func (i *IPContext) GetSrcIPNet() []*net.IPNet {
-	return strsToIPNets(i.GetSrcIpAddr())
+// GetSrcIPNets - GetSrcIpAddrs() converted to *net.IPNet or nil if empty or cannot be parsed
+func (i *IPContext) GetSrcIPNets() []*net.IPNet {
+	return strsToIPNets(i.GetSrcIpAddrs())
 }
 
-// GetDstIPNet - GetDstIpAddr() converted to *net.IPNet or nil if empty or cannot be parsed
-func (i *IPContext) GetDstIPNet() []*net.IPNet {
-	return strsToIPNets(i.GetDstIpAddr())
+// GetDstIPNets - GetDstIpAddrs() converted to *net.IPNet or nil if empty or cannot be parsed
+func (i *IPContext) GetDstIPNets() []*net.IPNet {
+	return strsToIPNets(i.GetDstIpAddrs())
+}
+
+// GetDstRoutesWithExplicitNextHop - returns routes with the Route.NextHop explicitly set to the first IP address
+// of the same address family (IPv4 or IPv6) from SrcIPAddrs if and only if Route.NextHop was initially nil
+func (i *IPContext) GetDstRoutesWithExplicitNextHop() (routes []*Route) {
+	srcIPs := i.GetSrcIPNets()
+	ipv6NextHop := getNextHop(filterIPNetByFamily(IpFamily_IPV6, srcIPs))
+	ipv4NextHop := getNextHop(filterIPNetByFamily(IpFamily_IPV4, srcIPs))
+	for _, route := range i.GetDstRoutes() {
+		if route.GetPrefixIPNet() != nil && route.GetNextHopIP() == nil {
+			if ipv4NextHop != nil && route.GetPrefixIPNet().IP.To4() != nil {
+				route = route.Clone()
+				route.NextHop = ipv4NextHop.String()
+			}
+			if ipv6NextHop != nil && route.GetPrefixIPNet().IP.To4() == nil {
+				route = route.Clone()
+				route.NextHop = ipv6NextHop.String()
+			}
+		}
+		routes = append(routes, route)
+	}
+	return routes
+}
+
+// GetSrcRoutesWithExplicitNextHop - returns routes with the Route.NextHop explicitly set to the first IP address
+// of the same address family (IPv4 or IPv6) from DstIPAddrs if and only if Route.NextHop was initially nil
+func (i *IPContext) GetSrcRoutesWithExplicitNextHop() (routes []*Route) {
+	// Set nextHop for any Route that is missing them
+	dstIPs := i.GetDstIPNets()
+	ipv6NextHop := getNextHop(filterIPNetByFamily(IpFamily_IPV6, dstIPs))
+	ipv4NextHop := getNextHop(filterIPNetByFamily(IpFamily_IPV4, dstIPs))
+	for _, route := range i.GetSrcRoutes() {
+		if route.GetPrefixIPNet() != nil && route.GetNextHopIP() == nil {
+			if ipv4NextHop != nil && route.GetPrefixIPNet().IP.To4() != nil {
+				route = route.Clone()
+				route.NextHop = ipv4NextHop.String()
+			}
+			if ipv6NextHop != nil && route.GetPrefixIPNet().IP.To4() == nil {
+				route = route.Clone()
+				route.NextHop = ipv6NextHop.String()
+			}
+		}
+		routes = append(routes, route)
+	}
+	return routes
+}
+
+// GetSrcIPRoutes - returns routes for any SrcIPs that are not contained in the prefixes of at least one DstIP
+func (i *IPContext) GetSrcIPRoutes() (routes []*Route) {
+	for _, srcIPNet := range i.GetSrcIPNets() {
+		if srcIPNet == nil {
+			continue
+		}
+		if contains(i.GetDstIPNets(), srcIPNet.IP) {
+			continue
+		}
+		routes = append(routes, &Route{
+			Prefix: srcIPNet.String(),
+		})
+	}
+	return routes
+}
+
+// GetDstIPRoutes - returns routes for any DstIPs that are not contained in the prefixes of at least one SrcIP
+func (i *IPContext) GetDstIPRoutes() (routes []*Route) {
+	for _, dstIPNet := range i.GetDstIPNets() {
+		if dstIPNet == nil {
+			continue
+		}
+		if contains(i.GetSrcIPNets(), dstIPNet.IP) {
+			continue
+		}
+		routes = append(routes, &Route{
+			Prefix: dstIPNet.String(),
+		})
+	}
+	return routes
+}
+
+func getNextHop(ipNets []*net.IPNet) net.IP {
+	if len(ipNets) > 0 && ipNets[0] != nil {
+		return ipNets[0].IP
+	}
+	return nil
+}
+
+func filterIPNetByFamily(family IpFamily_Family, ipNets []*net.IPNet) []*net.IPNet {
+	var rv []*net.IPNet
+	for _, ipNet := range ipNets {
+		if ipNet != nil && family == IpFamily_IPV4 && ipNet.IP.To4() == nil {
+			rv = append(rv, ipNet)
+		}
+		if ipNet != nil && family == IpFamily_IPV6 && ipNet.IP.To4() != nil {
+			rv = append(rv, ipNet)
+		}
+	}
+	return rv
+}
+
+// contains - returns true if ip is contained any any of the supplied prefixes
+func contains(prefixes []*net.IPNet, ip net.IP) bool {
+	for _, prefix := range prefixes {
+		if prefix != nil && prefix.Contains(ip) {
+			return true
+		}
+	}
+	return false
 }
 
 // GetExcludedPrefixesIPNet - GetExcludedPrefixes() converted to []*net.IPNet prefixes that are empty or cannot be parsed are omitted

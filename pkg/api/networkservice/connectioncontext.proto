@@ -48,8 +48,8 @@ message ExtraPrefixRequest {
 }
 
 message IPContext {
-    repeated string src_ip_addr = 1; /* source ip address + prefix in format <address>/<prefix> */
-    repeated string dst_ip_addr = 2; /* destination ip address + prefix in format <address>/<prefix> */
+    repeated string src_ip_addrs = 1; /* source ip address + prefix in format <address>/<prefix> */
+    repeated string dst_ip_addrs = 2; /* destination ip address + prefix in format <address>/<prefix> */
 
     bool src_ip_required = 3; /* if specified src_ip is required from NSE. */
     bool dst_ip_required = 4; /* if specified dst_ip is required from NSE */
