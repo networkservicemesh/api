@@ -29,8 +29,12 @@ const (
 
 	// SrcIP - source IP
 	SrcIP = common.SrcIP
-	// DstIP - destitiona IP
+	// DstIP - destination IP
 	DstIP = common.DstIP
+	// SrcPort - Source vxlan listening port
+	SrcPort = common.SrcPort
+	// DstPort - Destination vxlan listening port
+	DstPort = common.DstPort
 	// SrcOriginalIP - original src IP
 	SrcOriginalIP = common.SrcOriginalIP
 	// DstExternalIP - external destination ip

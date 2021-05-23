@@ -23,6 +23,11 @@ const (
 	// DstIP - key for DstIP parameters
 	DstIP = "dst_ip"
 
+	// SrcPort - key for SrcPort parameters
+	SrcPort = "src_port"
+	// DstPort - ley for DstPort parameters
+	DstPort = "dst_port"
+
 	// SrcOriginalIP - original src IP
 	SrcOriginalIP = "orig_src_ip"
 	// DstExternalIP - external destination ip

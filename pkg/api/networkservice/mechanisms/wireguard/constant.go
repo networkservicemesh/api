@@ -28,16 +28,16 @@ const (
 
 	// SrcIP - source IP
 	SrcIP = common.SrcIP
-	// DstIP - destitiona IP
+	// DstIP - destination IP
 	DstIP = common.DstIP
 	// SrcOriginalIP - original src IP
-	SrcOriginalIP = "orig_src_ip"
+	SrcOriginalIP = common.SrcOriginalIP
 	// DstExternalIP - external destination ip
-	DstExternalIP = "ext_src_ip"
+	DstExternalIP = common.DstExternalIP
 	// SrcPort - Source interface listening port
-	SrcPort = "src_port"
+	SrcPort = common.SrcPort
 	// DstPort - Destination interface listening port
-	DstPort = "dst_port"
+	DstPort = common.DstPort
 	// SrcPublicKey - Source public key
 	SrcPublicKey = "src_public_key"
 	// DstPublicKey - Destination public key
