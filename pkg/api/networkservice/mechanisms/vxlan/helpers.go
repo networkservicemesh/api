@@ -193,3 +193,39 @@ func (m *Mechanism) SetMTU(mtu uint32) *Mechanism {
 
 	return m
 }
+
+// SrcPort - Source vxlan listening port
+func (m *Mechanism) SrcPort() uint16 {
+	port, err := strconv.ParseUint(m.GetParameters()[SrcPort], 10, 16)
+	if err != nil {
+		return 0
+	}
+	return uint16(port)
+}
+
+// SetSrcPort - Set source vxlan listening port
+func (m *Mechanism) SetSrcPort(port uint16) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[SrcPort] = strconv.FormatUint(uint64(port), 10)
+	return m
+}
+
+// DstPort - Destination vxlan listening port
+func (m *Mechanism) DstPort() uint16 {
+	port, err := strconv.ParseUint(m.GetParameters()[DstPort], 10, 16)
+	if err != nil {
+		return 0
+	}
+	return uint16(port)
+}
+
+// SetDstPort - Set destination vxlan listening port
+func (m *Mechanism) SetDstPort(port uint16) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[DstPort] = strconv.FormatUint(uint64(port), 10)
+	return m
+}
