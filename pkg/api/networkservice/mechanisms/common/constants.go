@@ -30,8 +30,9 @@ const (
 
 	// SrcOriginalIP - original src IP
 	SrcOriginalIP = "orig_src_ip"
-	// DstExternalIP - external destination ip
-	DstExternalIP = "ext_src_ip"
+
+	// DstOriginalIP - original destination ip
+	DstOriginalIP = "orig_dst_ip"
 
 	// NetNSInodeKey - netns inode mechanism property key
 	NetNSInodeKey = "netnsInode"

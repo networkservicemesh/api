@@ -35,10 +35,7 @@ const (
 	SrcPort = common.SrcPort
 	// DstPort - Destination vxlan listening port
 	DstPort = common.DstPort
-	// SrcOriginalIP - original src IP
-	SrcOriginalIP = common.SrcOriginalIP
-	// DstExternalIP - external destination ip
-	DstExternalIP = common.DstExternalIP
+
 	// VNI - vni
 	VNI = "vni"
 	// MTU - maximum transmission unit

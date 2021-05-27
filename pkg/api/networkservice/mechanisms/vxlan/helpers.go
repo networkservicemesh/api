@@ -24,6 +24,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
 )
 
 // Mechanism - a vxlan Mechanism utility wrapper
@@ -65,13 +66,6 @@ func (m *Mechanism) SetSrcIP(ip net.IP) *Mechanism {
 	if m == nil {
 		return nil
 	}
-	srcIP, ok := m.GetParameters()[SrcIP]
-	if ok && !ip.Equal(net.ParseIP(srcIP)) {
-		_, ok := m.GetParameters()[SrcOriginalIP]
-		if !ok {
-			m.GetParameters()[SrcOriginalIP] = srcIP
-		}
-	}
 	m.GetParameters()[SrcIP] = ip.String()
 	return m
 }
@@ -85,13 +79,6 @@ func (m *Mechanism) DstIP() net.IP {
 func (m *Mechanism) SetDstIP(ip net.IP) *Mechanism {
 	if m == nil {
 		return nil
-	}
-	dstIP, ok := m.GetParameters()[DstIP]
-	if ok && !ip.Equal(net.ParseIP(dstIP)) {
-		_, ok := m.GetParameters()[DstExternalIP]
-		if !ok {
-			m.GetParameters()[DstExternalIP] = dstIP
-		}
 	}
 	m.GetParameters()[DstIP] = ip.String()
 	return m
@@ -129,7 +116,7 @@ func (m *Mechanism) SetVNI(vni uint32) *Mechanism {
 
 // EvenVNI - true if the VNI issues by the NSE should be even, false otherwise
 func (m *Mechanism) EvenVNI() bool {
-	srcStr, ok := m.GetParameters()[SrcOriginalIP]
+	srcStr, ok := m.GetParameters()[common.SrcOriginalIP]
 	if !ok {
 		srcStr = m.GetParameters()[SrcIP]
 	}
@@ -137,7 +124,7 @@ func (m *Mechanism) EvenVNI() bool {
 	if src == nil {
 		return true
 	}
-	dstStr, ok := m.GetParameters()[DstExternalIP]
+	dstStr, ok := m.GetParameters()[common.DstOriginalIP]
 	if !ok {
 		dstStr = m.GetParameters()[DstIP]
 	}
