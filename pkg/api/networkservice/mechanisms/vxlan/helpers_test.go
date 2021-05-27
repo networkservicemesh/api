@@ -22,6 +22,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
+	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/common"
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/vxlan"
 )
 
@@ -33,8 +34,8 @@ type evenVNITest struct {
 var evenVNITests = []evenVNITest{
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "172.18.0.1",
-			vxlan.DstExternalIP: "172.18.0.2",
+			common.SrcOriginalIP: "172.18.0.1",
+			common.DstOriginalIP: "172.18.0.2",
 		},
 		expected: true,
 	},
@@ -47,26 +48,26 @@ var evenVNITests = []evenVNITest{
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "172.28.0.1",
-			vxlan.DstExternalIP: "172.28.0.2",
-			vxlan.SrcIP:         "172.18.0.2",
-			vxlan.DstIP:         "172.18.0.1",
+			common.SrcOriginalIP: "172.28.0.1",
+			common.DstOriginalIP: "172.28.0.2",
+			vxlan.SrcIP:          "172.18.0.2",
+			vxlan.DstIP:          "172.18.0.1",
 		},
 		expected: true,
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "172.28.0.1",
-			vxlan.DstExternalIP: "172.28.0.2",
-			vxlan.SrcIP:         "172.18.0.1",
-			vxlan.DstIP:         "172.18.0.2",
+			common.SrcOriginalIP: "172.28.0.1",
+			common.DstOriginalIP: "172.28.0.2",
+			vxlan.SrcIP:          "172.18.0.1",
+			vxlan.DstIP:          "172.18.0.2",
 		},
 		expected: true,
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "fd00::1",
-			vxlan.DstExternalIP: "fd00::2",
+			common.SrcOriginalIP: "fd00::1",
+			common.DstOriginalIP: "fd00::2",
 		},
 		expected: true,
 	},
@@ -79,26 +80,26 @@ var evenVNITests = []evenVNITest{
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "fd00::1",
-			vxlan.DstExternalIP: "fd00::2",
-			vxlan.SrcIP:         "fd00:1::1",
-			vxlan.DstIP:         "fd00:1::2",
+			common.SrcOriginalIP: "fd00::1",
+			common.DstOriginalIP: "fd00::2",
+			vxlan.SrcIP:          "fd00:1::1",
+			vxlan.DstIP:          "fd00:1::2",
 		},
 		expected: true,
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "fd00::1",
-			vxlan.DstExternalIP: "fd00::2",
-			vxlan.SrcIP:         "fd00:1::2",
-			vxlan.DstIP:         "fd00:1::1",
+			common.SrcOriginalIP: "fd00::1",
+			common.DstOriginalIP: "fd00::2",
+			vxlan.SrcIP:          "fd00:1::2",
+			vxlan.DstIP:          "fd00:1::1",
 		},
 		expected: true,
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "172.18.0.2",
-			vxlan.DstExternalIP: "172.18.0.1",
+			common.SrcOriginalIP: "172.18.0.2",
+			common.DstOriginalIP: "172.18.0.1",
 		},
 		expected: false,
 	},
@@ -111,26 +112,26 @@ var evenVNITests = []evenVNITest{
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "172.28.0.2",
-			vxlan.DstExternalIP: "172.28.0.1",
-			vxlan.SrcIP:         "172.18.0.2",
-			vxlan.DstIP:         "172.18.0.1",
+			common.SrcOriginalIP: "172.28.0.2",
+			common.DstOriginalIP: "172.28.0.1",
+			vxlan.SrcIP:          "172.18.0.2",
+			vxlan.DstIP:          "172.18.0.1",
 		},
 		expected: false,
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "172.28.0.2",
-			vxlan.DstExternalIP: "172.28.0.1",
-			vxlan.SrcIP:         "172.18.0.1",
-			vxlan.DstIP:         "172.18.0.2",
+			common.SrcOriginalIP: "172.28.0.2",
+			common.DstOriginalIP: "172.28.0.1",
+			vxlan.SrcIP:          "172.18.0.1",
+			vxlan.DstIP:          "172.18.0.2",
 		},
 		expected: false,
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "fd00::2",
-			vxlan.DstExternalIP: "fd00::1",
+			common.SrcOriginalIP: "fd00::2",
+			common.DstOriginalIP: "fd00::1",
 		},
 		expected: false,
 	},
@@ -143,19 +144,19 @@ var evenVNITests = []evenVNITest{
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "fd00::2",
-			vxlan.DstExternalIP: "fd00::1",
-			vxlan.SrcIP:         "fd00:1::2",
-			vxlan.DstIP:         "fd00:1::1",
+			common.SrcOriginalIP: "fd00::2",
+			common.DstOriginalIP: "fd00::1",
+			vxlan.SrcIP:          "fd00:1::2",
+			vxlan.DstIP:          "fd00:1::1",
 		},
 		expected: false,
 	},
 	{
 		parameters: map[string]string{
-			vxlan.SrcOriginalIP: "fd00::2",
-			vxlan.DstExternalIP: "fd00::1",
-			vxlan.SrcIP:         "fd00:1::1",
-			vxlan.DstIP:         "fd00:1::2",
+			common.SrcOriginalIP: "fd00::2",
+			common.DstOriginalIP: "fd00::1",
+			vxlan.SrcIP:          "fd00:1::1",
+			vxlan.DstIP:          "fd00:1::2",
 		},
 		expected: false,
 	},

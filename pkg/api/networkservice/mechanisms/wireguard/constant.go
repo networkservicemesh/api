@@ -30,10 +30,6 @@ const (
 	SrcIP = common.SrcIP
 	// DstIP - destination IP
 	DstIP = common.DstIP
-	// SrcOriginalIP - original src IP
-	SrcOriginalIP = common.SrcOriginalIP
-	// DstExternalIP - external destination ip
-	DstExternalIP = common.DstExternalIP
 	// SrcPort - Source interface listening port
 	SrcPort = common.SrcPort
 	// DstPort - Destination interface listening port
