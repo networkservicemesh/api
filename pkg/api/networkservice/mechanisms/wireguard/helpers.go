@@ -30,7 +30,7 @@ type Mechanism struct {
 
 // ToMechanism - convert unified mechanism to useful wrapper
 func ToMechanism(m *networkservice.Mechanism) *Mechanism {
-	if m.Type == MECHANISM {
+	if m.GetType() == MECHANISM {
 		if m.GetParameters() == nil {
 			m.Parameters = map[string]string{}
 		}
@@ -122,6 +122,26 @@ func (m *Mechanism) SetDstPort(port uint16) *Mechanism {
 		return nil
 	}
 	m.GetParameters()[DstPort] = strconv.FormatUint(uint64(port), 10)
+	return m
+}
+
+// MTU - return MTU value - 0 if unset
+func (m *Mechanism) MTU() uint32 {
+	mtu, err := strconv.ParseUint(m.GetParameters()[MTU], 10, 32)
+	if err != nil {
+		return 0
+	}
+
+	return uint32(mtu)
+}
+
+// SetMTU - set the MTU value
+func (m *Mechanism) SetMTU(mtu uint32) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[MTU] = strconv.FormatUint(uint64(mtu), 10)
+
 	return m
 }
 

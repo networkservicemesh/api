@@ -38,4 +38,7 @@ const (
 	SrcPublicKey = "src_public_key"
 	// DstPublicKey - Destination public key
 	DstPublicKey = "dst_public_key"
+
+	// MTU - maximum transmission unit
+	MTU = common.MTU
 )
