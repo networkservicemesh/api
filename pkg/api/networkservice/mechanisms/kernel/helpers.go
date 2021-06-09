@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2020 Cisco Systems, Inc and/or its affiliates.
+// Copyright (c) 2019-2021 Cisco Systems, Inc and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -100,7 +100,7 @@ func (m *Mechanism) GetInterfaceName(conn *networkservice.Connection) string {
 		if len(name) > LinuxIfMaxLength {
 			name = name[:LinuxIfMaxLength]
 		}
-		return name
+		m.GetParameters()[InterfaceNameKey] = name
 	}
 	name := m.GetParameters()[InterfaceNameKey]
 	if len(name) > LinuxIfMaxLength {
