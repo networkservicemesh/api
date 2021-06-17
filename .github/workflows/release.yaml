@@ -22,12 +22,6 @@ jobs:
           branch=${{github.event.workflow_run.head_branch}}
           echo '::set-output name=tag::'${branch#release/}
         id: get-tag-step
-      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
-        with:
-          delete_release: true
-          tag_name: ${{ steps.get-tag-step.outputs.tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
       - name: Create Release
         uses: actions/create-release@v1
         env:
