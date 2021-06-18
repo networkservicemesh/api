@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with: 
+        with:
           ref: refs/heads/${{github.event.workflow_run.head_branch}}
       - name: Get tag
         run: |
