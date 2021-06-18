@@ -16,7 +16,7 @@ jobs:
         repository: [sdk]
     name: Update ${{ matrix.repository }}
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' || github.github.event.workflow_run.head_branch == 'refs/heads/main' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' || github.event_name == 'push' }}
     steps:
       - name: Checkout ${{ github.repository }}
         uses: actions/checkout@v2
@@ -53,7 +53,7 @@ jobs:
       - name: Update ${{ github.repository }} locally
         working-directory: networkservicemesh/${{ matrix.repository }}
         run: |
-          GOPRIVATE=github.com/networkservicemesh go get -u github.com/${{ github.repository }}
+          GOPRIVATE=github.com/networkservicemesh go get -u github.com/${{ github.repository }}@main
           go mod tidy
           git diff
       - name: Push update to the ${{ matrix.repository }}
