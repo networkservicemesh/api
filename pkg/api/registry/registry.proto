@@ -15,7 +15,7 @@ message NetworkService {
 message Match {
     map<string, string> source_selector = 1;
     repeated Destination routes = 2;
-    bool fallthrough_on_empty = 3;
+    bool fallthrough = 3;
 }
 
 message Destination {
