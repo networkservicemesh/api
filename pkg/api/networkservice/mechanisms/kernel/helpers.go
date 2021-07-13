@@ -18,8 +18,6 @@
 package kernel
 
 import (
-	"fmt"
-
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"
 )
@@ -87,26 +85,8 @@ func (m *Mechanism) IsPCIDevice() bool {
 }
 
 // GetInterfaceName returns the Kernel Interface Name
-//                  this is Mechanism.Parameters[InterfaceNameKey] if set
-//                  otherwise returns a name computed from networkservice.Connection 'conn'
-func (m *Mechanism) GetInterfaceName(conn *networkservice.Connection) string {
-	if m.GetParameters()[InterfaceNameKey] == "" {
-		ns := conn.GetNetworkService()
-		nsMaxLength := LinuxIfMaxLength - 5
-		if len(ns) > nsMaxLength {
-			ns = ns[:nsMaxLength]
-		}
-		name := fmt.Sprintf("%s-%s", ns, conn.GetId())
-		if len(name) > LinuxIfMaxLength {
-			name = name[:LinuxIfMaxLength]
-		}
-		m.GetParameters()[InterfaceNameKey] = name
-	}
-	name := m.GetParameters()[InterfaceNameKey]
-	if len(name) > LinuxIfMaxLength {
-		name = name[:LinuxIfMaxLength]
-	}
-	return name
+func (m *Mechanism) GetInterfaceName() string {
+	return m.GetParameters()[InterfaceNameKey]
 }
 
 // SetInterfaceName sets the Kernel Interface Name
