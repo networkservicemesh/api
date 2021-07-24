@@ -18,6 +18,8 @@
 package kernel
 
 import (
+	"strconv"
+
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"
 )
@@ -102,4 +104,39 @@ func (m *Mechanism) GetNetNSURL() string {
 // SetNetNSURL sets the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
 func (m *Mechanism) SetNetNSURL(urlString string) {
 	m.GetParameters()[NetNSURL] = urlString
+}
+
+// SupportsVLAN returns SupportsVLAN flag
+func (m *Mechanism) SupportsVLAN() bool {
+	boolValue, err := strconv.ParseBool(m.GetParameters()[SupportsVLAN])
+	if err != nil {
+		return false
+	}
+	return boolValue
+}
+
+// SetSupportsVLAN set SupportsVLAN flag
+func (m *Mechanism) SetSupportsVLAN(supportsVlan bool) {
+	m.GetParameters()[SupportsVLAN] = strconv.FormatBool(supportsVlan)
+}
+
+// GetVLAN - return Vlan value - 0 if unset or invalid
+func (m *Mechanism) GetVLAN() uint32 {
+	// vlan ID range is 0 to 4,095 - can be stored in 12 bit
+	vlan, err := strconv.ParseUint(m.GetParameters()[VLAN], 10, 12)
+	if err != nil {
+		return 0
+	}
+
+	return uint32(vlan)
+}
+
+// SetVLAN - set the VLAN value
+func (m *Mechanism) SetVLAN(vlan uint32) *Mechanism {
+	if m == nil {
+		return nil
+	}
+	m.GetParameters()[VLAN] = strconv.FormatUint(uint64(vlan), 10)
+
+	return m
 }
