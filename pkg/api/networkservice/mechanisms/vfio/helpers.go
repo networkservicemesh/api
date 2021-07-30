@@ -1,5 +1,6 @@
 // Copyright (c) 2020 Intel Corporation. All Rights Reserved.
-// Copyright (c) 2020 Doc.ai and/or its affiliates.
+//
+// Copyright (c) 2020-2021 Doc.ai and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -89,6 +90,16 @@ func (m *Mechanism) GetPCIAddress() string {
 // SetPCIAddress sets PCI address
 func (m *Mechanism) SetPCIAddress(pciAddress string) {
 	m.GetParameters()[PCIAddressKey] = pciAddress
+}
+
+// GetSRIOVTokenID returns SR-IOV token ID
+func (m *Mechanism) GetSRIOVTokenID() string {
+	return m.Parameters[SRIOVTokenIDKey]
+}
+
+// SetSRIOVTokenID sets SR-IOV token ID
+func (m *Mechanism) SetSRIOVTokenID(tokenID string) {
+	m.Parameters[SRIOVTokenIDKey] = tokenID
 }
 
 // GetVfioMajor returns /dev/vfio major number

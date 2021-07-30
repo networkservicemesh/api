@@ -1,5 +1,7 @@
 // Copyright (c) 2019-2021 Cisco Systems, Inc and/or its affiliates.
 //
+// Copyright (c) 2021 Doc.ai and/or its affiliates.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,6 +86,16 @@ func (m *Mechanism) SetPCIAddress(pciAddress string) {
 // IsPCIDevice returns if this mechanism is for a PCI device
 func (m *Mechanism) IsPCIDevice() bool {
 	return m.GetPCIAddress() != ""
+}
+
+// GetSRIOVTokenID returns SR-IOV token ID
+func (m *Mechanism) GetSRIOVTokenID() string {
+	return m.Parameters[SRIOVTokenIDKey]
+}
+
+// SetSRIOVTokenID sets SR-IOV token ID
+func (m *Mechanism) SetSRIOVTokenID(tokenID string) {
+	m.Parameters[SRIOVTokenIDKey] = tokenID
 }
 
 // GetInterfaceName returns the Kernel Interface Name
