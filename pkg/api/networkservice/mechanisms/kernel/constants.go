@@ -44,4 +44,10 @@ const (
 
 	// NetNSURLScheme - expected scheme of NetNSURLs
 	NetNSURLScheme = "file"
+
+	// SupportsVLAN - flag set if the forwarder supports VLAN trunking
+	SupportsVLAN = "supportsVlan"
+
+	// VLAN - VLAN ID
+	VLAN = "vlan"
 )
