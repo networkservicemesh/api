@@ -36,8 +36,8 @@ const (
 	// PCIAddressKey is a PCI address property key
 	PCIAddressKey = common.PCIAddressKey
 
-	// SRIOVTokenIDKey is a SR-IOV token ID property key
-	SRIOVTokenIDKey = common.SRIOVTokenIDKey
+	// TokenIDKey is a token ID property key
+	TokenIDKey = common.TokenIDKey
 
 	// VfioMajorKey is a /dev/vfio major number property key
 	VfioMajorKey = "vfioMajor"

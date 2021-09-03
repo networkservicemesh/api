@@ -35,8 +35,8 @@ const (
 	// PCIAddressKey - device PCI address property key
 	PCIAddressKey = common.PCIAddressKey
 
-	// SRIOVTokenIDKey is a SR-IOV token ID property key
-	SRIOVTokenIDKey = common.SRIOVTokenIDKey
+	// TokenIDKey is a token ID property key
+	TokenIDKey = common.TokenIDKey
 
 	// NetNSInodeKey - netns inode mechanism property key
 	NetNSInodeKey = common.NetNSInodeKey

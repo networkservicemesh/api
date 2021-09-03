@@ -48,9 +48,9 @@ const (
 	// PCIAddressKey - PCI address of the device for the SR-IOV supported mechanisms
 	PCIAddressKey = "pciAddress"
 
-	// SRIOVTokenIDKey - Client/Endpoint SR-IOV token ID
+	// TokenIDKey - Client/Endpoint token ID
 	// nolint:gosec
-	SRIOVTokenIDKey = "sriovTokenID"
+	TokenIDKey = "tokenID"
 
 	// MTU - Maximum Transmission Unit
 	MTU = "MTU"

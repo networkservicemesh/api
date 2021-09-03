@@ -88,14 +88,14 @@ func (m *Mechanism) IsPCIDevice() bool {
 	return m.GetPCIAddress() != ""
 }
 
-// GetSRIOVTokenID returns SR-IOV token ID
-func (m *Mechanism) GetSRIOVTokenID() string {
-	return m.Parameters[SRIOVTokenIDKey]
+// GetTokenID returns token ID
+func (m *Mechanism) GetTokenID() string {
+	return m.Parameters[TokenIDKey]
 }
 
-// SetSRIOVTokenID sets SR-IOV token ID
-func (m *Mechanism) SetSRIOVTokenID(tokenID string) {
-	m.Parameters[SRIOVTokenIDKey] = tokenID
+// SetTokenID sets token ID
+func (m *Mechanism) SetTokenID(tokenID string) {
+	m.Parameters[TokenIDKey] = tokenID
 }
 
 // GetInterfaceName returns the Kernel Interface Name
