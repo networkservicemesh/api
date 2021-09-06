@@ -92,14 +92,14 @@ func (m *Mechanism) SetPCIAddress(pciAddress string) {
 	m.GetParameters()[PCIAddressKey] = pciAddress
 }
 
-// GetTokenID returns token ID
-func (m *Mechanism) GetTokenID() string {
-	return m.Parameters[TokenIDKey]
+// GetDeviceTokenID returns device token ID
+func (m *Mechanism) GetDeviceTokenID() string {
+	return m.Parameters[DeviceTokenIDKey]
 }
 
-// SetTokenID sets token ID
-func (m *Mechanism) SetTokenID(tokenID string) {
-	m.Parameters[TokenIDKey] = tokenID
+// SetDeviceTokenID sets device token ID
+func (m *Mechanism) SetDeviceTokenID(tokenID string) {
+	m.Parameters[DeviceTokenIDKey] = tokenID
 }
 
 // GetVfioMajor returns /dev/vfio major number

@@ -35,8 +35,8 @@ const (
 	// PCIAddressKey - device PCI address property key
 	PCIAddressKey = common.PCIAddressKey
 
-	// TokenIDKey is a token ID property key
-	TokenIDKey = common.TokenIDKey
+	// DeviceTokenIDKey is a device token ID property key
+	DeviceTokenIDKey = common.DeviceTokenIDKey
 
 	// NetNSInodeKey - netns inode mechanism property key
 	NetNSInodeKey = common.NetNSInodeKey
