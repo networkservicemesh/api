@@ -1,5 +1,6 @@
 // Copyright (c) 2020 Intel Corporation. All Rights Reserved.
-// Copyright (c) 2020 Doc.ai and/or its affiliates.
+//
+// Copyright (c) 2020-2021 Doc.ai and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -34,6 +35,9 @@ const (
 
 	// PCIAddressKey is a PCI address property key
 	PCIAddressKey = common.PCIAddressKey
+
+	// DeviceTokenIDKey is a device token ID property key
+	DeviceTokenIDKey = common.DeviceTokenIDKey
 
 	// VfioMajorKey is a /dev/vfio major number property key
 	VfioMajorKey = "vfioMajor"

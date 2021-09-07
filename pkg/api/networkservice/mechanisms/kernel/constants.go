@@ -1,5 +1,7 @@
 // Copyright (c) 2020-2021 Cisco Systems, Inc.
 //
+// Copyright (c) 2021 Doc.ai and/or its affiliates.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +34,9 @@ const (
 
 	// PCIAddressKey - device PCI address property key
 	PCIAddressKey = common.PCIAddressKey
+
+	// DeviceTokenIDKey is a device token ID property key
+	DeviceTokenIDKey = common.DeviceTokenIDKey
 
 	// NetNSInodeKey - netns inode mechanism property key
 	NetNSInodeKey = common.NetNSInodeKey
