@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2020 Cisco Systems, Inc.
+// Copyright (c) 2019-2021 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -18,8 +18,6 @@
 package memif
 
 import (
-	"net/url"
-
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"
 )
@@ -29,14 +27,13 @@ type Mechanism struct {
 	*networkservice.Mechanism
 }
 
-// New returns *networkservice.Mechanism of type  memif using the given socketPath (file://socketPath)
-func New(socketPath string) *networkservice.Mechanism {
+// New returns *networkservice.Mechanism of type  memif using the given netnsURL (inode://${dev}/${ino})
+func New(netnsURL string) *networkservice.Mechanism {
 	return &networkservice.Mechanism{
 		Cls:  cls.LOCAL,
 		Type: MECHANISM,
 		Parameters: map[string]string{
-			SocketFilename: socketPath,
-			SocketFileURL:  (&url.URL{Scheme: SocketFileScheme, Path: socketPath}).String(),
+			NetNSURL: netnsURL,
 		},
 	}
 }
@@ -65,18 +62,20 @@ func (m *Mechanism) GetParameters() map[string]string {
 
 // GetSocketFilename returns memif mechanism socket filename
 func (m *Mechanism) GetSocketFilename() string {
-	if m == nil || m.GetParameters() == nil {
-		return ""
-	}
 	return m.GetParameters()[SocketFilename]
 }
 
-// GetSocketFileURL returns the SocketFileURL
-func (m *Mechanism) GetSocketFileURL() string {
-	return m.GetParameters()[SocketFileURL]
+// SetSocketFilename sets memif mechanism socket filename
+func (m *Mechanism) SetSocketFilename(filename string) {
+	m.GetParameters()[SocketFilename] = filename
 }
 
-// SetSocketFileURL sets the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
-func (m *Mechanism) SetSocketFileURL(urlString string) {
-	m.GetParameters()[SocketFileURL] = urlString
+// GetNetNSURL returns the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+func (m *Mechanism) GetNetNSURL() string {
+	return m.GetParameters()[NetNSURL]
+}
+
+// SetNetNSURL sets the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+func (m *Mechanism) SetNetNSURL(urlString string) {
+	m.GetParameters()[NetNSURL] = urlString
 }

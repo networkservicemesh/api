@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco Systems, Inc.
+// Copyright (c) 2020-2021 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -29,9 +29,9 @@ const (
 	// SocketFilename - name of the memif socketfile
 	SocketFilename = "socketfile"
 
-	// SocketFileURL - file url for the memif socketfile
-	SocketFileURL = common.InodeURL
+	// NetNSURL - url representing a inode - fmt.Sprintf("inode://%d/%d",dev,ino)
+	NetNSURL = common.InodeURL
 
-	// SocketFileScheme - expected scheme of the SocketFileURL
+	// SocketFileScheme - expected scheme of the NetNSURL
 	SocketFileScheme = "file"
 )
