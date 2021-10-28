@@ -8,13 +8,13 @@ package registry
 
 import (
 	context "context"
-	empty "github.com/golang/protobuf/ptypes/empty"
-	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -263,7 +263,7 @@ type NetworkServiceEndpoint struct {
 	NetworkServiceNames  []string                         `protobuf:"bytes,2,rep,name=network_service_names,json=networkServiceNames,proto3" json:"network_service_names,omitempty"`
 	NetworkServiceLabels map[string]*NetworkServiceLabels `protobuf:"bytes,3,rep,name=network_service_labels,json=networkServiceLabels,proto3" json:"network_service_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	Url                  string                           `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
-	ExpirationTime       *timestamp.Timestamp             `protobuf:"bytes,5,opt,name=expiration_time,json=expirationTime,proto3" json:"expiration_time,omitempty"`
+	ExpirationTime       *timestamppb.Timestamp           `protobuf:"bytes,5,opt,name=expiration_time,json=expirationTime,proto3" json:"expiration_time,omitempty"`
 }
 
 func (x *NetworkServiceEndpoint) Reset() {
@@ -326,7 +326,7 @@ func (x *NetworkServiceEndpoint) GetUrl() string {
 	return ""
 }
 
-func (x *NetworkServiceEndpoint) GetExpirationTime() *timestamp.Timestamp {
+func (x *NetworkServiceEndpoint) GetExpirationTime() *timestamppb.Timestamp {
 	if x != nil {
 		return x.ExpirationTime
 	}
@@ -729,8 +729,8 @@ var file_registry_proto_goTypes = []interface{}{
 	nil,                                    // 10: registry.Destination.DestinationSelectorEntry
 	nil,                                    // 11: registry.NetworkServiceLabels.LabelsEntry
 	nil,                                    // 12: registry.NetworkServiceEndpoint.NetworkServiceLabelsEntry
-	(*timestamp.Timestamp)(nil),            // 13: google.protobuf.Timestamp
-	(*empty.Empty)(nil),                    // 14: google.protobuf.Empty
+	(*timestamppb.Timestamp)(nil),          // 13: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),                  // 14: google.protobuf.Empty
 }
 var file_registry_proto_depIdxs = []int32{
 	1,  // 0: registry.NetworkService.matches:type_name -> registry.Match
@@ -913,7 +913,7 @@ const _ = grpc.SupportPackageIsVersion6
 type NetworkServiceEndpointRegistryClient interface {
 	Register(ctx context.Context, in *NetworkServiceEndpoint, opts ...grpc.CallOption) (*NetworkServiceEndpoint, error)
 	Find(ctx context.Context, in *NetworkServiceEndpointQuery, opts ...grpc.CallOption) (NetworkServiceEndpointRegistry_FindClient, error)
-	Unregister(ctx context.Context, in *NetworkServiceEndpoint, opts ...grpc.CallOption) (*empty.Empty, error)
+	Unregister(ctx context.Context, in *NetworkServiceEndpoint, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type networkServiceEndpointRegistryClient struct {
@@ -965,8 +965,8 @@ func (x *networkServiceEndpointRegistryFindClient) Recv() (*NetworkServiceEndpoi
 	return m, nil
 }
 
-func (c *networkServiceEndpointRegistryClient) Unregister(ctx context.Context, in *NetworkServiceEndpoint, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *networkServiceEndpointRegistryClient) Unregister(ctx context.Context, in *NetworkServiceEndpoint, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/registry.NetworkServiceEndpointRegistry/Unregister", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -978,7 +978,7 @@ func (c *networkServiceEndpointRegistryClient) Unregister(ctx context.Context, i
 type NetworkServiceEndpointRegistryServer interface {
 	Register(context.Context, *NetworkServiceEndpoint) (*NetworkServiceEndpoint, error)
 	Find(*NetworkServiceEndpointQuery, NetworkServiceEndpointRegistry_FindServer) error
-	Unregister(context.Context, *NetworkServiceEndpoint) (*empty.Empty, error)
+	Unregister(context.Context, *NetworkServiceEndpoint) (*emptypb.Empty, error)
 }
 
 // UnimplementedNetworkServiceEndpointRegistryServer can be embedded to have forward compatible implementations.
@@ -991,7 +991,7 @@ func (*UnimplementedNetworkServiceEndpointRegistryServer) Register(context.Conte
 func (*UnimplementedNetworkServiceEndpointRegistryServer) Find(*NetworkServiceEndpointQuery, NetworkServiceEndpointRegistry_FindServer) error {
 	return status.Errorf(codes.Unimplemented, "method Find not implemented")
 }
-func (*UnimplementedNetworkServiceEndpointRegistryServer) Unregister(context.Context, *NetworkServiceEndpoint) (*empty.Empty, error) {
+func (*UnimplementedNetworkServiceEndpointRegistryServer) Unregister(context.Context, *NetworkServiceEndpoint) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Unregister not implemented")
 }
 
@@ -1085,7 +1085,7 @@ var _NetworkServiceEndpointRegistry_serviceDesc = grpc.ServiceDesc{
 type NetworkServiceRegistryClient interface {
 	Register(ctx context.Context, in *NetworkService, opts ...grpc.CallOption) (*NetworkService, error)
 	Find(ctx context.Context, in *NetworkServiceQuery, opts ...grpc.CallOption) (NetworkServiceRegistry_FindClient, error)
-	Unregister(ctx context.Context, in *NetworkService, opts ...grpc.CallOption) (*empty.Empty, error)
+	Unregister(ctx context.Context, in *NetworkService, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type networkServiceRegistryClient struct {
@@ -1137,8 +1137,8 @@ func (x *networkServiceRegistryFindClient) Recv() (*NetworkServiceResponse, erro
 	return m, nil
 }
 
-func (c *networkServiceRegistryClient) Unregister(ctx context.Context, in *NetworkService, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *networkServiceRegistryClient) Unregister(ctx context.Context, in *NetworkService, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/registry.NetworkServiceRegistry/Unregister", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -1150,7 +1150,7 @@ func (c *networkServiceRegistryClient) Unregister(ctx context.Context, in *Netwo
 type NetworkServiceRegistryServer interface {
 	Register(context.Context, *NetworkService) (*NetworkService, error)
 	Find(*NetworkServiceQuery, NetworkServiceRegistry_FindServer) error
-	Unregister(context.Context, *NetworkService) (*empty.Empty, error)
+	Unregister(context.Context, *NetworkService) (*emptypb.Empty, error)
 }
 
 // UnimplementedNetworkServiceRegistryServer can be embedded to have forward compatible implementations.
@@ -1163,7 +1163,7 @@ func (*UnimplementedNetworkServiceRegistryServer) Register(context.Context, *Net
 func (*UnimplementedNetworkServiceRegistryServer) Find(*NetworkServiceQuery, NetworkServiceRegistry_FindServer) error {
 	return status.Errorf(codes.Unimplemented, "method Find not implemented")
 }
-func (*UnimplementedNetworkServiceRegistryServer) Unregister(context.Context, *NetworkService) (*empty.Empty, error) {
+func (*UnimplementedNetworkServiceRegistryServer) Unregister(context.Context, *NetworkService) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Unregister not implemented")
 }
 

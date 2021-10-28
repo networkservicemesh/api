@@ -26,12 +26,12 @@ package networkservice
 
 import (
 	context "context"
-	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -206,11 +206,11 @@ type PathSegment struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name    string               `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Id      string               `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-	Token   string               `protobuf:"bytes,3,opt,name=token,proto3" json:"token,omitempty"`
-	Expires *timestamp.Timestamp `protobuf:"bytes,4,opt,name=expires,proto3" json:"expires,omitempty"`
-	Metrics map[string]string    `protobuf:"bytes,5,rep,name=metrics,proto3" json:"metrics,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Name    string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Id      string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Token   string                 `protobuf:"bytes,3,opt,name=token,proto3" json:"token,omitempty"`
+	Expires *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=expires,proto3" json:"expires,omitempty"`
+	Metrics map[string]string      `protobuf:"bytes,5,rep,name=metrics,proto3" json:"metrics,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *PathSegment) Reset() {
@@ -266,7 +266,7 @@ func (x *PathSegment) GetToken() string {
 	return ""
 }
 
-func (x *PathSegment) GetExpires() *timestamp.Timestamp {
+func (x *PathSegment) GetExpires() *timestamppb.Timestamp {
 	if x != nil {
 		return x.Expires
 	}
@@ -675,20 +675,20 @@ func file_connection_proto_rawDescGZIP() []byte {
 var file_connection_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_connection_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_connection_proto_goTypes = []interface{}{
-	(State)(0),                   // 0: connection.State
-	(ConnectionEventType)(0),     // 1: connection.ConnectionEventType
-	(*Mechanism)(nil),            // 2: connection.Mechanism
-	(*PathSegment)(nil),          // 3: connection.PathSegment
-	(*Path)(nil),                 // 4: connection.Path
-	(*Connection)(nil),           // 5: connection.Connection
-	(*ConnectionEvent)(nil),      // 6: connection.ConnectionEvent
-	(*MonitorScopeSelector)(nil), // 7: connection.MonitorScopeSelector
-	nil,                          // 8: connection.Mechanism.ParametersEntry
-	nil,                          // 9: connection.PathSegment.MetricsEntry
-	nil,                          // 10: connection.Connection.LabelsEntry
-	nil,                          // 11: connection.ConnectionEvent.ConnectionsEntry
-	(*timestamp.Timestamp)(nil),  // 12: google.protobuf.Timestamp
-	(*ConnectionContext)(nil),    // 13: connectioncontext.ConnectionContext
+	(State)(0),                    // 0: connection.State
+	(ConnectionEventType)(0),      // 1: connection.ConnectionEventType
+	(*Mechanism)(nil),             // 2: connection.Mechanism
+	(*PathSegment)(nil),           // 3: connection.PathSegment
+	(*Path)(nil),                  // 4: connection.Path
+	(*Connection)(nil),            // 5: connection.Connection
+	(*ConnectionEvent)(nil),       // 6: connection.ConnectionEvent
+	(*MonitorScopeSelector)(nil),  // 7: connection.MonitorScopeSelector
+	nil,                           // 8: connection.Mechanism.ParametersEntry
+	nil,                           // 9: connection.PathSegment.MetricsEntry
+	nil,                           // 10: connection.Connection.LabelsEntry
+	nil,                           // 11: connection.ConnectionEvent.ConnectionsEntry
+	(*timestamppb.Timestamp)(nil), // 12: google.protobuf.Timestamp
+	(*ConnectionContext)(nil),     // 13: connectioncontext.ConnectionContext
 }
 var file_connection_proto_depIdxs = []int32{
 	8,  // 0: connection.Mechanism.parameters:type_name -> connection.Mechanism.ParametersEntry
