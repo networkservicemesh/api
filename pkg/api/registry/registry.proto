@@ -37,13 +37,13 @@ message NetworkServiceEndpoint {
 
 service NetworkServiceEndpointRegistry {
     rpc Register (NetworkServiceEndpoint) returns (NetworkServiceEndpoint);
-    rpc Find (NetworkServiceEndpointQuery) returns (stream NetworkServiceEndpoint);
+    rpc Find (NetworkServiceEndpointQuery) returns (stream NetworkServiceEndpointResponse);
     rpc Unregister (NetworkServiceEndpoint) returns (google.protobuf.Empty);
 }
 
 service NetworkServiceRegistry {
     rpc Register (NetworkService) returns (NetworkService);
-    rpc Find (NetworkServiceQuery) returns (stream NetworkService);
+    rpc Find (NetworkServiceQuery) returns (stream NetworkServiceResponse);
     rpc Unregister (NetworkService) returns (google.protobuf.Empty);
 }
 
@@ -55,4 +55,14 @@ message NetworkServiceQuery {
 message NetworkServiceEndpointQuery {
     NetworkServiceEndpoint network_service_endpoint = 1;
     bool watch = 2;
+}
+
+message NetworkServiceResponse {
+    NetworkService network_service = 1;
+    bool deleted = 2;
+}
+
+message NetworkServiceEndpointResponse {
+    NetworkServiceEndpoint network_service_endpoint = 1;
+    bool deleted = 2;
 }
