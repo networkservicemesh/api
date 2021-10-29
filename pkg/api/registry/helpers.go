@@ -104,3 +104,13 @@ func (x *NetworkService) Clone() *NetworkService {
 func (x *NetworkServiceEndpoint) Clone() *NetworkServiceEndpoint {
 	return proto.Clone(x).(*NetworkServiceEndpoint)
 }
+
+// Clone clones request
+func (x *NetworkServiceResponse) Clone() *NetworkServiceResponse {
+	return proto.Clone(x).(*NetworkServiceResponse)
+}
+
+// Clone clones request
+func (x *NetworkServiceEndpointResponse) Clone() *NetworkServiceEndpointResponse {
+	return proto.Clone(x).(*NetworkServiceEndpointResponse)
+}
