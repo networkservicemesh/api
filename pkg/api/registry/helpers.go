@@ -40,10 +40,12 @@ func ServiceNames(impl interface{}, existingServiceNames ...string) []string {
 }
 
 // ReadNetworkServiceList read list of NetworkServices from passed stream
-func ReadNetworkServiceList(stream NetworkServiceRegistry_FindClient) []*NetworkServiceResponse {
-	var result []*NetworkServiceResponse
+func ReadNetworkServiceList(stream NetworkServiceRegistry_FindClient) []*NetworkService {
+	var result []*NetworkService
 	for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
-		result = append(result, msg)
+		if !msg.Deleted {
+			result = append(result, msg.NetworkService)
+		}
 	}
 	return result
 }
@@ -83,10 +85,12 @@ func ReadNetworkServiceEndpointChannel(stream NetworkServiceEndpointRegistry_Fin
 }
 
 // ReadNetworkServiceEndpointList read list of NetworkServiceEndpoints from passed stream
-func ReadNetworkServiceEndpointList(stream NetworkServiceEndpointRegistry_FindClient) []*NetworkServiceEndpointResponse {
-	var result []*NetworkServiceEndpointResponse
+func ReadNetworkServiceEndpointList(stream NetworkServiceEndpointRegistry_FindClient) []*NetworkServiceEndpoint {
+	var result []*NetworkServiceEndpoint
 	for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
-		result = append(result, msg)
+		if !msg.Deleted {
+			result = append(result, msg.NetworkServiceEndpoint)
+		}
 	}
 	return result
 }
