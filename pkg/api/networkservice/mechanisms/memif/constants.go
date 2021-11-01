@@ -29,9 +29,11 @@ const (
 	// SocketFilename - name of the memif socketfile
 	SocketFilename = "socketfile"
 
-	// NetNSURL - url representing a inode - fmt.Sprintf("inode://%d/%d",dev,ino)
+	// NetNSURL - NetNS URL, it can be either:
+	// * file:///proc/${pid}/ns/net - ${pid} process net NS
+	// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
 	NetNSURL = common.InodeURL
 
-	// SocketFileScheme - expected scheme of the NetNSURL
-	SocketFileScheme = "file"
+	// NetNSFileScheme - expected scheme of the NetNSURL
+	NetNSFileScheme = "file"
 )

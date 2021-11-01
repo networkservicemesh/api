@@ -27,7 +27,7 @@ type Mechanism struct {
 	*networkservice.Mechanism
 }
 
-// New returns *networkservice.Mechanism of type  memif using the given netnsURL (inode://${dev}/${ino})
+// New returns *networkservice.Mechanism of type memif using the given netnsURL (file:///proc/${pid}/ns/net)
 func New(netnsURL string) *networkservice.Mechanism {
 	return &networkservice.Mechanism{
 		Cls:  cls.LOCAL,
@@ -70,12 +70,14 @@ func (m *Mechanism) SetSocketFilename(filename string) {
 	m.GetParameters()[SocketFilename] = filename
 }
 
-// GetNetNSURL returns the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+// GetNetNSURL returns the NetNS URL, it can be either:
+// * file:///proc/${pid}/ns/net - ${pid} process net NS
+// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
 func (m *Mechanism) GetNetNSURL() string {
 	return m.GetParameters()[NetNSURL]
 }
 
-// SetNetNSURL sets the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+// SetNetNSURL sets the NetNS URL - file:///proc/${pid}/ns/net
 func (m *Mechanism) SetNetNSURL(urlString string) {
 	m.GetParameters()[NetNSURL] = urlString
 }

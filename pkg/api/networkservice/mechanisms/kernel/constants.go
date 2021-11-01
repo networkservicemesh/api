@@ -44,7 +44,9 @@ const (
 	// InterfaceNameKey - interface name mechanism property key
 	InterfaceNameKey = common.InterfaceNameKey
 
-	// NetNSURL - url representing an inode - fmt.Sprintf("inode://%d/%d",dev,ino)
+	// NetNSURL - NetNS URL, it can be either:
+	// * file:///proc/${pid}/ns/net - ${pid} process net NS
+	// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
 	NetNSURL = common.InodeURL
 
 	// NetNSURLScheme - expected scheme of NetNSURLs
