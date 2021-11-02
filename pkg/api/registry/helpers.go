@@ -43,14 +43,16 @@ func ServiceNames(impl interface{}, existingServiceNames ...string) []string {
 func ReadNetworkServiceList(stream NetworkServiceRegistry_FindClient) []*NetworkService {
 	var result []*NetworkService
 	for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
-		result = append(result, msg)
+		if !msg.Deleted {
+			result = append(result, msg.NetworkService)
+		}
 	}
 	return result
 }
 
 // ReadNetworkServiceChannel reads NetworkServices from the stream and puts it into result channel
-func ReadNetworkServiceChannel(stream NetworkServiceRegistry_FindClient) <-chan *NetworkService {
-	result := make(chan *NetworkService)
+func ReadNetworkServiceChannel(stream NetworkServiceRegistry_FindClient) <-chan *NetworkServiceResponse {
+	result := make(chan *NetworkServiceResponse)
 	go func() {
 		defer close(result)
 		for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
@@ -66,8 +68,8 @@ func ReadNetworkServiceChannel(stream NetworkServiceRegistry_FindClient) <-chan 
 }
 
 // ReadNetworkServiceEndpointChannel reads NetworkServiceEndpoint from the stream and puts it into result channel
-func ReadNetworkServiceEndpointChannel(stream NetworkServiceEndpointRegistry_FindClient) <-chan *NetworkServiceEndpoint {
-	result := make(chan *NetworkServiceEndpoint)
+func ReadNetworkServiceEndpointChannel(stream NetworkServiceEndpointRegistry_FindClient) <-chan *NetworkServiceEndpointResponse {
+	result := make(chan *NetworkServiceEndpointResponse)
 	go func() {
 		defer close(result)
 		for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
@@ -86,7 +88,9 @@ func ReadNetworkServiceEndpointChannel(stream NetworkServiceEndpointRegistry_Fin
 func ReadNetworkServiceEndpointList(stream NetworkServiceEndpointRegistry_FindClient) []*NetworkServiceEndpoint {
 	var result []*NetworkServiceEndpoint
 	for msg, err := stream.Recv(); err == nil; msg, err = stream.Recv() {
-		result = append(result, msg)
+		if !msg.Deleted {
+			result = append(result, msg.NetworkServiceEndpoint)
+		}
 	}
 	return result
 }
@@ -99,4 +103,14 @@ func (x *NetworkService) Clone() *NetworkService {
 // Clone clones request
 func (x *NetworkServiceEndpoint) Clone() *NetworkServiceEndpoint {
 	return proto.Clone(x).(*NetworkServiceEndpoint)
+}
+
+// Clone clones NetworkServiceResponse
+func (x *NetworkServiceResponse) Clone() *NetworkServiceResponse {
+	return proto.Clone(x).(*NetworkServiceResponse)
+}
+
+// Clone clones NetworkServiceEndpointResponse
+func (x *NetworkServiceEndpointResponse) Clone() *NetworkServiceEndpointResponse {
+	return proto.Clone(x).(*NetworkServiceEndpointResponse)
 }
