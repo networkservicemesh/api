@@ -18,6 +18,8 @@
 package memif
 
 import (
+	"net/url"
+
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"
 )
@@ -27,13 +29,24 @@ type Mechanism struct {
 	*networkservice.Mechanism
 }
 
-// New returns *networkservice.Mechanism of type memif using the given netnsURL (file:///proc/${pid}/ns/net)
-func New(netnsURL string) *networkservice.Mechanism {
+// New returns *networkservice.Mechanism of type memif using the given socketPath
+func New(socketPath string) *networkservice.Mechanism {
 	return &networkservice.Mechanism{
 		Cls:  cls.LOCAL,
 		Type: MECHANISM,
 		Parameters: map[string]string{
-			NetNSURL: netnsURL,
+			SocketFileURL: (&url.URL{Scheme: FileScheme, Path: socketPath}).String(),
+		},
+	}
+}
+
+// NewAbstract returns *networkservice.Mechanism of type memif using the given netNSPath
+func NewAbstract(netNSPath string) *networkservice.Mechanism {
+	return &networkservice.Mechanism{
+		Cls:  cls.LOCAL,
+		Type: MECHANISM,
+		Parameters: map[string]string{
+			NetNSURL: (&url.URL{Scheme: FileScheme, Path: netNSPath}).String(),
 		},
 	}
 }

@@ -26,14 +26,19 @@ const (
 
 	// Mechanism parameters
 
-	// SocketFilename - name of the memif socketfile
+	// SocketFilename - [abstract sockets case] name of the memif socketfile
 	SocketFilename = "socketfile"
 
-	// NetNSURL - NetNS URL, it can be either:
+	// NetNSURL - [abstract sockets case] NetNS URL, it can be either:
 	// * file:///proc/${pid}/ns/net - ${pid} process net NS
 	// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
 	NetNSURL = common.InodeURL
 
-	// NetNSFileScheme - expected scheme of the NetNSURL
-	NetNSFileScheme = "file"
+	// SocketFileURL - [FS sockets case] memif socketfile URL, it can be either:
+	// * file://${path} - memif socketfile
+	// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
+	SocketFileURL = common.InodeURL
+
+	// FileScheme - expected scheme of the NetNSURL, SocketFileURL
+	FileScheme = "file"
 )
