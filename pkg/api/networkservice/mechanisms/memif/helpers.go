@@ -73,24 +73,36 @@ func (m *Mechanism) GetParameters() map[string]string {
 	return m.Parameters
 }
 
-// GetSocketFilename returns memif mechanism socket filename
+// GetSocketFilename [abstract sockets case] returns memif mechanism socket filename
 func (m *Mechanism) GetSocketFilename() string {
 	return m.GetParameters()[SocketFilename]
 }
 
-// SetSocketFilename sets memif mechanism socket filename
+// SetSocketFilename [abstract sockets case] sets memif mechanism socket filename
 func (m *Mechanism) SetSocketFilename(filename string) {
 	m.GetParameters()[SocketFilename] = filename
 }
 
-// GetNetNSURL returns the NetNS URL, it can be either:
+// GetNetNSURL [abstract sockets case] returns the NetNS URL, it can be either:
 // * file:///proc/${pid}/ns/net - ${pid} process net NS
 // * inode://${dev}/${ino} - while transferring file between processes using grpcfd
 func (m *Mechanism) GetNetNSURL() string {
 	return m.GetParameters()[NetNSURL]
 }
 
-// SetNetNSURL sets the NetNS URL - file:///proc/${pid}/ns/net
+// SetNetNSURL [abstract sockets case] sets the NetNS URL - file:///proc/${pid}/ns/net
 func (m *Mechanism) SetNetNSURL(urlString string) {
+	m.GetParameters()[NetNSURL] = urlString
+}
+
+// GetSocketFileURL [FS sockets case] returns the memif socketfile URL, it can be either:
+//	// * file://${path} - memif socketfile
+//	// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
+func (m *Mechanism) GetSocketFileURL() string {
+	return m.GetParameters()[SocketFileURL]
+}
+
+// SetSocketFileURL [FS sockets case] sets the memif socketfile URL.
+func (m *Mechanism) SetSocketFileURL(urlString string) {
 	m.GetParameters()[NetNSURL] = urlString
 }
