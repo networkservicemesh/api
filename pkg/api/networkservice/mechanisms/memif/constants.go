@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco Systems, Inc.
+// Copyright (c) 2020-2021 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -26,12 +26,19 @@ const (
 
 	// Mechanism parameters
 
-	// SocketFilename - name of the memif socketfile
+	// SocketFilename - [abstract sockets case] name of the memif socketfile
 	SocketFilename = "socketfile"
 
-	// SocketFileURL - file url for the memif socketfile
+	// NetNSURL - [abstract sockets case] NetNS URL, it can be either:
+	// * file:///proc/${pid}/ns/net - ${pid} process net NS
+	// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
+	NetNSURL = common.InodeURL
+
+	// SocketFileURL - [FS sockets case] memif socketfile URL, it can be either:
+	// * file://${path} - memif socketfile
+	// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
 	SocketFileURL = common.InodeURL
 
-	// SocketFileScheme - expected scheme of the SocketFileURL
-	SocketFileScheme = "file"
+	// FileScheme - expected scheme of the NetNSURL, SocketFileURL
+	FileScheme = "file"
 )

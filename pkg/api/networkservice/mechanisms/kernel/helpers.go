@@ -31,7 +31,7 @@ type Mechanism struct {
 	*networkservice.Mechanism
 }
 
-// New returns *networkservice.Mechanism of type kernel using the given netnsURL (inode://${dev}/${ino})
+// New returns *networkservice.Mechanism of type kernel using the given netnsURL (file:///proc/${pid}/ns/net)
 func New(netnsURL string) *networkservice.Mechanism {
 	return &networkservice.Mechanism{
 		Cls:  cls.LOCAL,
@@ -43,6 +43,7 @@ func New(netnsURL string) *networkservice.Mechanism {
 }
 
 // ToMechanism converts unified mechanism to helper
+// If Mechanism m is *not* of type kernel.MECHANISM, it returns nil
 func ToMechanism(m *networkservice.Mechanism) *Mechanism {
 	if m.GetType() == MECHANISM {
 		return &Mechanism{
@@ -108,12 +109,14 @@ func (m *Mechanism) SetInterfaceName(interfaceName string) {
 	m.GetParameters()[InterfaceNameKey] = interfaceName
 }
 
-// GetNetNSURL returns the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+// GetNetNSURL returns the NetNS URL, it can be either:
+// * file:///proc/${pid}/ns/net - ${pid} process net NS
+// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
 func (m *Mechanism) GetNetNSURL() string {
 	return m.GetParameters()[NetNSURL]
 }
 
-// SetNetNSURL sets the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
+// SetNetNSURL sets the NetNS URL - file:///proc/${pid}/ns/net
 func (m *Mechanism) SetNetNSURL(urlString string) {
 	m.GetParameters()[NetNSURL] = urlString
 }

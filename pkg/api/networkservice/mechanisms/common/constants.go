@@ -42,7 +42,7 @@ const (
 	// InterfaceNameKey - interface name mechanism property key
 	InterfaceNameKey = "name"
 
-	// InodeURL - url of the for inode://${dev}/${ino} to represent various netns, memif socket files etc
+	// InodeURL - file:// or inode:// URL representing some file shared between processes with grpcfd (e.g. netns file)
 	InodeURL = "inodeURL"
 
 	// PCIAddressKey - PCI address of the device for the SR-IOV supported mechanisms

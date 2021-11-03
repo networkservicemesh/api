@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2020 Cisco Systems, Inc.
+// Copyright (c) 2019-2021 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -29,14 +29,24 @@ type Mechanism struct {
 	*networkservice.Mechanism
 }
 
-// New returns *networkservice.Mechanism of type  memif using the given socketPath (file://socketPath)
+// New returns *networkservice.Mechanism of type memif using the given socketPath
 func New(socketPath string) *networkservice.Mechanism {
 	return &networkservice.Mechanism{
 		Cls:  cls.LOCAL,
 		Type: MECHANISM,
 		Parameters: map[string]string{
-			SocketFilename: socketPath,
-			SocketFileURL:  (&url.URL{Scheme: SocketFileScheme, Path: socketPath}).String(),
+			SocketFileURL: (&url.URL{Scheme: FileScheme, Path: socketPath}).String(),
+		},
+	}
+}
+
+// NewAbstract returns *networkservice.Mechanism of type memif using the given netNSPath
+func NewAbstract(netNSPath string) *networkservice.Mechanism {
+	return &networkservice.Mechanism{
+		Cls:  cls.LOCAL,
+		Type: MECHANISM,
+		Parameters: map[string]string{
+			NetNSURL: (&url.URL{Scheme: FileScheme, Path: netNSPath}).String(),
 		},
 	}
 }
@@ -65,18 +75,22 @@ func (m *Mechanism) GetParameters() map[string]string {
 
 // GetSocketFilename returns memif mechanism socket filename
 func (m *Mechanism) GetSocketFilename() string {
-	if m == nil || m.GetParameters() == nil {
-		return ""
-	}
 	return m.GetParameters()[SocketFilename]
 }
 
-// GetSocketFileURL returns the SocketFileURL
-func (m *Mechanism) GetSocketFileURL() string {
-	return m.GetParameters()[SocketFileURL]
+// SetSocketFilename sets memif mechanism socket filename
+func (m *Mechanism) SetSocketFilename(filename string) {
+	m.GetParameters()[SocketFilename] = filename
 }
 
-// SetSocketFileURL sets the NetNS URL - fmt.Sprintf("inode://%d/%d",dev,ino)
-func (m *Mechanism) SetSocketFileURL(urlString string) {
-	m.GetParameters()[SocketFileURL] = urlString
+// GetNetNSURL returns the NetNS URL, it can be either:
+// * file:///proc/${pid}/ns/net - ${pid} process net NS
+// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
+func (m *Mechanism) GetNetNSURL() string {
+	return m.GetParameters()[NetNSURL]
+}
+
+// SetNetNSURL sets the NetNS URL - file:///proc/${pid}/ns/net
+func (m *Mechanism) SetNetNSURL(urlString string) {
+	m.GetParameters()[NetNSURL] = urlString
 }
