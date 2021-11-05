@@ -33,6 +33,7 @@ message NetworkServiceEndpoint {
     map<string, NetworkServiceLabels> network_service_labels = 3;
     string url = 4;
     google.protobuf.Timestamp expiration_time = 5;
+    google.protobuf.Timestamp initial_registration_time = 6;
 }
 
 service NetworkServiceEndpointRegistry {
