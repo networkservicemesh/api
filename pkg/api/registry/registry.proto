@@ -16,7 +16,7 @@ message Match {
     map<string, string> source_selector = 1;
     repeated Destination routes = 2;
     bool fallthrough = 3;
-    Metadata metadata =4;
+    Metadata metadata = 4;
 }
 
 message Metadata {
