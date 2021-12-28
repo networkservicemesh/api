@@ -88,4 +88,5 @@ message ConnectionContext {
     EthernetContext ethernet_context = 3;
     map<string, string> extra_context = 4; /* a k,v map for transfering arbitrary information from an NSE to an NSC or dataplane */
     uint32 MTU = 5;
+    string endpoint_group_id = 6;
 }
