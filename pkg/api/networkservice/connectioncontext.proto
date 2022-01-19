@@ -47,6 +47,13 @@ message ExtraPrefixRequest {
     uint32 requested_number = 4;
 }
 
+message PolicyRoute {
+    string from  = 1; /* source ip address. This must be an IP that NSM has placed on the nsm interface or empty (in which case it applies to all IPs NSM puts on the interface */
+    uint32 proto = 2; /* ip protocol number */
+    uint32 port  = 3; /* destination port */
+    repeated Route routes = 4; /* list of destination based routes, if empty becomes a default route, but only for things matching both from and proto */
+}
+
 message IPContext {
     repeated string src_ip_addrs = 1; /* source ip address + prefix in format <address>/<prefix> */
     repeated string dst_ip_addrs = 2; /* destination ip address + prefix in format <address>/<prefix> */
@@ -63,6 +70,8 @@ message IPContext {
 
     repeated ExtraPrefixRequest extra_prefix_request = 9; /* A request for NSE to provide extra prefixes */
     repeated string extra_prefixes = 10; /* A list of extra prefixes requested */
+
+    repeated PolicyRoute policies = 11; /* A list of route policies */
 }
 
 message DNSConfig {
