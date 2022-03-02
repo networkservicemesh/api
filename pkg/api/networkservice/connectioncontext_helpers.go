@@ -1,4 +1,5 @@
-// Copyright (c) 2020-2021 Cisco and/or its affiliates.
+// Copyright (c) 2020-2022 Cisco and/or its affiliates.
+// Copyright (c) 2022 Nordix Foundation
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -18,6 +19,8 @@ package networkservice
 
 import (
 	"net"
+	"strconv"
+	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -123,4 +126,38 @@ func (c *ExtraPrefixRequest) IsValid() error {
 	}
 
 	return nil
+}
+
+// PortRange represents source port / destination port range.
+type PortRange struct {
+	Start uint16
+	End   uint16
+}
+
+// ParsePortRange - parses port range in format "start-end" or "port".
+func ParsePortRange(portRange string) (*PortRange, error) {
+	if portRange == "" {
+		return nil, nil
+	}
+	ports := strings.Split(portRange, "-")
+	if len(ports) > 2 {
+		return nil, errors.Errorf("port range should be in format start-end: %v", portRange)
+	}
+	start, err := strconv.ParseUint(ports[0], 10, 16)
+	if err != nil {
+		return nil, err
+	}
+	endString := ports[0]
+	if len(ports) == 2 {
+		endString = ports[1]
+	}
+	end, err := strconv.ParseUint(endString, 10, 16)
+	if err != nil {
+		return nil, err
+	}
+
+	return &PortRange{
+		Start: uint16(start),
+		End:   uint16(end),
+	}, nil
 }
