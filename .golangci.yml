@@ -177,3 +177,7 @@ issues:
       linters:
         - interfacer
       text: "can be `github.com/golang/protobuf/proto.Message"
+    - path: pkg/api/networkservice/connectioncontext_helpers_test.go
+      linters:
+        - funlen
+      text: "Function 'TestParsePortRange' is too long"
