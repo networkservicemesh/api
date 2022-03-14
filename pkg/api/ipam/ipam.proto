@@ -21,18 +21,23 @@ package ipam;
 option go_package = "github.com/networkservicemesh/api/pkg/api/ipam";
 
 
-enum RequestType {
+enum Type {
   UNDEFINED = 0;
   ALLOCATE = 1;
   DELETE = 2;
 }
 
-message IPAMRequest {
-  RequestType type = 1;
+message PrefixRequest {
+  Type type = 1;
   string prefix = 2;
-  repeated string exclude_prefixes =3;
+  repeated string exclude_prefixes = 3;
 }
 
-service IPAMService  {
-  rpc Request (IPAMRequest) returns (stream IPAMRequest);
+message PrefixResponse {
+  string prefix = 2;
+  repeated string exclude_prefixes = 3;
+}
+
+service IPAM  {
+  rpc ManagePrefixes (stream PrefixRequest) returns (stream PrefixResponse);
 }
