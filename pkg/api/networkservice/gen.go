@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2021 Cisco and/or its affiliates.
+// Copyright (c) 2020-2022 Cisco and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -20,4 +20,5 @@ package networkservice
 // Run with protoc and proto-gen-go matching the versions found in .github/workflows/ci.yaml
 // Please also note that you need a 'batteries included' version of protoc such as the one installed
 // with brew rather than the 'single binary' install to insure you get the correct *.proto files for imports
+//go:generate go install github.com/golang/protobuf/protoc-gen-go@v1.5.2
 //go:generate bash -c "protoc -I .  *.proto --go_out=plugins=grpc,paths=source_relative:."
