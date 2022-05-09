@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2021 Doc.ai and/or its affiliates.
 //
+// Copyright (c) 2022 Xored Software Inc and others.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,4 +59,7 @@ const (
 
 	// VLAN - VLAN ID
 	VLAN = "vlan"
+
+	// RouteLocalNet - flag set if route_localnet enabled
+	RouteLocalNet = "routeLocalNet"
 )

@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2021 Doc.ai and/or its affiliates.
 //
+// Copyright (c) 2022 Xored Software Inc and others.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -152,6 +154,23 @@ func (m *Mechanism) SetVLAN(vlan uint32) *Mechanism {
 		return nil
 	}
 	m.GetParameters()[VLAN] = strconv.FormatUint(uint64(vlan), 10)
+
+	return m
+}
+
+// GetRouteLocalNet - return RouteLocalNet flag value, false if unset or invalid
+func (m *Mechanism) GetRouteLocalNet() bool {
+	boolValue, err := strconv.ParseBool(m.GetParameters()[RouteLocalNet])
+	if err != nil {
+		return false
+	}
+
+	return boolValue
+}
+
+// SetRouteLocalNet - set RouteLocalNet flag
+func (m *Mechanism) SetRouteLocalNet(routeLocalNet bool) *Mechanism {
+	m.GetParameters()[RouteLocalNet] = strconv.FormatBool(routeLocalNet)
 
 	return m
 }
