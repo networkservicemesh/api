@@ -62,4 +62,7 @@ const (
 
 	// RouteLocalNet - flag set if route_localnet enabled
 	RouteLocalNet = "routeLocalNet"
+
+	// IPTables4NatTemplate - IP Tables ipv4 chains/rules template
+	IPTables4NatTemplate = "IPTables4NatTemplate"
 )

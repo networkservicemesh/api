@@ -22,7 +22,9 @@
 package kernel
 
 import (
+	"bytes"
 	"strconv"
+	"text/template"
 
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"
@@ -173,4 +175,49 @@ func (m *Mechanism) SetRouteLocalNet(routeLocalNet bool) *Mechanism {
 	m.GetParameters()[RouteLocalNet] = strconv.FormatBool(routeLocalNet)
 
 	return m
+}
+
+// GetIPTables4NatTemplate - return IP Table chain/rules template, empty string if unset
+func (m *Mechanism) GetIPTables4NatTemplate() string {
+	value, ok := m.GetParameters()[IPTables4NatTemplate]
+	if !ok {
+		return ""
+	}
+
+	return value
+}
+
+// SetIPTables4NatTemplate - set IP Table chain/rules template
+func (m *Mechanism) SetIPTables4NatTemplate(tmpl string) *Mechanism {
+	m.GetParameters()[IPTables4NatTemplate] = tmpl
+
+	return m
+}
+
+// EvaluateIPTables4NatTemplate - evaluate IP Table chain/rules template with connection parameters
+func (m *Mechanism) EvaluateIPTables4NatTemplate(conn *networkservice.Connection) (string, error) {
+	type TemplateData struct {
+		NsmInterfaceName string
+		NsmSrcIPs        []string
+		NsmDstIPs        []string
+	}
+
+	data := TemplateData{
+		NsmInterfaceName: m.GetInterfaceName(),
+		NsmSrcIPs:        conn.GetContext().GetIpContext().GetSrcIpAddrs(),
+		NsmDstIPs:        conn.GetContext().GetIpContext().GetDstIpAddrs(),
+	}
+
+	templateOutput := new(bytes.Buffer)
+
+	tmpl, err := template.New("").Parse(m.GetIPTables4NatTemplate())
+	if err != nil {
+		return "", err
+	}
+	err = tmpl.Execute(templateOutput, data)
+	if err != nil {
+		return "", err
+	}
+
+	return templateOutput.String(), nil
 }
