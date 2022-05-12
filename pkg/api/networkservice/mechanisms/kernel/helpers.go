@@ -23,7 +23,9 @@ package kernel
 
 import (
 	"bytes"
+	"errors"
 	"strconv"
+	"strings"
 	"text/template"
 
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
@@ -178,24 +180,22 @@ func (m *Mechanism) SetRouteLocalNet(routeLocalNet bool) *Mechanism {
 }
 
 // GetIPTables4NatTemplate - return IP Table chain/rules template, empty string if unset
-func (m *Mechanism) GetIPTables4NatTemplate() string {
-	value, ok := m.GetParameters()[IPTables4NatTemplate]
-	if !ok {
-		return ""
-	}
+func (m *Mechanism) GetIPTables4NatTemplate() []string {
+	rulesString := m.GetParameters()[IPTables4NatTemplate]
 
-	return value
+	return strings.Split(rulesString, ";")
 }
 
 // SetIPTables4NatTemplate - set IP Table chain/rules template
-func (m *Mechanism) SetIPTables4NatTemplate(tmpl string) *Mechanism {
-	m.GetParameters()[IPTables4NatTemplate] = tmpl
+func (m *Mechanism) SetIPTables4NatTemplate(rules []string) *Mechanism {
+	rulesString := strings.Join(rules, ";")
+	m.GetParameters()[IPTables4NatTemplate] = rulesString
 
 	return m
 }
 
 // EvaluateIPTables4NatTemplate - evaluate IP Table chain/rules template with connection parameters
-func (m *Mechanism) EvaluateIPTables4NatTemplate(conn *networkservice.Connection) (string, error) {
+func (m *Mechanism) EvaluateIPTables4NatTemplate(conn *networkservice.Connection) ([]string, error) {
 	type TemplateData struct {
 		NsmInterfaceName string
 		NsmSrcIPs        []string
@@ -208,16 +208,22 @@ func (m *Mechanism) EvaluateIPTables4NatTemplate(conn *networkservice.Connection
 		NsmDstIPs:        conn.GetContext().GetIpContext().GetDstIpAddrs(),
 	}
 
-	templateOutput := new(bytes.Buffer)
+	rulesString, ok := m.GetParameters()[IPTables4NatTemplate]
+	if !ok {
+		return nil, errors.New("template is not passed")
+	}
 
-	tmpl, err := template.New("").Parse(m.GetIPTables4NatTemplate())
+	templateOutput := new(bytes.Buffer)
+	tmpl, err := template.New("").Parse(rulesString)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	err = tmpl.Execute(templateOutput, data)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return templateOutput.String(), nil
+	evaluatedRules := strings.Split(templateOutput.String(), ";")
+
+	return evaluatedRules, nil
 }
