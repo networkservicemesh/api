@@ -181,7 +181,10 @@ func (m *Mechanism) SetRouteLocalNet(routeLocalNet bool) *Mechanism {
 
 // GetIPTables4NatTemplate - return IP Table chain/rules template, empty string if unset
 func (m *Mechanism) GetIPTables4NatTemplate() []string {
-	rulesString := m.GetParameters()[IPTables4NatTemplate]
+	rulesString, ok := m.GetParameters()[IPTables4NatTemplate]
+	if !ok {
+		return nil
+	}
 
 	return strings.Split(rulesString, ";")
 }
