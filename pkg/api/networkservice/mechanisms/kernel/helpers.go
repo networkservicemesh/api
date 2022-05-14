@@ -24,6 +24,7 @@ package kernel
 import (
 	"bytes"
 	"errors"
+	"net"
 	"strconv"
 	"strings"
 	"text/template"
@@ -190,7 +191,7 @@ func (m *Mechanism) GetIPTables4NatTemplate() []string {
 }
 
 // SetIPTables4NatTemplate - set IP Table chain/rules template
-func (m *Mechanism) SetIPTables4NatTemplate(rules []string) *Mechanism {
+func (m *Mechanism) SetIPTables4NatTemplate(rules ...string) *Mechanism {
 	rulesString := strings.Join(rules, ";")
 	m.GetParameters()[IPTables4NatTemplate] = rulesString
 
@@ -199,16 +200,22 @@ func (m *Mechanism) SetIPTables4NatTemplate(rules []string) *Mechanism {
 
 // EvaluateIPTables4NatTemplate - evaluate IP Table chain/rules template with connection parameters
 func (m *Mechanism) EvaluateIPTables4NatTemplate(conn *networkservice.Connection) ([]string, error) {
-	type TemplateData struct {
+	type TemplateInput struct {
 		NsmInterfaceName string
-		NsmSrcIPs        []string
-		NsmDstIPs        []string
+		NsmSrcIPs        []net.IP
+		NsmDstIPs        []net.IP
 	}
 
-	data := TemplateData{
+	input := TemplateInput{
 		NsmInterfaceName: m.GetInterfaceName(),
-		NsmSrcIPs:        conn.GetContext().GetIpContext().GetSrcIpAddrs(),
-		NsmDstIPs:        conn.GetContext().GetIpContext().GetDstIpAddrs(),
+	}
+
+	for _, srcIPNet := range conn.GetContext().GetIpContext().GetSrcIPNets() {
+		input.NsmSrcIPs = append(input.NsmSrcIPs, srcIPNet.IP)
+	}
+
+	for _, dstIPNet := range conn.GetContext().GetIpContext().GetDstIPNets() {
+		input.NsmDstIPs = append(input.NsmDstIPs, dstIPNet.IP)
 	}
 
 	rulesString, ok := m.GetParameters()[IPTables4NatTemplate]
@@ -221,7 +228,7 @@ func (m *Mechanism) EvaluateIPTables4NatTemplate(conn *networkservice.Connection
 	if err != nil {
 		return nil, err
 	}
-	err = tmpl.Execute(templateOutput, data)
+	err = tmpl.Execute(templateOutput, input)
 	if err != nil {
 		return nil, err
 	}
