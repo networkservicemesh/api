@@ -20,6 +20,8 @@ syntax = "proto3";
 package dns;
 option go_package = "github.com/networkservicemesh/api/pkg/api/dns";
 
+import "github.com/networkservicemesh/api/pkg/api/networkservice/connectioncontext.proto";
+
 enum Type {
   UNDEFINED = 0;
   ASSIGN = 1;
@@ -29,11 +31,12 @@ enum Type {
 message DNSRequest {
   Type type = 1;
   map<string, string> labels = 2;
-  string ip = 3;
+  repeated string ips = 3;
 }
 
 message DNSResponse {
-  string name = 1;
+  repeated string names = 1;
+  repeated connectioncontext.DNSConfig configs = 2;
 }
 
 service DNS  {
