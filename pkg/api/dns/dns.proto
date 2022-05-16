@@ -21,6 +21,7 @@ package dns;
 option go_package = "github.com/networkservicemesh/api/pkg/api/dns";
 
 import "github.com/networkservicemesh/api/pkg/api/networkservice/connectioncontext.proto";
+import "google/protobuf/empty.proto";
 
 enum Type {
   UNDEFINED = 0;
@@ -36,9 +37,13 @@ message DNSRequest {
 
 message DNSResponse {
   repeated string names = 1;
-  repeated connectioncontext.DNSConfig configs = 2;
 }
 
-service DNS  {
+message Configs {
+  repeated connectioncontext.DNSConfig configs = 1;
+}
+
+service DNS {
+  rpc FetchConfigs(google.protobuf.Empty) returns (Configs);
   rpc ManageNames (stream DNSRequest) returns (stream DNSResponse);
 }
