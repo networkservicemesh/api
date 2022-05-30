@@ -96,15 +96,7 @@ jobs:
     name: Check generated files
     runs-on: ubuntu-latest
     steps:
-      - name: Setup envs
-        run: |
-          echo GOPATH=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo GO111MODULE=on >> $GITHUB_ENV
-          echo $GITHUB_WORKSPACE/bin >> $GITHUB_PATH
-      - name: Check out code
-        uses: actions/checkout@v2
-        with:
-          path: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      - uses: actions/checkout@v2
       - uses: arduino/setup-protoc@master
         with:
           version: '3.14.0'
@@ -113,11 +105,9 @@ jobs:
           go-version: 1.18.1
       - name: Generate files
         run: go generate ./...
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
       - name: Check for changes in generated code
         run: |
           git diff -- '*.pb.go' || (echo "Rerun go generate ./... locally and resubmit" && exit -1)
-        working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
 
   excludereplace:
     name: Exclude replace in go.mod
