@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Nordix Foundation.
+// Copyright (c) 2021-2022 Nordix Foundation.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -64,7 +64,7 @@ func (m *Mechanism) GetVlanID() uint32 {
 
 	vid := m.Parameters[ID]
 	// vlan ID range is 0 to 4,095 stored in 12 bit
-	vlanid, err := strconv.ParseInt(vid, 10, 12)
+	vlanid, err := strconv.ParseUint(vid, 10, 12)
 
 	if err != nil {
 		return 0
