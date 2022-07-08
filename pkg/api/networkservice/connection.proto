@@ -33,6 +33,7 @@ message Mechanism {
 enum State {
   UP = 0;
   DOWN = 1;
+  REFRESH_REQUESTED = 2;
 }
 
 message PathSegment {
