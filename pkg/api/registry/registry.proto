@@ -50,13 +50,9 @@ message NetworkServiceEndpoint {
     repeated string network_service_names = 2;
     map<string, NetworkServiceLabels> network_service_labels = 3;
     string url = 4;
-<<<<<<< HEAD
-    google.protobuf.Timestamp expiration_time = 5;
-    google.protobuf.Timestamp initial_registration_time = 6;
-=======
     Path path = 5;
     google.protobuf.Timestamp expiration_time = 6;
->>>>>>> 76e0c3e (add path to NetworkService and NetworkServiceEndpoint)
+    google.protobuf.Timestamp initial_registration_time = 7;
 }
 
 service NetworkServiceEndpointRegistry {
