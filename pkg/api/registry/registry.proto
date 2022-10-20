@@ -22,11 +22,7 @@ message NetworkService {
     string name = 1;
     string payload = 2;
     repeated Match matches = 3;
-}
-
-message NetworkServiceRegistration {
-    NetworkService network_service = 1;
-    Path path = 2;
+    repeated string path_ids = 4;
 }
 
 message Match {
@@ -56,23 +52,19 @@ message NetworkServiceEndpoint {
     string url = 4;
     google.protobuf.Timestamp expiration_time = 5;
     google.protobuf.Timestamp initial_registration_time = 6;
-}
-
-message NetworkServiceEndpointRegistration {
-    NetworkServiceEndpoint network_service_endpoint = 1;
-    Path path = 2;
+    repeated string path_ids = 7;
 }
 
 service NetworkServiceEndpointRegistry {
-    rpc Register (NetworkServiceEndpointRegistration) returns (NetworkServiceEndpointRegistration);
+    rpc Register (NetworkServiceEndpoint) returns (NetworkServiceEndpoint);
     rpc Find (NetworkServiceEndpointQuery) returns (stream NetworkServiceEndpointResponse);
-    rpc Unregister (NetworkServiceEndpointRegistration) returns (google.protobuf.Empty);
+    rpc Unregister (NetworkServiceEndpoint) returns (google.protobuf.Empty);
 }
 
 service NetworkServiceRegistry {
-    rpc Register (NetworkServiceRegistration) returns (NetworkServiceRegistration);
+    rpc Register (NetworkService) returns (NetworkService);
     rpc Find (NetworkServiceQuery) returns (stream NetworkServiceResponse);
-    rpc Unregister (NetworkServiceRegistration) returns (google.protobuf.Empty);
+    rpc Unregister (NetworkService) returns (google.protobuf.Empty);
 }
 
 message NetworkServiceQuery {
