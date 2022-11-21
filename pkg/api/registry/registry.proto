@@ -6,18 +6,6 @@ option go_package = "github.com/networkservicemesh/api/pkg/api/registry";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
-message PathSegment {
-  string name      = 1;
-  string id        = 2;
-  string token = 3;
-  google.protobuf.Timestamp expires = 4;
-  map<string, string> metrics = 5;
-}
-message Path {
-  uint32 index = 1;
-  repeated PathSegment path_segments = 2;
-}
-
 message NetworkService {
     string name = 1;
     string payload = 2;
