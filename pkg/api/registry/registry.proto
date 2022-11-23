@@ -10,6 +10,7 @@ message NetworkService {
     string name = 1;
     string payload = 2;
     repeated Match matches = 3;
+    repeated string path_ids = 4;
 }
 
 message Match {
@@ -39,6 +40,7 @@ message NetworkServiceEndpoint {
     string url = 4;
     google.protobuf.Timestamp expiration_time = 5;
     google.protobuf.Timestamp initial_registration_time = 6;
+    repeated string path_ids = 7;
 }
 
 service NetworkServiceEndpointRegistry {
