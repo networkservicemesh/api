@@ -17,22 +17,10 @@
 package networkservice
 
 import (
-	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 )
 
 // Clone clones
 func (x *Path) Clone() *Path {
 	return proto.Clone(x).(*Path)
-}
-
-// IsValid returns true if Path p is Valid
-func (x *Path) IsValid() error {
-	if x == nil {
-		return nil
-	}
-	if int(x.GetIndex()) >= len(x.GetPathSegments()) {
-		return errors.New("Path.Index >= len(Path.PathSegments)")
-	}
-	return nil
 }
