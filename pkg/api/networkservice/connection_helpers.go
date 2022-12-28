@@ -21,41 +21,9 @@
 package networkservice
 
 import (
-	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
-
-// IsRemote returns if connection is remote
-func (x *Connection) IsRemote() bool {
-	if x == nil {
-		return false
-	}
-	// If we have two or more, it is remote
-	return len(x.GetPath().GetPathSegments()) > 1
-}
-
-// GetSourceNetworkServiceManagerName - return source network service manager name
-func (x *Connection) GetSourceNetworkServiceManagerName() string {
-	if x == nil {
-		return ""
-	}
-	if len(x.GetPath().GetPathSegments()) > 0 {
-		return x.GetPath().GetPathSegments()[0].GetName()
-	}
-	return ""
-}
-
-// GetDestinationNetworkServiceManagerName - return destination network service manager name
-func (x *Connection) GetDestinationNetworkServiceManagerName() string {
-	if x == nil {
-		return ""
-	}
-	if len(x.GetPath().GetPathSegments()) >= 2 {
-		return x.GetPath().GetPathSegments()[1].GetName()
-	}
-	return ""
-}
 
 // Equals returns if connection equals given connection
 func (x *Connection) Equals(connection protoreflect.ProtoMessage) bool {
@@ -69,64 +37,7 @@ func (x *Connection) Clone() *Connection {
 	return proto.Clone(x).(*Connection)
 }
 
-// UpdateContext checks and tries to set connection context
-func (x *Connection) UpdateContext(context *ConnectionContext) error {
-	if err := context.MeetsRequirements(x.Context); err != nil {
-		return err
-	}
-
-	oldContext := x.Context
-	x.Context = context
-
-	if err := x.IsValid(); err != nil {
-		x.Context = oldContext
-		return err
-	}
-
-	return nil
-}
-
-// IsValid checks if connection is minimally valid
-func (x *Connection) IsValid() error {
-	if x == nil {
-		return errors.New("connection cannot be nil")
-	}
-
-	if x.GetNetworkService() == "" {
-		return errors.Errorf("NetworkService cannot be empty: %v", x)
-	}
-
-	if x.GetMechanism() != nil {
-		if err := x.GetMechanism().IsValid(); err != nil {
-			return errors.Wrapf(err, "invalid Mechanism in %v", x)
-		}
-	}
-
-	if err := x.GetPath().IsValid(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// IsComplete checks if connection is complete valid
-func (x *Connection) IsComplete() error {
-	if err := x.IsValid(); err != nil {
-		return err
-	}
-
-	if x.GetId() == "" {
-		return errors.Errorf("Id cannot be empty: %v", x)
-	}
-
-	if err := x.GetContext().IsValid(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// MatchesMonitorScopeSelector - Returns true if the connection matches the selector
+// MatchesMonitorScopeSelector - Returns true of the connection matches the selector
 func (x *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector) bool {
 	if x == nil {
 		return false

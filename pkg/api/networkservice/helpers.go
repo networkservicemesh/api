@@ -31,14 +31,6 @@ func (x *NetworkServiceRequest) GetRequestConnection() *Connection {
 	return x.GetConnection()
 }
 
-// SetRequestConnection sets request connection
-func (x *NetworkServiceRequest) SetRequestConnection(conn *Connection) *NetworkServiceRequest {
-	if x != nil {
-		x.Connection = conn
-	}
-	return x
-}
-
 // GetRequestMechanismPreferences returns request mechanism preferences
 func (x *NetworkServiceRequest) GetRequestMechanismPreferences() []*Mechanism {
 	preferences := make([]*Mechanism, 0, len(x.MechanismPreferences))
