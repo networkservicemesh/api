@@ -126,3 +126,14 @@ func (x *Connection) GetNextPathSegment() *PathSegment {
 	}
 	return x.GetPath().GetPathSegments()[x.GetPath().GetIndex()+1]
 }
+
+// FilterMapOnManagerScopeSelector - Filters out of map[string]*Connection Connections not matching the selector
+func FilterMapOnManagerScopeSelector(c map[string]*Connection, selector *MonitorScopeSelector) map[string]*Connection {
+	rv := make(map[string]*Connection)
+	for k, v := range c {
+		if v != nil && v.MatchesMonitorScopeSelector(selector) {
+			rv[k] = v
+		}
+	}
+	return rv
+}
