@@ -133,29 +133,6 @@ func contains(prefixes []*net.IPNet, ip net.IP) bool {
 	return false
 }
 
-// GetExcludedPrefixesIPNet - GetExcludedPrefixes() converted to []*net.IPNet prefixes that are empty or cannot be parsed are omitted
-func (i *IPContext) GetExcludedPrefixesIPNet() []*net.IPNet {
-	var prefixes []*net.IPNet
-	for _, prefixStr := range i.GetExcludedPrefixes() {
-		prefixes = append(prefixes, strToIPNet(prefixStr))
-	}
-	return prefixes
-}
-
-// GetGetExtraPrefixesIPNet - GetExtraPrefixes() converted to []*net.IPNet prefixes that are empty or cannot be parsed are omitted
-func (i *IPContext) GetGetExtraPrefixesIPNet() []*net.IPNet {
-	var prefixes []*net.IPNet
-	for _, prefixStr := range i.GetExtraPrefixes() {
-		prefixes = append(prefixes, strToIPNet(prefixStr))
-	}
-	return prefixes
-}
-
-// GetIP - GetIp() - converted to *net.IP or nil if empty or cannot be parsed
-func (n *IpNeighbor) GetIP() net.IP {
-	return net.ParseIP(n.GetIp())
-}
-
 // GetPrefixIPNet - GetPrefix() converted to *net.IPNet or nil if empty or cannot be parsed
 func (r *Route) GetPrefixIPNet() *net.IPNet {
 	return strToIPNet(r.GetPrefix())
@@ -185,10 +162,9 @@ func strToIPNet(in string) *net.IPNet {
 	if in == "" {
 		return nil
 	}
-	ip, ipNet, err := net.ParseCIDR(in)
+	_, ipNet, err := net.ParseCIDR(in)
 	if err != nil {
 		return nil
 	}
-	ipNet.IP = ip
 	return ipNet
 }
