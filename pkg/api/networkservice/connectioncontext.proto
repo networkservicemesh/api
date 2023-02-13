@@ -29,8 +29,8 @@ message IpNeighbor {
 
 message Route {
     string prefix = 1; /* destination address + prefix in format <address>/<prefix> */
-    string nextHop = 2; /* nexthop ip address - if empty, presume {Src/Dst}IP of same address family
-                           from the opposite end of the link */
+    string nextHop = 2; /* nexthop ip address - if empty, presume {Src/Dst}IP of same address family from the opposite end of the link */
+    string interfaceName = 3;
 }
 
 message IpFamily {
