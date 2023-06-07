@@ -34,6 +34,7 @@ enum State {
   UP = 0;
   DOWN = 1;
   REFRESH_REQUESTED = 2;
+  RESELECT_REQUESTED = 3;
 }
 
 message PathSegment {
