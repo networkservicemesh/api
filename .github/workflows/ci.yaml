@@ -97,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: arduino/setup-protoc@master
+      - uses: arduino/setup-protoc@v1
         with:
           version: '3.14.0'
       - uses: actions/setup-go@v1
