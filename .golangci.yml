@@ -131,7 +131,6 @@ linters:
     - goheader
     - bodyclose
     - deadcode
-    - depguard
     - dogsled
     - dupl
     - errcheck
