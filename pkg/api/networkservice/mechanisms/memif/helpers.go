@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021 Cisco Systems, Inc.
+// Copyright (c) 2019-2023 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -96,6 +96,7 @@ func (m *Mechanism) SetNetNSURL(urlString string) {
 }
 
 // GetSocketFileURL [FS sockets case] returns the memif socketfile URL, it can be either:
+//
 //	// * file://${path} - memif socketfile
 //	// * inode://${dev}/${ino} - while transferring file between processes using grpcfd
 func (m *Mechanism) GetSocketFileURL() string {
