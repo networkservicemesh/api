@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2021 Doc.ai and/or its affiliates.
 //
+// Copyright (c) 2023 Cisco and/or its affiliates.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -160,8 +162,8 @@ func (x *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector)
 	return false
 }
 
-// GetPathSegmentById gets the path segment by passed id
-func (x *Connection) GetPathSegmentById(id string) *PathSegment {
+// GetPathSegmentByID gets the path segment by passed id
+func (x *Connection) GetPathSegmentByID(id string) *PathSegment {
 	for _, segment := range x.GetPath().GetPathSegments() {
 		if segment.GetId() == id {
 			return segment
