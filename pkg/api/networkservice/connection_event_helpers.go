@@ -22,3 +22,13 @@ import "google.golang.org/protobuf/proto"
 func (x *ConnectionEvent) Clone() *ConnectionEvent {
 	return proto.Clone(x).(*ConnectionEvent)
 }
+
+// GetEventSenderName returns name of the segment from the path who send the event
+func (x *ConnectionEvent) GetEventSenderName() string {
+	for v, k := range x.GetConnections() {
+		if segment := k.GetPathSegmentById(v); segment != nil {
+			return segment.GetName()
+		}
+	}
+	return "unknown"
+}
