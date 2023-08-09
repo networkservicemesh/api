@@ -146,7 +146,7 @@ func (x *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector)
 		// Connection.PathSegments[i] matches selector.PathSegments
 		for j := range selector.GetPathSegments() {
 			// "" matches as a wildcard... failure to match either as wildcard or exact match means the subarray
-			// starting at Connection.PathSegments[i] doesn't match selectors.NetworkServiceManagers
+			// starting at Connection.PathSegments[i] doesn't match selectors.PathSegments
 			if selector.GetPathSegments()[j].GetName() != "" && x.GetPath().GetPathSegments()[i+j].GetName() != selector.GetPathSegments()[j].GetName() {
 				break
 			}
