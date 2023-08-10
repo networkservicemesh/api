@@ -19,10 +19,12 @@ package networkservice_test
 import (
 	"testing"
 
-	"github.com/networkservicemesh/api/pkg/api/networkservice"
 	"github.com/stretchr/testify/require"
+
+	"github.com/networkservicemesh/api/pkg/api/networkservice"
 )
 
+// nolint: funlen
 func TestMonitorScopeSelector(t *testing.T) {
 	cases := []struct {
 		testname         string
@@ -86,7 +88,8 @@ func TestMonitorScopeSelector(t *testing.T) {
 		},
 	}
 
-	for _, c := range cases {
+	for _, testCase := range cases {
+		c := testCase
 		t.Run(c.testname, func(t *testing.T) {
 			path := &networkservice.Path{PathSegments: c.connSegments}
 			conn := networkservice.Connection{Path: path}
