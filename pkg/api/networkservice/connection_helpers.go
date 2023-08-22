@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2021 Doc.ai and/or its affiliates.
 //
+// Copyright (c) 2023 Cisco and/or its affiliates.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -124,7 +126,7 @@ func (x *Connection) IsComplete() error {
 	return nil
 }
 
-// MatchesMonitorScopeSelector - Returns true of the connection matches the selector
+// MatchesMonitorScopeSelector - Returns true if the connection matches the selector
 func (x *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector) bool {
 	if x == nil {
 		return false
@@ -133,24 +135,33 @@ func (x *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector)
 	if len(selector.GetPathSegments()) == 0 {
 		return true
 	}
-	// Iterate through the Connection.NetworkServiceManagers array looking for a subarray that matches
-	// the selector.NetworkServiceManagers array, treating "" in the selector.NetworkServiceManagers array
+	// Iterate through the Connection.PathSegments array looking for a subarray that matches
+	// the selector.PathSegments array, treating "" in the selector.PathSegments array
 	// as a wildcard
 	for i := range x.GetPath().GetPathSegments() {
-		// If there aren't enough elements left in the Connection.NetworkServiceManagers array to match
-		// all of the elements in the select.NetworkServiceManager array...clearly we can't match
+		// If there aren't enough elements left in the Connection.PathSegments array to match
+		// all of the elements in the select.PathSegments array...clearly we can't match
 		if i+len(selector.GetPathSegments()) > len(x.GetPath().GetPathSegments()) {
 			return false
 		}
-		// Iterate through the selector.NetworkServiceManagers array to see is the subarray starting at
-		// Connection.NetworkServiceManagers[i] matches selector.NetworkServiceManagers
+		// Iterate through the selector.PathSegments array to see is the subarray starting at
+		// Connection.PathSegments[i] matches selector.PathSegments
 		for j := range selector.GetPathSegments() {
 			// "" matches as a wildcard... failure to match either as wildcard or exact match means the subarray
-			// starting at Connection.NetworkServiceManagers[i] doesn't match selectors.NetworkServiceManagers
+			// starting at Connection.PathSegments[i] doesn't match selectors.PathSegments
 			if selector.GetPathSegments()[j].GetName() != "" && x.GetPath().GetPathSegments()[i+j].GetName() != selector.GetPathSegments()[j].GetName() {
 				break
 			}
-			// If this is the last element in the selector.NetworkServiceManagers array and we still are matching...
+
+			if selector.GetPathSegments()[j].GetId() != "" && x.GetPath().GetPathSegments()[i+j].GetId() != selector.GetPathSegments()[j].GetId() {
+				break
+			}
+
+			if selector.GetPathSegments()[j].GetToken() != "" && x.GetPath().GetPathSegments()[i+j].GetToken() != selector.GetPathSegments()[j].GetToken() {
+				break
+			}
+
+			// If this is the last element in the selector.PathSegments array and we still are matching...
 			// return true
 			if j == len(selector.GetPathSegments())-1 {
 				return true
