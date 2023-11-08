@@ -84,9 +84,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Download Dependency Check scanner
-      - run: docker pull owasp/dependency-check:latest
+        run: docker pull owasp/dependency-check:latest
       - name: Prepare
-      - run: |
+        run: |
           mkdir -p "OWASP-Dependency-Check/data"
           mkdir -p "OWASP-Dependency-Check/data/cache"
       - name: Generate report
