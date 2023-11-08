@@ -78,6 +78,37 @@ jobs:
             exit 1
           done
 
+  dependencycheck:
+    name: Check dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download Dependency Check scanner
+      - run: docker pull owasp/dependency-check:latest
+      - name: Prepare
+      - run: |
+          mkdir -p "OWASP-Dependency-Check/data"
+          mkdir -p "OWASP-Dependency-Check/data/cache"
+      - name: Generate report
+        run: docker run --rm \
+          -e user=$USER \
+          -u $(id -u ${USER}):$(id -g ${USER}) \
+          --volume $(pwd):/src:z \
+          --volume OWASP-Dependency-Check/data:/usr/share/dependency-check/data:z \
+          --volume $(pwd)/odc-reports:/report:z \
+          owasp/dependency-check:latest \
+          --scan /src \
+          --enableExperimental \
+          --format "HTML" \
+          --project "api" \
+          --failOnCVSS 7 \
+          --out /report
+      - name: Archive dependency check results
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-check-report
+          path: odc-reports/dependency-check-report.html
+
   checkgomod:
     name: check go.mod and go.sum
     runs-on: ubuntu-latest
