@@ -89,6 +89,7 @@ jobs:
         run: |
           mkdir -p "$HOME/OWASP-Dependency-Check/data"
           mkdir -p "$HOME/OWASP-Dependency-Check/data/cache"
+          mkdir -p "$(pwd)/odc-reports"
       - name: Generate report
         run: docker run --rm -e user=$USER -u $(id -u ${USER}):$(id -g ${USER}) --volume $(pwd):/src:z --volume $HOME/OWASP-Dependency-Check/data:/usr/share/dependency-check/data:z --volume $(pwd)/odc-reports:/report:z owasp/dependency-check:latest --scan /src --enableExperimental --format "HTML" --project "api" --failOnCVSS 7 --out /report
       - name: Archive dependency check results
