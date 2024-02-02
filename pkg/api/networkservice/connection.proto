@@ -31,9 +31,18 @@ message Mechanism {
 }
 
 enum State {
+  // UP - Endpoint sets the connection state to UP when it successfully
+  // establishes the server-side of the connection.
   UP = 0;
+  // DOWN - Monitor Connection Server sets the connection state to DOWN
+  // when the connection is broken (for example, one of the NSM components is dead).
+  // Monitor Connection Server also sets the DOWN state for the deleted connections.
   DOWN = 1;
+  // REFRESH_REQUESTED - This state indicates the server's connection parameters have 
+  // been changed and the client should make a refresh to get them. 
   REFRESH_REQUESTED = 2;
+  // RESELECT_REQUESTED - This state indicates the client wants to use another endpoint
+  // for the connection. The client can set this state when it loses the connection.
   RESELECT_REQUESTED = 3;
 }
 
@@ -62,8 +71,16 @@ message Connection {
 }
 
 enum ConnectionEventType {
+  // INITIAL_STATE_TRANSFER - Monitor Connection Server immediately sends event 
+  // with this type to a client when the client makes MonitorConnections Request. 
+  // Event with this type contains all connections that Monitor Connection Server 
+  // currently has.
   INITIAL_STATE_TRANSFER = 0;
+  // UPDATE - Monitor Connection Server sends event with this type when the 
+  // connection changes. For exapmle, when the state of the connection has been changed.
   UPDATE = 1;
+  // DETETE - Monitor Connection Server sends event with this type when the connection
+  // has been closed.
   DELETE = 2;
 }
 
