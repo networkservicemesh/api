@@ -32,7 +32,7 @@ message Mechanism {
 
 enum State {
   // UP - Endpoint sets the connection state to UP when it successfully
-  // establishes the server-side of the connection.
+  // establishes the connection.
   UP = 0;
   // DOWN - Monitor Connection Server sets the connection state to DOWN
   // when the connection is broken (for example, one of the NSM components is dead).
@@ -79,7 +79,7 @@ enum ConnectionEventType {
   // UPDATE - Monitor Connection Server sends event with this type when the 
   // connection changes. For exapmle, when the state of the connection has been changed.
   UPDATE = 1;
-  // DETETE - Monitor Connection Server sends event with this type when the connection
+  // DELETE - Monitor Connection Server sends event with this type when the connection
   // has been closed.
   DELETE = 2;
 }
