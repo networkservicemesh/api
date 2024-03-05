@@ -32,14 +32,10 @@ jobs:
           git tag ${{ steps.get-tag-step.outputs.tag }}
           git push origin ${{ steps.get-tag-step.outputs.tag }} -f
       - name: Create release ${{ steps.get-tag-step.outputs.tag }}
-        uses: actions/create-release@v1
+        run: |
+          gh release create ${{ needs.get-tag.outputs.tag }} --title ${{ needs.get-tag.outputs.tag }} --target ${{github.event.workflow_run.head_branch}} --generate-notes
         env:
-          GITHUB_TOKEN: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
-        with:
-          tag_name: refs/tags/${{ steps.get-tag-step.outputs.tag }}
-          release_name: ${{ steps.get-tag-step.outputs.tag }}
-          draft: false
-          prerelease: false
+          GH_TOKEN: ${{ secrets.token }}
   update-dependent-repositories:
     strategy:
       matrix:
