@@ -33,7 +33,7 @@ jobs:
     secrets:
       token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
 
-  update-dependent-repositories:
+  release-dependent-repositories:
     name: Release dependent repositories
     needs: [get-tag, create-release]
     uses: networkservicemesh/.github/.github/workflows/release-dependent-repositories.yaml@main
