@@ -6,6 +6,8 @@ on:
       - completed
     workflows:
       - 'ci'
+    branches:
+      - release/*
 jobs:
   print-debug-info:
     name: Print debug info for Release workflow
@@ -13,32 +15,18 @@ jobs:
     steps:
       - uses: hmarr/debug-action@v2
 
-  get-tag:
-    name: Get tag
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' && contains(github.event.workflow_run.head_branch, 'release/') }}
-    outputs:
-      tag: ${{ steps.get-tag-step.outputs.tag }}
-    steps:
-      - name: Get tag
-        run: |
-          branch=${{github.event.workflow_run.head_branch}}
-          echo tag=${branch#release/} >> $GITHUB_OUTPUT
-        id: get-tag-step
-
   create-release:
     name: Create release
-    needs: get-tag
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     uses: networkservicemesh/.github/.github/workflows/release.yaml@main
     secrets:
       token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
 
   release-dependent-repositories:
     name: Release dependent repositories
-    needs: [get-tag, create-release]
+    needs: create-release
     uses: networkservicemesh/.github/.github/workflows/release-dependent-repositories.yaml@main
     with:
-      tag: ${{ needs.get-tag.outputs.tag }}
       dependent_repositories: ["sdk"]
     secrets:
       token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
