@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - main
-  workflow_run:
-    types:
-      - completed
-    workflows:
-      - 'automerge'
 jobs:
   update-dependent-repositories:
     strategy:
@@ -16,7 +11,6 @@ jobs:
         repository: [sdk]
     name: Update ${{ matrix.repository }}
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.actor == 'nsmbot' || github.event_name == 'push' }}
     steps:
       - name: Checkout ${{ github.repository }}
         uses: actions/checkout@v2
