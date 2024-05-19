@@ -27,6 +27,6 @@ jobs:
     needs: create-release
     uses: networkservicemesh/.github/.github/workflows/release-dependent-repositories.yaml@main
     with:
-      dependent_repositories: ["sdk"]
+      dependent_repositories: '["sdk"]'
     secrets:
       token: ${{ secrets.NSM_BOT_GITHUB_TOKEN }}
