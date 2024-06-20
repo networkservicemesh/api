@@ -171,6 +171,16 @@ func (x *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector)
 	return false
 }
 
+// GetPathSegmentByID gets the path segment by passed id
+func (x *Connection) GetPathSegmentByID(id string) *PathSegment {
+	for _, segment := range x.GetPath().GetPathSegments() {
+		if segment.GetId() == id {
+			return segment
+		}
+	}
+	return nil
+}
+
 // GetCurrentPathSegment - Get the current path segment of the connection
 func (x *Connection) GetCurrentPathSegment() *PathSegment {
 	if x == nil {

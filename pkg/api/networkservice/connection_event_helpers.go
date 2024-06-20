@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco and/or its affiliates.
+// Copyright (c) 2020-2023 Cisco and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -21,4 +21,14 @@ import "google.golang.org/protobuf/proto"
 // Clone clones ConnectionEvents
 func (x *ConnectionEvent) Clone() *ConnectionEvent {
 	return proto.Clone(x).(*ConnectionEvent)
+}
+
+// GetEventSenderName returns name of the segment from the path who send the event
+func (x *ConnectionEvent) GetEventSenderName() string {
+	for v, k := range x.GetConnections() {
+		if segment := k.GetPathSegmentByID(v); segment != nil {
+			return segment.GetName()
+		}
+	}
+	return "unknown"
 }
