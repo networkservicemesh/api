@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2021 Doc.ai and/or its affiliates.
 //
-// Copyright (c) 2022 Xored Software Inc and others.
+// Copyright (c) 2022-2024 Xored Software Inc and others.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
