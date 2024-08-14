@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Cisco and/or its affiliates.
+// Copyright (c) 2020-2024 Cisco and/or its affiliates.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -17,7 +17,6 @@
 package networkservice
 
 import (
-	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -31,50 +30,12 @@ func (x *NetworkServiceRequest) GetRequestConnection() *Connection {
 	return x.GetConnection()
 }
 
-// SetRequestConnection sets request connection
-func (x *NetworkServiceRequest) SetRequestConnection(conn *Connection) *NetworkServiceRequest {
-	if x != nil {
-		x.Connection = conn
-	}
-	return x
-}
-
 // GetRequestMechanismPreferences returns request mechanism preferences
 func (x *NetworkServiceRequest) GetRequestMechanismPreferences() []*Mechanism {
 	preferences := make([]*Mechanism, 0, len(x.MechanismPreferences))
 	preferences = append(preferences, x.MechanismPreferences...)
 
 	return preferences
-}
-
-// SetRequestMechanismPreferences sets request mechanism preferences
-func (x *NetworkServiceRequest) SetRequestMechanismPreferences(mechanismPreferences []*Mechanism) {
-	x.MechanismPreferences = mechanismPreferences
-}
-
-// IsValid returns if request is valid
-func (x *NetworkServiceRequest) IsValid() error {
-	if x == nil {
-		return errors.New("request cannot be nil")
-	}
-
-	if x.GetConnection() == nil {
-		return errors.Errorf("request.Connection cannot be nil %v", x)
-	}
-
-	if err := x.GetConnection().IsValid(); err != nil {
-		return errors.Errorf("request.Connection is invalid: %s: %v", err, x)
-	}
-
-	if x.GetMechanismPreferences() == nil {
-		return errors.Errorf("request.MechanismPreferences cannot be nil: %v", x)
-	}
-
-	if len(x.GetMechanismPreferences()) < 1 {
-		return errors.Errorf("request.MechanismPreferences must have at least one entry: %v", x)
-	}
-
-	return nil
 }
 
 // ServiceNames - returns grpc ServiceNames implemented by impl

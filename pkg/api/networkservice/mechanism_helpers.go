@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2020 Cisco Systems, Inc.
+// Copyright (c) 2018-2024 Cisco Systems, Inc.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -17,9 +17,6 @@
 package networkservice
 
 import (
-	"sync"
-
-	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -33,28 +30,4 @@ func (x *Mechanism) Equals(mechanism protoreflect.ProtoMessage) bool {
 // Clone clones mechanism
 func (x *Mechanism) Clone() *Mechanism {
 	return proto.Clone(x).(*Mechanism)
-}
-
-var mechanismValidators map[string]func(*Mechanism) error
-var mechanismValidatorsMutex sync.Mutex
-
-// AddMechanism adds a Mechanism
-func AddMechanism(mtype string, validator func(*Mechanism) error) {
-	mechanismValidatorsMutex.Lock()
-	defer mechanismValidatorsMutex.Unlock()
-	mechanismValidators[mtype] = validator
-}
-
-// IsValid - is the Mechanism Valid?
-func (x *Mechanism) IsValid() error {
-	if x == nil {
-		return errors.New("mechanism cannot be nil")
-	}
-	validator, ok := mechanismValidators[x.GetType()]
-	if ok {
-		return validator(x)
-	}
-	// NOTE: this means that we intentionally decide that Mechanisms are valid
-	// unless we have a Validator that says otherwise
-	return nil
 }

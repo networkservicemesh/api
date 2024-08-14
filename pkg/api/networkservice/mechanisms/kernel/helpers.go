@@ -2,7 +2,7 @@
 //
 // Copyright (c) 2021 Doc.ai and/or its affiliates.
 //
-// Copyright (c) 2022 Xored Software Inc and others.
+// Copyright (c) 2022-2024 Xored Software Inc and others.
 //
 // SPDX-License-Identifier: Apache-2.0
 //
@@ -71,29 +71,9 @@ func (m *Mechanism) GetParameters() map[string]string {
 	return m.Parameters
 }
 
-// GetNetNSInode returns the NetNS inode
-func (m *Mechanism) GetNetNSInode() string {
-	return m.GetParameters()[NetNSInodeKey]
-}
-
-// SetNetNSInode sets the NetNS inode
-func (m *Mechanism) SetNetNSInode(netNSInode string) {
-	m.GetParameters()[NetNSInodeKey] = netNSInode
-}
-
 // GetPCIAddress returns the PCI address of the device
 func (m *Mechanism) GetPCIAddress() string {
 	return m.GetParameters()[PCIAddressKey]
-}
-
-// SetPCIAddress sets the PCI address of the device
-func (m *Mechanism) SetPCIAddress(pciAddress string) {
-	m.GetParameters()[PCIAddressKey] = pciAddress
-}
-
-// IsPCIDevice returns if this mechanism is for a PCI device
-func (m *Mechanism) IsPCIDevice() bool {
-	return m.GetPCIAddress() != ""
 }
 
 // GetDeviceTokenID returns device token ID
