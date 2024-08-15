@@ -162,9 +162,10 @@ func strToIPNet(in string) *net.IPNet {
 	if in == "" {
 		return nil
 	}
-	_, ipNet, err := net.ParseCIDR(in)
+	ip, ipNet, err := net.ParseCIDR(in)
 	if err != nil {
 		return nil
 	}
+	ipNet.IP = ip
 	return ipNet
 }
