@@ -135,7 +135,16 @@ func contains(prefixes []*net.IPNet, ip net.IP) bool {
 
 // GetPrefixIPNet - GetPrefix() converted to *net.IPNet or nil if empty or cannot be parsed
 func (r *Route) GetPrefixIPNet() *net.IPNet {
-	return strToIPNet(r.GetPrefix())
+	prefix := r.GetPrefix()
+	if prefix == "" {
+		return nil
+	}
+	ip, ipNet, err := net.ParseCIDR(prefix)
+	if err != nil {
+		return nil
+	}
+	ipNet.IP = ip
+	return ipNet
 }
 
 // GetNextHopIP - GetNextHop() converted to net.IP or nil if empty or cannot be parsed
@@ -162,10 +171,9 @@ func strToIPNet(in string) *net.IPNet {
 	if in == "" {
 		return nil
 	}
-	ip, ipNet, err := net.ParseCIDR(in)
+	_, ipNet, err := net.ParseCIDR(in)
 	if err != nil {
 		return nil
 	}
-	ipNet.IP = ip
 	return ipNet
 }
