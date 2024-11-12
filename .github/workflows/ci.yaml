@@ -24,6 +24,8 @@ jobs:
 
   restrict-nsm-deps:
     uses: networkservicemesh/.github/.github/workflows/restrict-nsm-deps.yaml@main
+    with:
+      allowed_repositories: ""
 
   checkgomod:
     uses: networkservicemesh/.github/.github/workflows/checkgomod.yaml@main
