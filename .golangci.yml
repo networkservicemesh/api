@@ -1,7 +1,7 @@
 ---
 run:
   # concurrency: 6
-  go: "1.17"
+  go: "1.23"
   timeout: 2m
   issues-exit-code: 1
   tests: true
@@ -11,13 +11,14 @@ linters-settings:
     values:
       regexp:
         company: .*
-        copyright-holder: Copyright \(c\) ({{year-range}}) {{company}}\n\n
+        copyright-holder: Copyright \(c\) ({{mod-year-range}}) {{company}}\n\n
         copyright-holders: ({{copyright-holder}})+
   errcheck:
     check-type-assertions: false
     check-blank: false
   govet:
-    check-shadowing: true
+    enable:
+      - shadow
     settings:
       printf:
         funcs:
@@ -25,27 +26,46 @@ linters-settings:
           - (github.com/sirupsen/logrus.FieldLogger).Warnf
           - (github.com/sirupsen/logrus.FieldLogger).Errorf
           - (github.com/sirupsen/logrus.FieldLogger).Fatalf
-  golint:
-    min-confidence: 0.8
+  depguard:
+    rules:
+      main:
+        deny:
+          - pkg: "errors"
+            desc: "Please use \"github.com/pkg/errors\" instead of \"errors\" in go imports"
+  revive:
+    confidence: 0.8
+    rules:
+      - name: exported
+      - name: blank-imports
+      - name: context-as-argument
+      - name: context-keys-type
+      - name: dot-imports
+      - name: error-return
+      - name: error-strings
+      - name: error-naming
+      - name: exported
+      - name: increment-decrement
+      - name: var-naming
+      - name: package-comments
+      - name: range
+      - name: receiver-naming
+      - name: time-naming
+      - name: unexported-return
+      - name: indent-error-flow
+      - name: errorf
+      - name: superfluous-else
+      - name: unreachable-code
   goimports:
     local-prefixes: github.com/networkservicemesh/api
   gocyclo:
     min-complexity: 15
-  maligned:
-    suggest-new: true
   dupl:
     threshold: 150
   goconst:
     min-len: 2
     min-occurrences: 2
-  depguard:
-    list-type: blacklist
-    include-go-root: false
-    packages:
-      - errors
-    packages-with-error-message:
-      # specify an error message to output when a blacklisted package is used
-      - errors: "Please use \"github.com/pkg/errors\" instead of \"errors\" in go imports"
+  lll:
+    line-length: 160
   misspell:
     locale: US
   unparam:
@@ -58,79 +78,47 @@ linters-settings:
     for-loops: false
   gocritic:
     enabled-checks:
-      - appendAssign
-      - assignOp
       - appendCombine
-      - argOrder
-      - badCall
-      - badCond
       - boolExprSimplify
       - builtinShadow
-      - captLocal
-      - caseOrder
-      - codegenComment
-      - commentFormatting
       - commentedOutCode
       - commentedOutImport
-      - defaultCaseOrder
-      - deprecatedComment
       - docStub
-      - dupArg
-      - dupBranchBody
-      - dupCase
       - dupImport
-      - dupSubExpr
-      - elseif
       - emptyFallthrough
       - emptyStringTest
       - equalFold
       - evalOrder
-      - exitAfterDefer
-      - flagDeref
-      - flagName
       - hexLiteral
       - hugeParam
-      - ifElseChain
       - importShadow
       - indexAlloc
       - initClause
       - methodExprCall
       - nestingReduce
-      - newDeref
       - nilValReturn
       - octalLiteral
-      - offBy1
       - paramTypeCombine
-      - ptrToRefParam
       - rangeExprCopy
       - rangeValCopy
-      - regexpMust
       - regexpPattern
-      - singleCaseSwitch
-      - sloppyLen
       - sloppyReassign
       - stringXbytes
-      - switchTrue
       - typeAssertChain
-      - typeSwitchVar
       - typeUnparen
       - unlabelStmt
       - unnamedResult
       - unnecessaryBlock
-      - underef
-      - unlambda
-      - unslice
-      - valSwap
       - weakCond
-      - wrapperFunc
       - yodaStyleExpr
 linters:
   disable-all: true
   enable:
-    # - rowserrcheck
+    - depguard
+    - revive
+    - rowserrcheck
     - goheader
     - bodyclose
-    - deadcode
     - dogsled
     - dupl
     - errcheck
@@ -141,43 +129,30 @@ linters:
     - gocyclo
     - gofmt
     - goimports
-    - golint
     - gosec
     - gosimple
     - govet
     - ineffassign
-    - interfacer
-    # - lll
+    - lll
     - misspell
     - nakedret
-    - scopelint
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unparam
-    # - unused
-    - varcheck
+    - unused
     - whitespace
 issues:
   exclude-use-default: false
   max-issues-per-linter: 0
   max-same-issues: 0
   exclude-rules:
-    - path: pkg/api/networkservice/mechanism_helpers.go
-      linters:
-        - interfacer
-      text: "can be `github.com/golang/protobuf/proto.Message"
-    - path: pkg/api/networkservice/connection_helpers.go
-      linters:
-        - interfacer
-      text: "can be `github.com/golang/protobuf/proto.Message"
-    - path: pkg/api/networkservice/path_segment_helpers.go
-      linters:
-        - interfacer
-      text: "can be `github.com/golang/protobuf/proto.Message"
     - path: pkg/api/networkservice/connectioncontext_helpers_test.go
       linters:
         - funlen
       text: "Function 'TestParsePortRange' is too long"
+    - path: pkg/api/networkservice
+      linters:
+        - gosec
+      text: "G115"
