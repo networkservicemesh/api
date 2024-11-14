@@ -23,11 +23,12 @@ package kernel
 
 import (
 	"bytes"
-	"errors"
 	"net"
 	"strconv"
 	"strings"
 	"text/template"
+
+	"github.com/pkg/errors"
 
 	"github.com/networkservicemesh/api/pkg/api/networkservice"
 	"github.com/networkservicemesh/api/pkg/api/networkservice/mechanisms/cls"

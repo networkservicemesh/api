@@ -26,6 +26,35 @@ linters-settings:
           - (github.com/sirupsen/logrus.FieldLogger).Warnf
           - (github.com/sirupsen/logrus.FieldLogger).Errorf
           - (github.com/sirupsen/logrus.FieldLogger).Fatalf
+  depguard:
+    rules:
+      main:
+        deny:
+          - pkg: "errors"
+            desc: "Please use \"github.com/pkg/errors\" instead of \"errors\" in go imports"
+  revive:
+    confidence: 0.8
+    rules:
+      - name: exported
+      - name: blank-imports
+      - name: context-as-argument
+      - name: context-keys-type
+      - name: dot-imports
+      - name: error-return
+      - name: error-strings
+      - name: error-naming
+      - name: exported
+      - name: increment-decrement
+      - name: var-naming
+      - name: package-comments
+      - name: range
+      - name: receiver-naming
+      - name: time-naming
+      - name: unexported-return
+      - name: indent-error-flow
+      - name: errorf
+      - name: superfluous-else
+      - name: unreachable-code
   goimports:
     local-prefixes: github.com/networkservicemesh/api
   gocyclo:
@@ -35,6 +64,8 @@ linters-settings:
   goconst:
     min-len: 2
     min-occurrences: 2
+  lll:
+    line-length: 160
   misspell:
     locale: US
   unparam:
@@ -45,80 +76,46 @@ linters-settings:
     simple: true
     range-loops: true
     for-loops: false
-  gosec:
-    excludes:
-      - G115
   gocritic:
     enabled-checks:
-      - appendAssign
-      - assignOp
       - appendCombine
-      - argOrder
-      - badCall
-      - badCond
       - boolExprSimplify
       - builtinShadow
-      - captLocal
-      - caseOrder
-      - codegenComment
-      - commentFormatting
       - commentedOutCode
       - commentedOutImport
-      - defaultCaseOrder
-      - deprecatedComment
       - docStub
-      - dupArg
-      - dupBranchBody
-      - dupCase
       - dupImport
-      - dupSubExpr
-      - elseif
       - emptyFallthrough
       - emptyStringTest
       - equalFold
       - evalOrder
-      - exitAfterDefer
-      - flagDeref
-      - flagName
       - hexLiteral
       - hugeParam
-      - ifElseChain
       - importShadow
       - indexAlloc
       - initClause
       - methodExprCall
       - nestingReduce
-      - newDeref
       - nilValReturn
       - octalLiteral
-      - offBy1
       - paramTypeCombine
-      - ptrToRefParam
       - rangeExprCopy
       - rangeValCopy
-      - regexpMust
       - regexpPattern
-      - singleCaseSwitch
-      - sloppyLen
       - sloppyReassign
       - stringXbytes
-      - switchTrue
       - typeAssertChain
-      - typeSwitchVar
       - typeUnparen
       - unlabelStmt
       - unnamedResult
       - unnecessaryBlock
-      - underef
-      - unlambda
-      - unslice
-      - valSwap
       - weakCond
-      - wrapperFunc
       - yodaStyleExpr
 linters:
   disable-all: true
   enable:
+    - depguard
+    - revive
     - rowserrcheck
     - goheader
     - bodyclose
@@ -136,7 +133,7 @@ linters:
     - gosimple
     - govet
     - ineffassign
-    # - lll
+    - lll
     - misspell
     - nakedret
     - staticcheck
@@ -155,3 +152,7 @@ issues:
       linters:
         - funlen
       text: "Function 'TestParsePortRange' is too long"
+    - path: pkg/api/networkservice
+      linters:
+        - gosec
+      text: "G115"
