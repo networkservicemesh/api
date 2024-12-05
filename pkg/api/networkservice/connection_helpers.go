@@ -4,6 +4,8 @@
 //
 // Copyright (c) 2023-2024 Cisco and/or its affiliates.
 //
+// Copyright (c) 2024 Nordix Foundation.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,21 +39,36 @@ func (x *Connection) Clone() *Connection {
 	return proto.Clone(x).(*Connection)
 }
 
-// MatchesMonitorScopeSelector - Returns true of the connection matches the selector
-func (x *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector) bool {
-	if x == nil {
-		return false
+// Checks if the connection matches any of the network services in the given
+// network service selector.
+// Treats an empty NetworkServices in the selector as a wildcard.
+func (x *Connection) matchesNetworkServices(selector *MonitorScopeSelector) bool {
+	selectorServices := selector.GetNetworkServices()
+	if len(selectorServices) == 0 {
+		return true // Wildcard match
 	}
-	// Note: Empty selector always matches a non-nil Connection
+
+	for _, service := range selectorServices {
+		if service == x.GetNetworkService() {
+			return true // Match found
+		}
+	}
+
+	return false
+}
+
+// Iterates through the connection's PathSegments array looking for a subarray
+// that matches the selector's PathSegments array.
+// Treats an empty PathSegments in the selector or empty strings in the selector
+// as wildcards.
+func (x *Connection) matchesPathSegments(selector *MonitorScopeSelector) bool {
 	if len(selector.GetPathSegments()) == 0 {
-		return true
+		return true // Wildcard match
 	}
-	// Iterate through the Connection.PathSegments array looking for a subarray that matches
-	// the selector.PathSegments array, treating "" in the selector.PathSegments array
-	// as a wildcard
+
 	for i := range x.GetPath().GetPathSegments() {
 		// If there aren't enough elements left in the Connection.PathSegments array to match
-		// all of the elements in the select.PathSegments array...clearly we can't match
+		// all of the elements in the selector.PathSegments array...clearly we can't match
 		if i+len(selector.GetPathSegments()) > len(x.GetPath().GetPathSegments()) {
 			return false
 		}
@@ -79,7 +96,25 @@ func (x *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector)
 			}
 		}
 	}
+
 	return false
+}
+
+// MatchesMonitorScopeSelector - Returns true of the connection matches the selector
+func (x *Connection) MatchesMonitorScopeSelector(selector *MonitorScopeSelector) bool {
+	if x == nil {
+		return false
+	}
+	// Empty selector matches any non-nil connection
+	if len(selector.GetPathSegments()) == 0 && len(selector.GetNetworkServices()) == 0 {
+		return true
+	}
+	// Check network service match first
+	if !x.matchesNetworkServices(selector) {
+		return false
+	}
+	// Check path segments match
+	return x.matchesPathSegments(selector)
 }
 
 // GetCurrentPathSegment - Get the current path segment of the connection

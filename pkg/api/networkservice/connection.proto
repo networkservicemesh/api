@@ -1,5 +1,6 @@
 // Copyright 2018 Red Hat, Inc.
 // Copyright (c) 2018 Cisco and/or its affiliates.
+// Copyright (c) 2024 Nordix Foundation.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -91,6 +92,7 @@ message ConnectionEvent {
 
 message MonitorScopeSelector {
   repeated PathSegment path_segments = 1;
+  repeated string network_services = 2;
 }
 
 service MonitorConnection {

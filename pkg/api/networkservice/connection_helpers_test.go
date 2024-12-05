@@ -1,5 +1,7 @@
 // Copyright (c) 2023 Cisco and/or its affiliates.
 //
+// Copyright (c) 2024 Nordix Foundation.
+//
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -96,6 +98,163 @@ func TestMonitorScopeSelector(t *testing.T) {
 			selector := &networkservice.MonitorScopeSelector{PathSegments: c.selectorSegments}
 
 			require.Equal(t, conn.MatchesMonitorScopeSelector(selector), c.matches)
+		})
+	}
+}
+
+// nolint: funlen
+func TestNetworkServiceMonitorScopeSelector(t *testing.T) {
+	cases := []struct {
+		testname string
+		conn     *networkservice.Connection
+		selector *networkservice.MonitorScopeSelector
+		matches  bool
+	}{
+		{
+			testname: "EmptySelector",
+			conn: &networkservice.Connection{
+				Path: &networkservice.Path{
+					PathSegments: []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				},
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{},
+			matches:  true,
+		},
+		{
+			testname: "IdenticalPathsAndNetworkService",
+			conn: &networkservice.Connection{
+				Path: &networkservice.Path{
+					PathSegments: []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				},
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{
+				PathSegments:    []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				NetworkServices: []string{"ns1"},
+			},
+			matches: true,
+		},
+		{
+			testname: "IdenticalPathsAndDifferentNetworkService",
+			conn: &networkservice.Connection{
+				Path: &networkservice.Path{
+					PathSegments: []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				},
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{
+				PathSegments:    []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				NetworkServices: []string{"ns2"},
+			},
+			matches: false,
+		},
+		{
+			testname: "IdenticalPathsAndMatchingNetworkServiceList",
+			conn: &networkservice.Connection{
+				Path: &networkservice.Path{
+					PathSegments: []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				},
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{
+				PathSegments:    []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				NetworkServices: []string{"ns2", "ns1", "ns3"},
+			},
+			matches: true,
+		},
+		{
+			testname: "IdenticalPathsAndNonMatchingNetworkServiceList",
+			conn: &networkservice.Connection{
+				Path: &networkservice.Path{
+					PathSegments: []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				},
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{
+				PathSegments:    []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				NetworkServices: []string{"ns2", "ns3", "ns0"},
+			},
+			matches: false,
+		},
+		{
+			testname: "IdenticalNetworkService",
+			conn: &networkservice.Connection{
+				Path: &networkservice.Path{
+					PathSegments: []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				},
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{
+				NetworkServices: []string{"ns1"},
+			},
+			matches: true,
+		},
+		{
+			testname: "IdenticalNetworkServiceEmptyConnectionPath",
+			conn: &networkservice.Connection{
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{
+				NetworkServices: []string{"ns1"},
+			},
+			matches: true,
+		},
+		{
+			testname: "DifferentNetworkService",
+			conn: &networkservice.Connection{
+				Path: &networkservice.Path{
+					PathSegments: []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				},
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{
+				NetworkServices: []string{"ns2"},
+			},
+			matches: false,
+		},
+		{
+			testname: "DifferentNetworkServiceEmptyConnectionPath",
+			conn: &networkservice.Connection{
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{
+				NetworkServices: []string{"ns2"},
+			},
+			matches: false,
+		},
+		{
+			testname: "MatchingNetworkServiceList",
+			conn: &networkservice.Connection{
+				Path: &networkservice.Path{
+					PathSegments: []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				},
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{
+				NetworkServices: []string{"ns2", "ns1", "ns3"},
+			},
+			matches: true,
+		},
+		{
+			testname: "NonMatchingNetworkServiceList",
+			conn: &networkservice.Connection{
+				Path: &networkservice.Path{
+					PathSegments: []*networkservice.PathSegment{{Name: "s1", Id: "id1", Token: "t1"}, {Name: "s2", Id: "id2", Token: "t2"}},
+				},
+				NetworkService: "ns1",
+			},
+			selector: &networkservice.MonitorScopeSelector{
+				NetworkServices: []string{"ns2", "ns3", "ns0"},
+			},
+			matches: false,
+		},
+	}
+
+	for _, testCase := range cases {
+		c := testCase
+		t.Run(c.testname, func(t *testing.T) {
+			require.Equal(t, c.conn.MatchesMonitorScopeSelector(c.selector), c.matches)
 		})
 	}
 }
