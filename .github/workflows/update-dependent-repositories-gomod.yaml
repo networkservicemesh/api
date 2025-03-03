@@ -6,6 +6,7 @@ on:
       - main
 jobs:
   update-dependent-repositories:
+    if: ${{ github.event.commits[0].author.name != 'dependabot[bot]' }}
     strategy:
       matrix:
         repository: [sdk]
