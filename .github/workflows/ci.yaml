@@ -38,7 +38,7 @@ jobs:
       - uses: arduino/setup-protoc@v1
         with:
           version: '3.14.0'
-      - uses: actions/setup-go@v1
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.23.3
       - name: Generate files
