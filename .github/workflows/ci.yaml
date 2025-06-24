@@ -35,9 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: arduino/setup-protoc@v1
-        with:
-          version: '3.14.0'
+      - uses: arduino/setup-protoc@v3
       - uses: actions/setup-go@v5
         with:
           go-version: 1.23.3
