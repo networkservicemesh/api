@@ -54,6 +54,7 @@ message PolicyRoute {
     string dst_port  = 3; /* destination port (range in format start-end) */
     string src_port  = 4; /* source port (range in format start-end) */
     repeated Route routes = 5; /* list of destination based routes, if empty becomes a default route, but only for things matching both from and proto */
+    string mark = 6;
 }
 
 message IPContext {
