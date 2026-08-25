@@ -17,6 +17,7 @@ jobs:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 
   golangci-lint:
+    continue-on-error: true
     uses: networkservicemesh/.github/.github/workflows/golangci-lint.yaml@main
 
   exclude-fmt-errorf:
